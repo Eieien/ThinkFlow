@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
+import { exit } from "process";
 
 async function dbConnect()
 {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to mongodb');
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('Connected to mongodb');
+    } catch (err) {
+        console.log(err);
+        exit(1);
+    }
 }
 
 export default dbConnect;

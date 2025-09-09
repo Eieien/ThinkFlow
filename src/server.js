@@ -4,14 +4,11 @@ import cookieParser from "cookie-parser";
 import dbConnect from "./config/dbConnect.js"
 import routes from "./routes/router.js";
 
-// config
 dbConnect();
 
-// vars
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

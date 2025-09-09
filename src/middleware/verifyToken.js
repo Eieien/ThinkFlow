@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
         accessToken, 
         process.env.ACCESS_TOKEN_SECRET, 
         (err) => {
-            if(err) return res.sendStatus(401);
+            if(err) return res.status(401).json({ error: err.message });
             next();
         }
     );

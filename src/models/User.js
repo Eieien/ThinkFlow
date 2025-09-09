@@ -6,7 +6,17 @@ const userSchema = new mongoose.Schema(
         username: {
             type: String,
             required: true,
-            unique: true
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            validate: {
+                validator: (v) => {
+                    return v.includes('@')
+                },
+                message: 'email must include @ symbol'
+            }
         },
         password: {
             type: String,
