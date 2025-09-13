@@ -7,7 +7,7 @@ async function dbConnect()
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to mongodb');
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
         exit(1);
     }
 }

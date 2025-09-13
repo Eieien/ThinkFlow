@@ -1,7 +1,7 @@
 import { GoogleGenAI, createPartFromUri, createUserContent } from '@google/genai';
 import fs from "fs/promises";
 
-import { quizPrompt, systemInstructions } from "../utils/genAiConstants.js";
+import { quizPrompt, systemInstructions } from "../utils/genAiConst.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 

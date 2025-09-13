@@ -13,13 +13,22 @@ const notesSchema = new mongoose.Schema(
         }],
         title: {
             type: String,
-            required: true,
+            required: true
         },
         content: {
             type: String,
-            required: true,
         },
-        tags: [{ 
+        options: {
+            isPublic: {
+                type: Boolean,
+                default: false
+            },
+            bookMarked: {
+                type: Boolean,
+                default: false
+            }
+        },
+        tags: [{
             type: String 
         }]
     },

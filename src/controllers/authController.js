@@ -2,49 +2,43 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
-import { jwtCookieOptions, formatJwtUserData } from "../utils/jwtConstants.js";
+import { jwtCookieOptions, formatJwtUserData } from "../utils/jwtConst.js";
 
 export const signup = async (req, res) => {
+    const userData = req.body;
     try {
-        const user = req.body;
-        const newUser = await User.create(user);
-        return res.status(201).json(newUser);
+        const createdUser = await User.create(userData);
+        return res.status(201).json({
+            message: "User has been created!",
+            createdUser: createdUser
+        });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        if(err?.code === 11000 ) return res.status(406).json({ error: 'Cannot have duplicate emails!' })
+        return res.status(500).json({ error: err });
     }
 }
 
 export const login = async (req, res) => {
-    if(req.cookies?.jwt) return res.status(400).json({ error: 'You are already logged in!' });
-    const user = req.body;
+    const userData = req.body;
     try {
-        const foundUser = await User.findOne({ email: user.email });
+        const foundUser = await User.findOne({ email: userData.email });
         if(!foundUser) return res.status(404).json({ error: 'User not found!' });
-        const doMatch = await bcrypt.compare(user.password, foundUser.password);
+        const doMatch = await bcrypt.compare(userData.password, foundUser.password);
         if(!doMatch) return res.status(403).json({ error:'Incorrect password!' });
 
-        const userData = formatJwtUserData(foundUser);
-        const accessToken = jwt.sign(
-            userData, 
-            process.env.ACCESS_TOKEN_SECRET, 
-            { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-        );
-        const refreshToken = jwt.sign(
-            userData, 
-            process.env.REFRESH_TOKEN_SECRET, 
-            { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
-        );
+        const jwtUserData = formatJwtUserData(foundUser);
+        const accessToken = jwt.sign(jwtUserData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+        const refreshToken = jwt.sign(jwtUserData, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
         res.cookie('jwt', refreshToken, jwtCookieOptions);
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
         return res.status(201).json({ accessToken: accessToken });
     } catch (err) {
-        return res.status(406).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 }
 
 export const refresh = async (req, res) => {
-    if(!req.cookies?.jwt) return res.status(400).json({ error: "You are not logged in!"});
     const refreshToken = req.cookies.jwt;
     try {
         const decodedUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -58,19 +52,15 @@ export const refresh = async (req, res) => {
         );
         return res.status(201).json({ accessToken: accessToken });
     } catch (err) {
-        return res.status(401).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 }
 
 export const logout = async (req, res) => {
-    if(!req.cookies?.jwt) return res.status(400).json({ error: "You are not logged in!"});
     const refreshToken = req.cookies.jwt;
     try {
         const decodedUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-        await User.findByIdAndUpdate(
-            decodedUser._id,
-            { $unset: { refreshToken: '' }}
-        );
+        await User.findByIdAndUpdate(decodedUser._id, { $unset: { refreshToken: '' }});
         res.clearCookie('jwt', refreshToken, jwtCookieOptions);
         return res.sendStatus(204);
     } catch (err) {

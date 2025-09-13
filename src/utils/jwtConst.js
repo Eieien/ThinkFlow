@@ -1,6 +1,7 @@
 export const jwtCookieOptions = {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: true
 }
 
 export function formatJwtUserData(user)
