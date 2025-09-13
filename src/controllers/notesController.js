@@ -1,5 +1,5 @@
 import Notes from "../models/Notes.js";
-import { userPopulateExcludes } from '../utils/mongoConst.js';
+import { userPopulateExcludes } from '../config/mongoConfig.js';
 
 export const getPublicNotes = async (req, res) => {
   try {

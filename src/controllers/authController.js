@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
-import { jwtCookieOptions, formatJwtUserData } from "../utils/jwtConst.js";
+import { jwtCookieOptions, formatJwtUserData } from "../config/jwtConfig.js";
 
 export const signup = async (req, res) => {
     const userData = req.body;
