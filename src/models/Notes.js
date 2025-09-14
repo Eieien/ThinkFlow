@@ -34,6 +34,16 @@ const notesSchema = new mongoose.Schema(
         },
         tags: [{
             type: String 
+        }],
+        editHistory: [{
+            editedBy: { 
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: "users"
+            },
+            updatedAt: { 
+                type: Date,
+                default: new Date()
+            }
         }]
     },
     { timestamps: true }

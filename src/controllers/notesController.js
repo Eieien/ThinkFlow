@@ -1,4 +1,4 @@
-import { unlink } from "fs/promises";
+import { unlink, readFile } from "fs/promises";
 import path from "path";
 
 import Notes from "../models/Notes.js";
@@ -35,7 +35,8 @@ export const getOneNote = async (req, res) => {
   try {
     const note = await Notes.findById(noteId).populate("creator", userPopulateExcludes);
     return res.status(200).json(note);
-  } catch (err) { 
+  } catch (err) {
+    if(err.name === "CastError") return res.status(500).json({ error: 'Invalid note id!' });
     return res.status(500).json({ error: err.message });
   }
 }
@@ -46,7 +47,9 @@ export const updateNote = async (req, res) => {
   const noteData = req.body;
   try {
     const foundNote = await Notes.findById(noteId);
-    if(!foundNote) return res.status(404).json({ error: "Note not found!" });
+    if(!foundNote) return res.status(404).json({ error: 'Note not found!' });
+    if(foundNote.options?.imported && noteData?.content)
+      return res.status(400).json({ error: 'Cannot edit contents of imported note!' });
 
     if(noteData?.title) foundNote.title = noteData.title;
     if(noteData?.content) foundNote.content = noteData.content;
@@ -70,6 +73,11 @@ export const deleteNote = async (req, res) => {
   try {
     const deletedNote = await Notes.findByIdAndDelete(noteId);
     if(!deletedNote) return res.status(404).json({ error: "Note not found!" });
+    if(deletedNote.options.imported){
+      const fileName = deletedNote.content;
+      const filePath = path.join(process.cwd(), 'src', 'uploads', 'imported_notes', fileName)
+      await unlink(filePath);
+    }
     return res.sendStatus(204);
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -80,13 +88,11 @@ export const importNote = async (req, res) => {
   const { creator, title } = req.body;
   const uploaded = req.file;
   try {
-    const createdNote = await Notes.create({ 
+    // need to make content into md
+    const createdNote = await Notes.create({
       creator: creator,
       title: title,
-      content: uploaded.filename,
-      options: {
-        imported: true
-      }
+      content: uploaded.filename
     });
     return res.status(201).json({
       message: "Note has been imported!",
@@ -105,10 +111,10 @@ export const importNote = async (req, res) => {
 }
 
 export const getImportedNote = async (req, res) => {
-  const noteId = req.params.id;
+  const noteFile = req.params.noteFile;
   try {
-    const foundNote = await Notes.findById(noteId);
-    const filePath = path.join(process.cwd(), 'src', 'uploads', 'imported_notes', foundNote.content)
+    const filePath = path.join(process.cwd(), 'src', 'uploads', 'imported_notes', noteFile);
+    await readFile(filePath);
     return res.status(200).sendFile(filePath);
   } catch (err) {
     if(err.name === "CastError") return res.status(500).json({ error: 'Invalid note id!' });

@@ -28,6 +28,6 @@ notesRouter.post('/import',
   body('title').notEmpty().withMessage('Title must be set!'),
   handleValidation,
   notes.importNote);
-notesRouter.get('/import/:id', notes.getImportedNote);
+notesRouter.get('/import/:noteFile', notes.getImportedNote);
 
 export default notesRouter;

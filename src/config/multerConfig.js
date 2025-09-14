@@ -18,4 +18,4 @@ const pfpStorage = multer.diskStorage({
 });
 
 export const noteUploader = multer({ storage: noteStorage });
-// export const pfpUploader = multer({ storage: pfpStorage });
+export const pfpUploader = multer({ storage: pfpStorage });
