@@ -1,3 +1,6 @@
+import { unlink } from "fs/promises";
+import path from "path";
+
 import Notes from "../models/Notes.js";
 import { userPopulateExcludes } from '../config/mongoConfig.js';
 
@@ -11,9 +14,13 @@ export const getPublicNotes = async (req, res) => {
 }
 
 export const createNote = async (req, res) => {
-  const noteData = req.body;
+  const { creator, title, content } = req.body;
   try {
-    const createdNote = await Notes.create(noteData);
+    const createdNote = await Notes.create({ 
+      creator: creator,
+      title: title,
+      content: content
+    });
     return res.status(201).json({
       message: "Note has been created!",
       createdNote: createdNote
@@ -65,6 +72,46 @@ export const deleteNote = async (req, res) => {
     if(!deletedNote) return res.status(404).json({ error: "Note not found!" });
     return res.sendStatus(204);
   } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+export const importNote = async (req, res) => {
+  const { creator, title } = req.body;
+  const uploaded = req.file;
+  try {
+    const createdNote = await Notes.create({ 
+      creator: creator,
+      title: title,
+      content: uploaded.filename,
+      options: {
+        imported: true
+      }
+    });
+    return res.status(201).json({
+      message: "Note has been imported!",
+      createdNote: createdNote
+    });
+  } catch (err) {
+    try {
+      await unlink(uploaded.path);
+    } catch (unlinkErr) {
+      return res.status(500).json({ 
+        error: err.message + ' ' + unlinkErr.message
+      });
+    } 
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+export const getImportedNote = async (req, res) => {
+  const noteId = req.params.id;
+  try {
+    const foundNote = await Notes.findById(noteId);
+    const filePath = path.join(process.cwd(), 'src', 'uploads', 'imported_notes', foundNote.content)
+    return res.status(200).sendFile(filePath);
+  } catch (err) {
+    if(err.name === "CastError") return res.status(500).json({ error: 'Invalid note id!' });
     return res.status(500).json({ error: err.message });
   }
 }

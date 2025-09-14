@@ -1,7 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 
-import dbConnect from "./config/dbConnect.js"
+import { dbConnect } from "./config/mongoConfig.js";
 import routes from "./routes/router.js";
 
 dbConnect();

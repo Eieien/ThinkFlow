@@ -23,7 +23,11 @@ const notesSchema = new mongoose.Schema(
                 type: Boolean,
                 default: false
             },
-            bookMarked: {
+            bookmarked: {
+                type: Boolean,
+                default: false
+            },
+            imported: {
                 type: Boolean,
                 default: false
             }
