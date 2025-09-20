@@ -3,7 +3,7 @@ import { randomBytes } from "crypto";
 import { extname } from "path";
 
 const noteStorage = multer.diskStorage({
-  destination: 'src/uploads/imported_notes',
+  destination: 'src/uploads/notes',
   filename: (_req, file, cb) => {
     const randomName = randomBytes(16).toString("hex");
     const fileExt = extname(file.originalname);

@@ -15,19 +15,13 @@ const notesSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        content: {
-            type: String,
-        },
+        file_content: { type: String },
         options: {
             isPublic: {
                 type: Boolean,
                 default: false
             },
             bookmarked: {
-                type: Boolean,
-                default: false
-            },
-            imported: {
                 type: Boolean,
                 default: false
             }

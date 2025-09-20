@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
 import { jwtCookieOptions, formatJwtUserData } from "../config/jwtConfig.js";
+import catchError from "../utils/catchError.js";
 
 export const signup = async (req, res) => {
     const userData = req.body;
@@ -13,8 +14,7 @@ export const signup = async (req, res) => {
             createdUser: createdUser
         });
     } catch (err) {
-        if(err?.code === 11000 ) return res.status(406).json({ error: 'Cannot have duplicate emails!' })
-        return res.status(500).json({ error: err });
+        return res.status(500).json(catchError(err));
     }
 }
 
@@ -34,7 +34,7 @@ export const login = async (req, res) => {
         await foundUser.save();
         return res.status(201).json({ accessToken: accessToken });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json(catchError(err));
     }
 }
 
@@ -52,7 +52,7 @@ export const refresh = async (req, res) => {
         );
         return res.status(201).json({ accessToken: accessToken });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json(catchError(err));
     }
 }
 

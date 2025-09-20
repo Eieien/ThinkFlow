@@ -9,17 +9,16 @@ import validateFileUpload from "../middleware/validateFileUpload.js";
 
 const notesRouter = Router();
 
-notesRouter.get('/', notes.getPublicNotes);
+notesRouter.get('/', notes.getNotes);
 notesRouter.use(verifyToken);
 notesRouter.post('/create',
   body('creator').notEmpty().withMessage('Creator ID must be set!'),
   body('title').notEmpty().withMessage('Title must be set!'),
-  body('content').exists().withMessage('Must set content field!'),
   handleValidation,
   notes.createNote);
 notesRouter.route('/:id')
   .get(notes.getOneNote)
-  .patch(notes.updateNote)
+  .put(notes.updateNote)
   .delete(notes.deleteNote);
 notesRouter.post('/import',
   noteUploader.single('content'),
@@ -28,6 +27,5 @@ notesRouter.post('/import',
   body('title').notEmpty().withMessage('Title must be set!'),
   handleValidation,
   notes.importNote);
-notesRouter.get('/import/:noteFile', notes.getImportedNote);
 
 export default notesRouter;
