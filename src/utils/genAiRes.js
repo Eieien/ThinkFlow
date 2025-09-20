@@ -1,6 +1,7 @@
 import { createPartFromUri, createUserContent } from '@google/genai';
+import { lookup } from 'mime-types';
 
-import { genAi, notePrompt, noteSystemInstructions } from '../config/genAiConfig.js';
+import { genAi, notePrompt, noteSystemInstructions, quizPrompt, quizSystemInstructions } from '../config/genAiConfig.js';
 
 export async function generateMdContent(filePath, mimeType)
 {
@@ -24,7 +25,25 @@ export async function generateMdContent(filePath, mimeType)
     return result.text;
 }
 
-export async function generateQuiz()
+export async function generateQuiz(filePath)
 {
+  const mimeType = lookup(filePath);
+    const uploaded = await genAi.files.upload({
+      file: filePath,
+      config: { mimeType: mimeType }
+    });
+    const fileData = createPartFromUri(uploaded.uri, uploaded.mimeType);
+    const content = createUserContent([ fileData, quizPrompt ]);
 
+    const result = await genAi.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: content,
+      config: {
+          systemInstruction: quizSystemInstructions,
+          thinkingConfig: {
+            thinkingBudget: 0
+          }
+      }
+    });
+    return JSON.parse(result.text);
 }

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 export const userPopulateExcludes = '-_id -password -refreshToken -__v';
-export const notePopulateExcludes = '';
-export const quizPopulateExcludes = '';
+export const notePopulateExcludes = '-_id -__v';
+export const quizPopulateExcludes = '-__v';
 
 export async function dbConnect()
 {

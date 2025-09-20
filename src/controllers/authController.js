@@ -24,7 +24,7 @@ export const login = async (req, res) => {
         const foundUser = await User.findOne({ email: userData.email });
         if(!foundUser) return res.status(404).json({ error: 'User not found!' });
         const doMatch = await bcrypt.compare(userData.password, foundUser.password);
-        if(!doMatch) return res.status(403).json({ error:'Incorrect password!' });
+        if(!doMatch) return res.status(403).json({ error: 'Incorrect password!' });
 
         const jwtUserData = formatJwtUserData(foundUser);
         const accessToken = jwt.sign(jwtUserData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
@@ -43,7 +43,7 @@ export const refresh = async (req, res) => {
     try {
         const decodedUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const foundUser = await User.findById(decodedUser._id);
-        if(!foundUser) return res.status(404).json({ error: "User not found!"});
+        if(!foundUser) return res.status(404).json({ error: "User not found!" });
         const userData = formatJwtUserData(decodedUser);
         const accessToken = jwt.sign(
             userData, 

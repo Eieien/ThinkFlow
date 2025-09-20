@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 export const getNotes = async (req, res) => {
   let notes;
   try {
-    if(req?.query?.creator)
+    if(req.query?.creator)
       notes = await Notes.find({ creator: req.query.creator }).populate("creator", userPopulateExcludes);
     else
       notes = await Notes.find({ 'options.isPublic': true }).populate("creator", userPopulateExcludes);
@@ -35,7 +35,7 @@ export const createNote = async (req, res) => {
     const createdNote = await Notes.create({ 
       creator: creator,
       title: title,
-      file_content: fileName
+      fileContent: fileName
     });
     return res.status(201).json({
       message: "Note has been created!",
@@ -58,21 +58,23 @@ export const getOneNote = async (req, res) => {
 }
 
 export const updateNote = async (req, res) => {
-  if(!req.body || Object.keys(req.body).length === 0) 
+  const noteData = req.body;
+  if(!req.body || Object.keys(req.body).length === 0 ||
+    (!noteData.title && !noteData.accesses && !noteData.options))
     return res.status(400).json({ error: 'No content to update!' });
   const noteId = req.params.id;
-  const noteData = req.body;
   try {
     const foundNote = await Notes.findById(noteId);
     if(!foundNote) return res.status(404).json({ error: 'Note not found!' });
 
-    if(noteData?.title) foundNote.title = noteData.title;
-    if(noteData?.accesses) foundNote.accesses = noteData.accesses;
-    if(noteData?.options){
+    if(noteData.title) foundNote.title = noteData.title;
+    if(noteData.accesses) foundNote.accesses = noteData.accesses;
+    if(noteData.options){
       const options = noteData.options;
-      if(options?.isPublic) foundNote.options.isPublic = options.isPublic;
-      if(options?.bookMarked) foundNote.options.isPublic = options.bookMarked;
+      if(options.isPublic) foundNote.options.isPublic = options.isPublic;
+      if(options.bookmarked) foundNote.options.bookmarked = options.bookmarked;
     }
+
     const updatedNote = await foundNote.save();
     return res.status(200).json({
       message: 'Note has been updated!',
@@ -88,7 +90,7 @@ export const deleteNote = async (req, res) => {
   try {
     const deletedNote = await Notes.findByIdAndDelete(noteId);
     if(!deletedNote) return res.status(404).json({ error: "Note not found!" });
-    const fileName = deletedNote.file_content;
+    const fileName = deletedNote.fileContent;
     const filePath = path.join(__dirname, '..', 'uploads', 'notes', fileName);
     await unlink(filePath);
     return res.sendStatus(204);
@@ -107,14 +109,13 @@ export const importNote = async (req, res) => {
   const newFilePath = path.join(__dirname, '..', 'uploads', 'notes', fileName);
   try {
     const importedName = path.basename(filePath);
-
     if(path.extname(importedName) !== '.md'){
       const mdResult = await generateMdContent(filePath, mimeType);
       try {
-        const jsonResult = JSON.parse(mdResult);
+        const errorResult = JSON.parse(mdResult);
         await unlink(filePath);
-        return res.status(400).json(jsonResult);
-      } catch (e) {
+        return res.status(400).json(errorResult);
+      } catch (_) {
         await writeFile(newFilePath, mdResult);
         await unlink(filePath);
       }
@@ -125,7 +126,7 @@ export const importNote = async (req, res) => {
     const createdNote = await Notes.create({
       creator: creator,
       title: title,
-      file_content: fileName,
+      fileContent: fileName,
     });
 
     return res.status(201).json({
@@ -133,13 +134,8 @@ export const importNote = async (req, res) => {
       createdNote: createdNote
     });
   } catch (err) {
-    try {
-      if(existsSync(filePath)) await unlink(filePath);
-      if(existsSync(newFilePath)) await unlink(newFilePath);
-    } catch (unlinkErr) {
-      const errs = { message: err.message + ' CANNOT UNLINK: ' + unlinkErr.message };
-      return res.status(500).json(catchError(errs));
-    }
+    if(existsSync(filePath)) await unlink(filePath);
+    if(existsSync(newFilePath)) await unlink(newFilePath);
     return res.status(500).json(catchError(err));
   }
 }

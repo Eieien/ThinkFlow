@@ -1,7 +1,20 @@
 import mongoose from "mongoose";
 
 const resultSchema = new mongoose.Schema(
-    { obj: 's' },
+    {
+        quiz: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "quizzes"
+        },
+        score: {
+            type: Number,
+            required: true
+        },
+        time: {
+            type: Number,
+            required: true
+        }
+    },
     { timestamps: true }
 )
 

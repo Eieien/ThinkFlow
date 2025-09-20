@@ -15,7 +15,7 @@ const notesSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        file_content: { type: String },
+        fileContent: { type: String },
         options: {
             isPublic: {
                 type: Boolean,
