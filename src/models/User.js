@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
             required: true,
         },
         pfp: { type: String },
+        deactivated: {
+            type: Boolean,
+            default: false
+        },
         refreshToken: {
             type: String
         },

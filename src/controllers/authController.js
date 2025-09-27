@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
-import { jwtCookieOptions, formatJwtUserData } from "../config/jwtConfig.js";
 import catchError from "../utils/catchError.js";
+import { jwtCookieOptions, formatJwtUserData } from "../config/jwtConfig.js";
 
 export const signup = async (req, res) => {
     const userData = req.body;
@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
             createdUser: createdUser
         });
     } catch (err) {
-        return res.status(500).json(catchError(err));
+        return res.status(400).json(catchError(err));
     }
 }
 
@@ -32,9 +32,13 @@ export const login = async (req, res) => {
         res.cookie('jwt', refreshToken, jwtCookieOptions);
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
-        return res.status(201).json({ accessToken: accessToken });
+        return res.status(201).json({
+            id: foundUser._id,
+            pfp: foundUser.pfp,
+            accessToken: accessToken 
+        });
     } catch (err) {
-        return res.status(500).json(catchError(err));
+        return res.status(400).json(catchError(err));
     }
 }
 
@@ -45,14 +49,10 @@ export const refresh = async (req, res) => {
         const foundUser = await User.findById(decodedUser._id);
         if(!foundUser) return res.status(404).json({ error: "User not found!" });
         const userData = formatJwtUserData(decodedUser);
-        const accessToken = jwt.sign(
-            userData, 
-            process.env.ACCESS_TOKEN_SECRET, 
-            { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-        );
+        const accessToken = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
         return res.status(201).json({ accessToken: accessToken });
     } catch (err) {
-        return res.status(500).json(catchError(err));
+        return res.status(400).json(catchError(err));
     }
 }
 
@@ -64,7 +64,19 @@ export const logout = async (req, res) => {
         res.clearCookie('jwt', refreshToken, jwtCookieOptions);
         return res.sendStatus(204);
     } catch (err) {
-        res.clearCookie('jwt', refreshToken, jwtCookieOptions);
-        return res.sendStatus(200);
+        return res.status(400).json(catchError(err));
+    }
+}
+
+export const changePassword = async (req, res) => {
+    const { email, password, confPassword } = req.body;
+    try {
+        if(password !== confPassword) return res.status(400).json({ error: 'Passwords don\'t match!' });
+        const foundUser = await User.findOne({ email: email });
+        foundUser.password = password;
+        await foundUser.save();
+        return res.status(200).json({ message: 'Password has been change!' });
+    } catch (err) {
+        return res.status(400).json(catchError(err));
     }
 }

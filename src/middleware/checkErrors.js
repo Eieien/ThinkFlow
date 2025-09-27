@@ -1,14 +1,13 @@
 import { validationResult } from "express-validator";
 import { unlink } from "fs/promises";
 
-const handleValidation = async (req, res, next) => {
+export const checkValidationErrors = async (req, res, next) => {
     const validation = validationResult(req);
     if(validation.errors.length > 0){
         if(req?.file){
             const uploaded = req.file;
             try {
                 await unlink(uploaded.path);
-                console.log('Upload deleted');
             } catch (err){
                 console.log('Upload NOT deleted: ' + err.message);
             }
@@ -18,4 +17,15 @@ const handleValidation = async (req, res, next) => {
     next();
 }
 
-export default handleValidation;
+export const checkFileUpload = async (err, req, res, next) => {
+    if (err)
+        return res.status(400).json({ error:  err.message });
+    if(!req.file)
+        return res.status(400).json({ error: 'No file found!' });
+    next();
+}
+
+export const checkError = async (err, req, res, next) => {
+    if(err) return res.status(400).json({ error:  err.message });
+    next();
+}

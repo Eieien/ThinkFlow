@@ -5,10 +5,10 @@ import { fileURLToPath } from "url";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 
-import { dbConnect } from "./config/mongoConfig.js";
+import { connectToMongoDB } from "./config/mongoConfig.js";
 import routes from "./routes/router.js";
 
-dbConnect();
+connectToMongoDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +29,7 @@ const io = new Server(appServer, {
         origin: '*'
     }
 });
+
 io.on('connection', (socket) => {
     console.log(`User ${socket.id} connected`);
 

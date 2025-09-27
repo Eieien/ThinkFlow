@@ -7,15 +7,14 @@ const notesSchema = new mongoose.Schema(
             ref: "users",
             required: true
         },
-        accesses: [{
-            type: mongoose.SchemaTypes.ObjectId,
-            ref: "users"
-        }],
         title: {
             type: String,
             required: true
         },
-        fileContent: { type: String },
+        fileContent: { 
+            type: String,
+            required: true
+        },
         options: {
             isPublic: {
                 type: Boolean,
@@ -27,17 +26,8 @@ const notesSchema = new mongoose.Schema(
             }
         },
         tags: [{
-            type: String 
-        }],
-        editHistory: [{
-            editedBy: { 
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: "users"
-            },
-            updatedAt: { 
-                type: Date,
-                default: new Date()
-            }
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "tags"
         }]
     },
     { timestamps: true }

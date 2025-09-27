@@ -2,13 +2,13 @@ import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
     const bearer = req.headers['authorization'];
-    if(!bearer) return res.status(403).json({ error: 'forbidden access' });
+    if(!bearer) return res.status(403).json({ error: 'Forbidden access' });
     const accessToken = bearer.split(' ')[1];
     jwt.verify(
         accessToken, 
         process.env.ACCESS_TOKEN_SECRET, 
         (err) => {
-            if(err) return res.status(401).json({ error: err.message });
+            if(err) return res.status(401).json({ error: err });
             next();
         }
     );

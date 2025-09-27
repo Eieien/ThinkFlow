@@ -11,6 +11,7 @@ function checkKeyValue(keyValue)
 
 function catchError(err)
 {
+    console.error(err);
     let message = err.message;
     if(err.name){
         switch(err.name){
@@ -18,7 +19,7 @@ function catchError(err)
                 message = 'Invalid ID!';
                 break;
             case "ValidationError":
-                message = 'Validation Error! Please try again.';
+                message = err.message;
                 break;
         }
     }

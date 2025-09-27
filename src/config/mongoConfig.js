@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-export const userPopulateExcludes = '-_id -password -refreshToken -__v';
-export const notePopulateExcludes = '-_id -__v';
-export const quizPopulateExcludes = '-__v';
+export const excludedUserFields = '-_id -password -refreshToken -__v';
+export const excludedNoteFields = '-_id -__v';
+export const excludedQuizFields = '-__v';
 
-export async function dbConnect()
+export async function connectToMongoDB()
 {
     try {
         await mongoose.connect(process.env.MONGO_URI);
