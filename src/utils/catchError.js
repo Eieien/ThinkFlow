@@ -13,23 +13,24 @@ function catchError(err)
 {
     console.error(err);
     let message = err.message;
-    if(err.name){
+    if(err?.name){
         switch(err.name){
             case "CastError":
                 message = 'Invalid ID!';
                 break;
             case "ValidationError":
-                message = err.message;
+                const key = Object.keys(err.errors)[0];
+                message = err.errors[key].message;
                 break;
         }
     }
-    if(err.code){
+    if(err?.code){
         switch(err.code){
             case 11000:
                 message = checkKeyValue(err.keyValue);
                 break;
             case "ENOENT":
-                message = "Path doesn't esists!";
+                message = "Path doesn't esist!";
                 break;
         }
     }

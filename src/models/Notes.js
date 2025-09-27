@@ -25,10 +25,10 @@ const notesSchema = new mongoose.Schema(
                 default: false
             }
         },
-        tags: [{
-            type: mongoose.SchemaTypes.ObjectId,
+        tags: {
+            type: [ mongoose.SchemaTypes.ObjectId ],
             ref: "tags"
-        }]
+        }
     },
     { timestamps: true }
 );

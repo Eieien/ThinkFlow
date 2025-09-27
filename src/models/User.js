@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
+function checkIfFound(foundUser, res)
+{
+    if(!foundUser){
+        res.statusCode = 404;
+        throw new Error('User not found!');
+    }
+}
+
 const userSchema = new mongoose.Schema(
     {
         username: {
@@ -25,7 +33,19 @@ const userSchema = new mongoose.Schema(
             type: String
         },
     },
-    { timestamps: true }
+    { 
+        timestamps: true, 
+        statics: {
+            findByEmail: async function(email) {
+                return await this.findOne({ email: email });
+            }
+        },
+        methods: {
+            comparePasswords: async function(plainPassword) {
+                return (await bcrypt.compare(plainPassword, this.password)) ? true : false;
+            }
+        }
+    }
 );
 
 userSchema.pre('save', async function(next) {

@@ -39,7 +39,7 @@ export const getQuizByNoteId = async (req, res) => {
   const noteId = req.params.id;
   if(!noteId) return res.status(400).json({ error: 'No note id!' });
   try {
-    const foundQuiz = await Quiz.findOne({ note: noteId }, excludedNoteFields);
+    const foundQuiz = await Quiz.findOne({ note: noteId });
     if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
     return res.status(200).json(foundQuiz);
   } catch (err) {
@@ -50,14 +50,12 @@ export const getQuizByNoteId = async (req, res) => {
 export const updateQuiz = async (req, res) => {
   const quizId = req.params.id;
   const quizDetails = req.body;
-  if(!req.body || Object.keys(req.body).length === 0 ||
-    (!quizDetails.quizTitle && !quizDetails.description))
-    return res.status(400).json({ error: 'No content to update!' });
   try {
     const foundQuiz = await Quiz.findById(quizId);
     if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
-    if(quizDetails?.quizTitle) foundQuiz.quizTitle = quizDetails.quizTitle;
-    if(quizDetails?.description) foundQuiz.description = quizDetails.description;
+    for(let key of Object.keys(quizDetails)){
+      foundQuiz[key] = quizDetails[key];
+    }
     const editedQuiz = await foundQuiz.save();
     return res.status(200).json({ 
       message: 'Quiz has been updated!',

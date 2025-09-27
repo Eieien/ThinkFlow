@@ -6,6 +6,10 @@ const resultSchema = new mongoose.Schema(
             type: mongoose.SchemaTypes.ObjectId,
             ref: "quizzes"
         },
+        user: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "users"
+        },
         score: {
             type: Number,
             required: true

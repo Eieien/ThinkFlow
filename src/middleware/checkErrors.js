@@ -21,7 +21,7 @@ export const checkFileUpload = async (err, req, res, next) => {
     if (err)
         return res.status(400).json({ error:  err.message });
     if(!req.file)
-        return res.status(400).json({ error: 'No file found!' });
+        return res.status(404).json({ error: 'No file found!' });
     next();
 }
 

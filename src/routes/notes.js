@@ -9,9 +9,9 @@ import { noteUploader } from "../config/multerConfig.js";
 const notesRouter = Router();
 
 notesRouter.get('/', notes.getPublicNotes);
-notesRouter.use(verifyToken);
+// notesRouter.use(verifyToken);
 notesRouter.post('/create',
-  body('creator').notEmpty().withMessage('Creator ID must be set!'),
+  body('userId').notEmpty().withMessage('User ID must be set!'),
   body('title').notEmpty().withMessage('Title must be set!'),
   checkValidationErrors,
   notes.createNote);
@@ -22,7 +22,7 @@ notesRouter.route('/:id')
 notesRouter.post('/import',
   noteUploader.single('content'),
   checkFileUpload,
-  body('creator').notEmpty().withMessage('Creator ID must be set!'),
+  body('userId').notEmpty().withMessage('User ID must be set!'),
   body('title').notEmpty().withMessage('Title must be set!'),
   checkValidationErrors,
   notes.importNote);

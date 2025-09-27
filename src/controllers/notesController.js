@@ -1,22 +1,19 @@
 import { unlink, writeFile, rename } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
-import { fileURLToPath } from 'url';
 
 import Notes from "../models/Notes.js";
-import { excludedUserFields } from '../config/mongoConfig.js';
+import { excludedUserFields, excludedTagFields, excludedNoteFields } from '../config/mongoConfig.js';
 import generateAiContent from "../utils/genAiRes.js";
 import { aiNoteDetails } from "../config/genAiConfig.js";
 import catchError from "../utils/catchError.js";
 import Quiz from "../models/Quiz.js";
-import getFileNameAndPath from "../utils/getFileDetails.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getNoteNameAndPath, getUploadFilePath } from "../utils/getFileDetails.js";
 
 export const getPublicNotes = async (req, res) => {
   try {
-    const notes = await Notes.find({ 'options.isPublic': true }).populate("creator", excludedUserFields);
+    const notes = await Notes.find({ 'options.isPublic': true }, excludedNoteFields)
+      .populate("creator", excludedUserFields);
     return res.status(200).json(notes);
   } catch (err) {
     return res.status(400).json(catchError(err));
@@ -24,12 +21,12 @@ export const getPublicNotes = async (req, res) => {
 } 
 
 export const createNote = async (req, res) => {
-  const { creator, title } = req.body;
-  const { fileName, filePath } = getFileNameAndPath();
+  const { userId, title } = req.body;
+  const { fileName, filePath } = getNoteNameAndPath();
   try {
     await writeFile(filePath, '');
     const createdNote = await Notes.create({ 
-      creator: creator,
+      creator: userId,
       title: title,
       fileContent: fileName
     });
@@ -46,7 +43,9 @@ export const createNote = async (req, res) => {
 export const getNotesByUserId = async (req, res) => {
   const userId = req.params.id;
   try {
-    const foundNote = await Notes.find({ creator: userId }).populate("creator", excludedUserFields);
+    const foundNote = await Notes.find({ creator: userId }, excludedNoteFields)
+      .populate("creator", excludedUserFields)
+      .populate("tags", excludedTagFields);
     if(!foundNote) return res.status(404).json({ error: 'Note not found! '});
     return res.status(200).json(foundNote);
   } catch (err) {
@@ -79,8 +78,7 @@ export const deleteNote = async (req, res) => {
   try {
     const deletedNote = await Notes.findByIdAndDelete(noteId);
     if(!deletedNote) return res.status(404).json({ error: "Note not found!" });
-    const fileName = deletedNote.fileContent;
-    const filePath = path.join(__dirname, '..', 'uploads', 'notes', fileName);
+    const filePath = getUploadFilePath('notes', deletedNote.fileContent);
     if(existsSync(filePath)) await unlink(filePath);
     await Quiz.findOneAndDelete({ note: deletedNote._id });
     return res.sendStatus(204);
@@ -90,9 +88,9 @@ export const deleteNote = async (req, res) => {
 }
 
 export const importNote = async (req, res) => {
-  const { creator, title } = req.body;
+  const { userId, title } = req.body;
   const oldFilePath = req.file.path;
-  const { fileName, filePath } = getFileNameAndPath();
+  const { fileName, filePath } = getNoteNameAndPath();
   try {
     if(path.extname(path.basename(oldFilePath)) !== '.md'){
       const result = await generateAiContent(oldFilePath, aiNoteDetails);
@@ -106,7 +104,7 @@ export const importNote = async (req, res) => {
       await rename(oldFilePath, filePath);
     }
     const createdNote = await Notes.create({
-      creator: creator,
+      creator: userId,
       title: title,
       fileContent: fileName,
     });

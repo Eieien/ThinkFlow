@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
 import catchError from "../utils/catchError.js";
-import { jwtCookieOptions, formatJwtUserData } from "../config/jwtConfig.js";
+import { jwtCookieOptions, formatJwtUserData, createJwts } from "../utils/jwtUtils.js";
 
 export const signup = async (req, res) => {
     const userData = req.body;
@@ -21,14 +21,13 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     const userData = req.body;
     try {
-        const foundUser = await User.findOne({ email: userData.email });
+        const foundUser = await User.findByEmail(userData.email);
         if(!foundUser) return res.status(404).json({ error: 'User not found!' });
-        const doMatch = await bcrypt.compare(userData.password, foundUser.password);
-        if(!doMatch) return res.status(403).json({ error: 'Incorrect password!' });
+        const doMatch = await foundUser.comparePasswords(userData.password);
+        if(!doMatch) return res.status(401).json({ error: 'Incorrect password!' });
 
         const jwtUserData = formatJwtUserData(foundUser);
-        const accessToken = jwt.sign(jwtUserData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
-        const refreshToken = jwt.sign(jwtUserData, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
+        const { accessToken, refreshToken } = createJwts(jwtUserData);
         res.cookie('jwt', refreshToken, jwtCookieOptions);
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
@@ -72,7 +71,7 @@ export const changePassword = async (req, res) => {
     const { email, password, confPassword } = req.body;
     try {
         if(password !== confPassword) return res.status(400).json({ error: 'Passwords don\'t match!' });
-        const foundUser = await User.findOne({ email: email });
+        const foundUser = await User.findByEmail(email);
         foundUser.password = password;
         await foundUser.save();
         return res.status(200).json({ message: 'Password has been change!' });

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 
 import * as quiz from "../controllers/quizController.js";
 import { checkValidationErrors } from "../middleware/checkErrors.js";

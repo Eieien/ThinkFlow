@@ -5,12 +5,12 @@ import { extname } from "path";
 const MB = 1024 * 1024;
 const validDetails = [
   {
-    url: '/import',
+    path: '/import',
     validExts: ['.txt', '.md', '.pdf', '.jpg', '.jpeg', '.png'],
     uploads_folder: 'notes'
   },
   {
-    url: '/pfp',
+    path: '/pfp/:id',
     validExts: ['.jpg', '.jpeg', '.png'],
     uploads_folder: 'pfps'
   }
@@ -34,10 +34,8 @@ const pfpStorage = multer.diskStorage({
 });
 
 const validateFile = (req, file, cb) => {
-  const [{ validExts }] = validDetails.filter(valid => req.url === valid.url);
+  const [{ validExts }] = validDetails.filter(valid => req.route.path === valid.path);
   const extName = extname(file.originalname);
-
-  console.log(validExts);
 
   if(!validExts.includes(extName)){
     cb(new Error('Invalid file type!'), false);

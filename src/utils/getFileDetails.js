@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
 
-function getFileNameAndPath()
+export function getNoteNameAndPath()
 {
     const randomHex = randomBytes(16).toString('hex');
     const fileName = randomHex + '.md';
@@ -13,4 +13,7 @@ function getFileNameAndPath()
     return { fileName, filePath };
 }
 
-export default getFileNameAndPath;
+export function getUploadFilePath(uploadsFolder, fileName)
+{
+    return join(__dirname, '..', 'uploads', uploadsFolder, fileName);
+}

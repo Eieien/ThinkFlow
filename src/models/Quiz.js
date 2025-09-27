@@ -15,7 +15,19 @@ const quizSchema = new mongoose.Schema(
             type: String, 
             required: true
         },
-        questions: [{ type: Object }]
+        questions: [
+            {
+                question: { type: String, required: true },
+                options: { 
+                    a: { type: String, required: true },
+                    b: { type: String, required: true },
+                    c: { type: String, required: true },
+                    d: { type: String, required: true }
+                },
+                answer: { type: String, required: true },
+                explanation: { type: String }
+            }
+        ]
     },
     { timestamps: true }
 );
