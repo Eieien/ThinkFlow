@@ -1,4 +1,5 @@
 import React, {ReactNode} from "react";
+import GuestHeader from "./GuestHeader";
 
 interface LayoutProps{
     title: string;
@@ -14,7 +15,8 @@ export default function Layout({title, description, children} : LayoutProps){
                 <meta name="description" content={description}/>
             </head>
 
-            <body className="antialiased">
+            <body className="antialiased max-w-screen-xl mx-auto">
+                <GuestHeader/>
                 <div className="min-h-screen w-full">
                     {children}
 
