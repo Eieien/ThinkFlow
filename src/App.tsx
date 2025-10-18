@@ -1,4 +1,4 @@
-import Layout from "./components/Layout.tsx"
+import Layout from "./components/layout/Layout.tsx"
 import NotesCard from "./components/NotesCard.tsx"
 
 function App() {
