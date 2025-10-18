@@ -1,9 +1,7 @@
 # Contribution Guidelines
-<hr>
 If you are interested in contributing to the thinkflow website. Feel free to contribute
 
 ## Getting Started
-<hr>
 
 ### Prerequisites
 Ensure you have the following installed
@@ -16,12 +14,14 @@ Ensure you have the following installed
 - Express
 
 ## Setup
-<hr>
 1. Clone the Repository
+
 ```
 git clone https://github.com/Eieien/ThinkFlow.git
 ```
+
 2. Install dependencies
+
 ```
 npm create vite@latest
 npm install
@@ -29,6 +29,7 @@ npm install tailwindcss @tailwindcss/vite
 ```
 
 3. Install VS Code extensions
+
 ```
 Just the usual lang sa
 ```
@@ -39,7 +40,7 @@ npm run dev
 ```
 
 ## Project Structure
-<hr>
+```
 Thinkflow/
 ├── .git/                   # GitHub workflows and templates
 ├── .vscode/                # VS Code settings
@@ -58,7 +59,7 @@ Thinkflow/
 ├── tsconfig.json          # TypeScript configuration
 ├── tailwind.config.js     # Tailwind CSS configuration
 └── vitest.config.ts       # Test configuration
-
+```
 ## Contributing Process
 ### 1. Choose a Feature or an issue to work on
 - Check the [Notion](https://www.notion.so/2904cb6a29788098a111e54729666575?v=2904cb6a297880d1b540000ca89089c3&source=copy_link) Page
