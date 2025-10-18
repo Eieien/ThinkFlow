@@ -12,6 +12,7 @@ Ensure you have the following installed
 - Tailwindcss
 - React Router
 - Express
+- Ivan pls add
 
 ## Setup
 1. Clone the Repository
