@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme{
+
+/* Light mode and Dark mode colors */
+--color-primary-dark: #100F11; /*Background*/
+--color-dark-2: #171619;
+--color-dark-3: #1B1A1D;
+--color-dark-4: #2B2A2D;
+--color-dark-border: #3E3D41;
+--color-primary-white: #FFFFFF; /*Background*/
+--color-light-2: #FAFAFA;
+--color-light-3: #F0F0F0;
+--color-light-4: #E4E4E4;
+--color-light-border: #CDD1DA;
+
+ /*Light mode Colors*/
+--color-light-primary-blue: #492AE5;
+--color-light-secondary-blue: #9199EF;
+--color-light-tertiary-blue: #E4E6FF;
+--color-light-success: #47CB75;
+--color-light-error: #ED2D4F;
+--color-light-warning: #FDB803;
+
+ /*Dark Mode Colors*/
+--color-dark-primary-blue: #1E39C0;
+--color-dark-secondary-blue: #2D3C89;
+--color-dark-tertiary-blue: #2C3356;
+--color-dark-success: #50C462;
+--color-dark-error: #DFAD29;
+--color-dark-warning: #D8314E;
+}
+
+@layer base{
+    .card{
+        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md
+    }
+}
+
+@layer components[
+
+]
