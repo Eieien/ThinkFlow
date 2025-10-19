@@ -12,6 +12,8 @@ Ensure you have the following installed
 - Tailwindcss
 - React Router
 - Express
+- Axios
+- Websocket
 - Ivan pls add
 
 ## Setup
@@ -27,6 +29,7 @@ git clone https://github.com/Eieien/ThinkFlow.git
 npm create vite@latest
 npm install
 npm install tailwindcss @tailwindcss/vite
+npm install axios
 ```
 
 3. Install VS Code extensions
