@@ -15,7 +15,7 @@ export default function Layout({title, description, children} : LayoutProps){
                 <meta name="description" content={description}/>
             </head>
 
-            <body className="antialiased max-w-screen-xl mx-auto">
+            <body className="antialiased max-w-screen-xl mx-auto flex flex-col justify-center">
                 <GuestHeader/>
                 <div className="min-h-screen w-full">
                     {children}
