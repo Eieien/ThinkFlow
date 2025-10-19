@@ -14,6 +14,8 @@ git clone https://github.com/Eieien/ThinkFlow.git
 npm create vite@latest
 npm install
 npm install tailwindcss @tailwindcss/vite
+npm install axios
+npm install lucide-react
 ```
 
 3. Install VS Code extensions
@@ -26,6 +28,7 @@ Just the usual lang sa
 ```
 npm run dev
 ```
+
 ## Project Structure
 ```
 Thinkflow/
