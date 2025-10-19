@@ -3,6 +3,8 @@
 
 @theme{
 
+--font-satoshi: 'Satoshi', "Helvetica Neue";
+
 /* Light mode and Dark mode colors */
 --color-primary-dark: #100F11; /*Background*/
 --color-dark-2: #171619;
@@ -34,6 +36,10 @@
 
 @layer base{
 
+    html{
+        @apply bg-primary-white text-primary-dark dark:bg-primary-dark dark:text-primary-white
+    }
+
     .card{
         @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md
     }
@@ -41,4 +47,80 @@
 
 @layer components{
 
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Light.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-LightItalic.otf") format("opentype");
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Medium.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-MediumItalic.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Regular.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Italic.otf") format("opentype");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-BoldItalic.otf") format("opentype");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-Black.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url("../assets/fonts/Satoshi-BlackItalic.otf") format("opentype");
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+*, body{
+    font-family: var(--font-satoshi);
 }

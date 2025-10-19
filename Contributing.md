@@ -14,6 +14,8 @@ Ensure you have the following installed
 - Express
 - Axios
 - Websocket
+- lucide-react for icons
+- shadcn for the graphs and other components
 - Ivan pls add
 
 ## Setup
@@ -30,6 +32,7 @@ npm create vite@latest
 npm install
 npm install tailwindcss @tailwindcss/vite
 npm install axios
+npm install lucide-react
 ```
 
 3. Install VS Code extensions
