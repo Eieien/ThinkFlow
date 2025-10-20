@@ -28,7 +28,6 @@ git clone https://github.com/Eieien/ThinkFlow.git
 2. Install dependencies
 
 ```
-npm create vite@latest
 npm install
 npm install tailwindcss @tailwindcss/vite
 npm install axios
