@@ -1,7 +1,6 @@
 import react from "react";
 import {Link} from "react-router-dom";
 import ThemeSwitcher from "../ThemeSwitcher.tsx";
-import logo from "../../assets/images/Thinkflow_Logo.svg"
 import LogoStyle from "../LogoStyle.tsx";
 
 export default function GuestHeader(){

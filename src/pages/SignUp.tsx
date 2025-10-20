@@ -2,7 +2,6 @@ import react from "react";
 import Layout from "../components/layout/Layout";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/Thinkflow_Logo.svg"
 import LogoStyle from "../components/LogoStyle";
 
 export default function SignUp(){
@@ -16,12 +15,7 @@ export default function SignUp(){
                     <div className="h-20 flex flex-row justify-between items-center">
                         <Link to="/">
                             <div className="flex gap-2 items-center">
-                                <img
-                                src={logo}
-                                className="w-20 h-20"
-                                loading="lazy"
-                                alt="logo"
-                                />
+                                <LogoStyle type={"single"} styles={"w-20 h-20"}/>
                                 <h1 className="font-bold text-xl">
                                     Thinkflow
 

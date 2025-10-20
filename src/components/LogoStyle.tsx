@@ -4,9 +4,10 @@ import lightLogo from "../assets/images/Thinkflow_Logo_light.svg"
 
 interface LogoStyleProps{
     type: String;
+    styles?: string;
 }
 
-export default function LogoStyle({type} : LogoStyleProps){
+export default function LogoStyle({type, styles} : LogoStyleProps){
     const [isDarkMode, setDarkMode] = useState(
         document.documentElement.classList.contains("dark")
     );
@@ -56,6 +57,16 @@ export default function LogoStyle({type} : LogoStyleProps){
 
                 </h1>
             </div>
+        )
+    }else if(type === "single"){
+        return (
+            <img
+            src={logo}
+            className={styles}
+            loading="lazy"
+            alt="logo"
+            />
+
         )
     }
 
