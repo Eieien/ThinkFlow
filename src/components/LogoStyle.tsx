@@ -1,10 +1,32 @@
-import logo from "../assets/images/Thinkflow_Logo.svg"
+import {useState, useEffect} from "react";
+import darkLogo from "../assets/images/Thinkflow_Logo_dark.svg"
+import lightLogo from "../assets/images/Thinkflow_Logo_light.svg"
 
 interface LogoStyleProps{
     type: String;
 }
 
 export default function LogoStyle({type} : LogoStyleProps){
+    const [isDarkMode, setDarkMode] = useState(
+        document.documentElement.classList.contains("dark")
+    );
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            const dark = document.documentElement.classList.contains("dark");
+            setDarkMode(dark);
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class"],
+        });
+
+        return () => observer.disconnect();
+    }, [])
+
+    const logo = (isDarkMode === true) ?  lightLogo : darkLogo;
+
     if(type === "vertical"){
         return (
             <div className="flex flex-col justify-center items-center">
