@@ -19,7 +19,7 @@ export default function ThemeSwitcher(){
     return(
 
         <>
-            <button className="relative bg-primary-white p-2 rounded-full cursor-pointer dark:bg-dark-3
+            <button className="relative bg-primary-white p-2 rounded-full cursor-pointer dark:bg-primary-dark
             "
             onClick={changeTheme}>
                 

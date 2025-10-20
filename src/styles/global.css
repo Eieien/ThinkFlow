@@ -37,11 +37,18 @@
 @layer base{
 
     html{
-        @apply transition duration-200 bg-light-2 text-primary-dark dark:bg-primary-dark dark:text-primary-white
+        @apply transition duration-200 bg-light-2 text-primary-dark dark:bg-dark-2 dark:text-primary-white
     }
 
     .card{
         @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md
+    }
+
+    label{
+        @apply text-dark-border font-bold dark:text-light-border
+    }
+    .auth-input{
+        @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-2 rounded-md p-2 text-sm font-semibold
     }
 }
 
@@ -80,14 +87,14 @@
 @font-face {
     font-family: 'Satoshi';
     src: url("../assets/fonts/Satoshi-Regular.otf") format("opentype");
-    font-weight: 500;
+    font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Satoshi';
     src: url("../assets/fonts/Satoshi-Italic.otf") format("opentype");
-    font-weight: 500;
+    font-weight: 600;
     font-style: italic;
     font-display: swap;
 }

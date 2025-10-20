@@ -2,24 +2,14 @@ import react from "react";
 import {Link} from "react-router-dom";
 import ThemeSwitcher from "../ThemeSwitcher.tsx";
 import logo from "../../assets/images/Thinkflow_Logo.svg"
+import LogoStyle from "../LogoStyle.tsx";
 
 export default function GuestHeader(){
     return (
         <>
             <div className="h-20 flex flex-row justify-between items-center">
                 <Link to="/">
-                    <div className="flex gap-2 items-center">
-                        <img
-                        src={logo}
-                        className="w-20 h-20"
-                        loading="lazy"
-                        alt="logo"
-                        />
-                        <h1 className="font-bold text-xl">
-                            Thinkflow
-
-                        </h1>
-                    </div>
+                    <LogoStyle type="horizontal"/>
                 
                 </Link>
 
