@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { body, cookie } from "express-validator";
 
-import * as auth from "../controllers/authController.js";
-import { checkValidationErrors } from "../middleware/checkErrors.js";
+import AuthController from "../controllers/authController.js";
+import { checkValidationErrors } from "../middleware/errorHandler.js";
 
 const authRouter = Router();
 
@@ -12,23 +12,23 @@ authRouter.post('/signup',
         .isEmail().withMessage('Invalid email!'),
     body('password').notEmpty().withMessage('Password not found!')
         .isLength(8).withMessage('Password must be at least 8 characters long!'),
-    checkValidationErrors, 
-    auth.signup);
+    checkValidationErrors,
+    AuthController.signup);
 authRouter.post('/login',
     body('email').notEmpty().withMessage('Email not found!')
         .isEmail().withMessage('Invalid email!'),
     body('password').notEmpty().withMessage('Password not found!'),
     cookie('jwt').isEmpty().withMessage('You are already logged in!'),
     checkValidationErrors, 
-    auth.login);
+    AuthController.login);
 authRouter.put('/change-password',
     body('email').notEmpty().withMessage('Email must be set!'),
     body('password').notEmpty().withMessage('New password not set!'),
     body('confPassword').notEmpty().withMessage('Must confirm password!'),
     checkValidationErrors,
-    auth.changePassword);
+    AuthController.changePassword);
 authRouter.use(cookie('jwt').notEmpty().withMessage('You are not logged in!'), checkValidationErrors)
-authRouter.get('/refresh', auth.refresh);
-authRouter.delete('/logout', auth.logout);
+authRouter.get('/refresh', AuthController.refresh);
+authRouter.delete('/logout', AuthController.logout);
 
 export default authRouter;

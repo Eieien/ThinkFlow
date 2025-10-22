@@ -15,11 +15,18 @@ const resultSchema = new mongoose.Schema(
             required: true
         },
         time: {
-            type: Number,
+            type: Date,
             required: true
         }
     },
-    { timestamps: true }
+    { 
+        timestamps: true,
+        statics: {
+            findAllByQuizId: async function(quizId){
+                return await this.find({ quiz: quizId });
+            }
+        }
+    }
 )
 
 const Result = mongoose.model('results', resultSchema);

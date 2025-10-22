@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import { excludedNoteFields, excludedTagFields, excludedUserFields } from "../config/mongoConfig.js";
+
 const notesSchema = new mongoose.Schema(
     {
         creator: {
@@ -30,7 +32,20 @@ const notesSchema = new mongoose.Schema(
             ref: "tags"
         }
     },
-    { timestamps: true }
+    { 
+        timestamps: true,
+        statics: {
+            findPublic: async function(){
+                return await this.find({ 'options.isPublic': true }, excludedNoteFields)
+                    .populate("creator", excludedUserFields);
+            },
+            findByUserId: async function(userId){
+                return await this.find({ creator: userId }, excludedNoteFields)
+                    .populate("creator", excludedUserFields)
+                    .populate("tags", excludedTagFields);
+            }
+        }
+    }
 );
 
 const Notes = mongoose.model("notes", notesSchema);

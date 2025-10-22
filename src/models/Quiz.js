@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import { excludedQuizFields } from "../config/mongoConfig.js";
+
 const quizSchema = new mongoose.Schema(
     {
         note: {
@@ -29,7 +31,14 @@ const quizSchema = new mongoose.Schema(
             }
         ]
     },
-    { timestamps: true }
+    { 
+        timestamps: true, 
+        statics: {
+            findByNoteId: async function(noteId){
+                return await this.findOne({ note: noteId }).select(excludedQuizFields);
+            }
+        }
+    }
 );
 
 const Quiz = mongoose.model("quizzes", quizSchema);

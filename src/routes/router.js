@@ -1,21 +1,21 @@
 import { Router } from "express";
 
-import auth from "./auth.js";
-import root from "./root.js";
-import notes from "./notes.js";
-import quiz from "./quiz.js";
-import result from "./result.js";
-import tag from "./tags.js";
+import authRoutes from "./authRoutes.js";
+import rootRoutes from "./rootRoutes.js";
+import notesRoutes from "./notesRoutes.js";
+import quizRoutes from "./quizRoutes.js";
+import resultRoutes from "./resultRoutes.js";
+import tagsRoutes from "./tagsRoutes.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const router = Router();
 
-router.use('/auth', auth);
-router.use('/notes', notes);
+router.use('/auth', authRoutes);
+router.use('/notes', notesRoutes);
 // router.use(verifyToken);
-router.use('/', root);
-router.use('/tags', tag);
-router.use('/quiz', quiz);
-router.use('/results', result);
+router.use('/', rootRoutes);
+router.use('/tags', tagsRoutes);
+router.use('/quiz', quizRoutes);
+router.use('/results', resultRoutes);
 
 export default router;

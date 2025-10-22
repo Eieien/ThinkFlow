@@ -34,7 +34,7 @@ function catchError(err)
                 break;
         }
     }
-    return { error: message };
+    return { error: err };
 }
 
 export default catchError;

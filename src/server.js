@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
+import path from "path";
 
 import { connectToMongoDB } from "./config/mongoConfig.js";
 import routes from "./routes/router.js";
@@ -11,8 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
-    limit: 10, // 10 requests per windowMs
-    message: (req, res) => {
+    limit: 100, // 100 requests per windowMs
+    message: (_req, res) => {
         return res.status(429).json({ error: 'Too many requests, please try again later.' });
     },
     standardHeaders: true

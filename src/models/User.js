@@ -1,13 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-function checkIfFound(foundUser, res)
-{
-    if(!foundUser){
-        res.statusCode = 404;
-        throw new Error('User not found!');
-    }
-}
+import { excludedUserFields } from "../config/mongoConfig.js";
 
 const userSchema = new mongoose.Schema(
     {
