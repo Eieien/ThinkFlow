@@ -13,7 +13,7 @@ export default function Hero(){
                         <h1 className="text-8xl text-center font-bold">
                             Change your Way of <span>thinking</span> with <span>AI</span>
                         </h1>
-                        <p className="text-2xl">
+                        <p className="text-2xl font-medium text-dark-4 dark:text-light-4">
                             Transform the Way You Study With AI-Generated Quizzes From Your Own Notes
                         </p>
                         <div className="flex justify-center items-center gap-2">

@@ -26,7 +26,7 @@
 --color-light-warning: #FDB803;
 
  /*Dark Mode Colors*/
---color-dark-primary-blue: #1E39C0;
+--color-dark-primary-blue: #1d4ed8;
 --color-dark-secondary-blue: #2D3C89;
 --color-dark-tertiary-blue: #2C3356;
 --color-dark-success: #50C462;
@@ -37,7 +37,7 @@
 @layer base{
 
     html{
-        @apply transition duration-200 bg-light-2 text-primary-dark dark:bg-dark-2 dark:text-primary-white
+        @apply transition duration-200 bg-primary-white text-dark-3 dark:bg-primary-dark dark:text-primary-white
     }
 
     .card{
@@ -45,7 +45,7 @@
     }
 
     label{
-        @apply text-dark-border font-bold dark:text-light-border
+        @apply text-primary-dark dark:text-primary-white
     }
     .auth-input{
         @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-2 rounded-md p-2 text-sm font-semibold
