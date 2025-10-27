@@ -65,14 +65,14 @@ export default function Sidebar({collapsed, }: SidebarProps){
 
     return (
         <div id="sidebar" className={`${collapsed ? "w-14" : "w-60"} transition-all duration-200 fixed top-0 left-0 h-screen bg-light-2 border-r border-r-light-border`}>
-            <div className="p-2">
+            <div className="p-2 h-full">
                 <div className="flex justify-between items-center">
                     <Logo type={"single"} styles="w-15 mb-2"/>
                     
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col h-full gap-2">
                     {sidebarData.navMain.map((item) => (
-                        <div key={item.section} className="flex flex-col gap-2">
+                        <div key={item.section} className="flex justify-between flex-col gap-2">
                             <h1 className={`${collapsed ? "hidden" : "inline-block"}`}>{item.section}</h1>
                             {item.items.map((item) => (
                                 <div className="flex gap-4 cursor-pointer hover:bg-light-3 px-2 py-1 rounded-md" key={item.title}>

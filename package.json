@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdxeditor/editor": "^3.48.0",
     "@tailwindcss/vite": "^4.1.14",
+    "@uiw/react-md-editor": "^4.0.8",
     "axios": "^1.12.2",
     "lucide-react": "^0.546.0",
     "react": "^19.1.1",
