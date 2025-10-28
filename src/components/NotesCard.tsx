@@ -10,7 +10,7 @@ interface NotesCardProps{
 export default function NotesCard({title, dateCreated, creator, description} : NotesCardProps){
 
     return (
-        <div className="w-80 card">
+        <div className="w-full card">
             <h1>{title}</h1>
             <div className="flex gap-2">
                 <h3>{dateCreated}</h3>
