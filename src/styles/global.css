@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
+
 @theme{
 
 --font-satoshi: 'Satoshi', "Helvetica Neue";
@@ -34,6 +35,47 @@
 --color-dark-warning: #D8314E;
 }
 
+
+
+.tiptap{
+    h1{
+        @apply scroll-m-20  text-4xl font-extrabold tracking-tight text-balance
+    }
+
+    h2{
+        @apply scroll-m-20 text-3xl font-bold tracking-tight first:mt-0
+    }
+
+    h3{
+        @apply scroll-m-20 text-2xl font-bold tracking-tight
+    }
+
+    h4{
+        @apply scroll-m-20 text-xl font-bold tracking-tight
+    }
+
+    p{
+        @apply leading-7 
+    }
+
+    blockquote{
+        @apply mt-6 border-l-2 pl-6 italic
+    }
+    ul, ol{
+        @apply pl-4 
+    }
+
+    ul li{
+        @apply list-disc
+    }
+
+    ol li{
+        @apply list-decimal
+    }
+    
+
+}
+  
 .ProseMirror {
     border: none;
     outline: none;
@@ -55,15 +97,9 @@
         @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-2 rounded-md p-2 text-sm font-semibold
     }
 
-    .tiptap{
-        @apply prose-xl 
-        
-    }
+    
 }
 
-@layer components{
-
-}
 
 @font-face {
     font-family: 'Satoshi';
