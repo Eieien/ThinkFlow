@@ -13,10 +13,9 @@ Ensure you have the following installed
 - React Router
 - Express
 - Axios
-- Websocket
+- socket.io-client
 - lucide-react for icons
 - shadcn for the graphs and other components
-- Ivan pls add
 
 ## Setup
 1. Clone the Repository
