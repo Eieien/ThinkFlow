@@ -1,7 +1,9 @@
 import {useEffect, useState, useContext, ReactNode} from "react";
 import Sidebar from "../../components/layout/Sidebar"
 import UserNavigationBar from "../../components/layout/UserNavigationBar"
-
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/AppSidebar"
+import ThemeSwitcher from "../ThemeSwitcher";
 interface UserLayoutProps{
     title: String;
     description: string;
@@ -28,7 +30,33 @@ export default function UserLayout({title, description, children}: UserLayoutPro
             <title>{title}</title>
             <meta name="description" content={description}/>
 
-            <div className="relative">
+            <SidebarProvider>
+                <AppSidebar />
+                <main className="w-full">
+                    <div className="flex justify-between gap-2 items-center px-1 py-2">
+                        <div className="flex gap-2 items-center">
+                            <SidebarTrigger/>
+                            <h1>Page Title</h1>
+                        </div>
+                        <ThemeSwitcher/>
+                    </div>
+                    <section className="w-[90%]">
+                        <div className="max-w-xl mx-auto gap-2">
+                            <div>
+                                {children}
+
+                            </div>
+                            <div>
+                                HELLo
+                            </div>
+
+                        </div>
+
+                    </section>
+                </main>
+            </SidebarProvider>
+            
+            {/* <div className="relative">
                 <div className="flex">
                     <Sidebar collapsed={isCollapsed}/>
                     <section className={`${isCollapsed ? "ml-16" : "ml-60"} transition-all duration-200 flex w-full flex-col gap-2`}>
@@ -42,7 +70,7 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                     
                 </div>
 
-            </div>
+            </div> */}
 
         </>
 

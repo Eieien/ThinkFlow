@@ -48,7 +48,7 @@ export default function LogoStyle({type, styles} : LogoStyleProps){
             <div className="flex gap-2 items-center">
                 <img
                 src={logo}
-                className="w-20 h-20"
+                className={`${!styles ? "w-20" : styles} ? `}
                 loading="lazy"
                 alt="logo"
                 />
