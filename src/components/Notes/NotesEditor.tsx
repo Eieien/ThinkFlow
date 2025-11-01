@@ -7,34 +7,70 @@ import Typography from '@tiptap/extension-typography';
 import { shouldShowHeadingMenu } from "../../configs/HeadingConfig"; 
 import { getHierarchicalIndexes, TableOfContents } from '@tiptap/extension-table-of-contents';
 import { Highlighter } from "lucide-react";
+import Collaboration from "@tiptap/extension-collaboration"
+import {HocuspocusProvider} from "@hocuspocus/provider"
+import {CollaborationCaret} from '@tiptap/extension-collaboration-caret'
+import * as Y from "yjs"
+import { generateJSON, } from '@tiptap/html'
+import { yXmlFragmentToProseMirrorFragment } from "@tiptap/y-tiptap";
 
-    
+const ydoc = new Y.Doc();
+const provider = new HocuspocusProvider({
+  url: "ws://127.0.0.1:1234",
+  name: "example",
+  document: ydoc,
+});
 
 export default function NotesEditor(){
 
     const [value, setValue] = useState("Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.")
+
     const [isEditable, setEditable] = useState(true);
-    const title = "Untitled";
+    const title = "Antitled";
+
+    
 
     const editor = useEditor({
         extensions: [
+          Collaboration.configure({
+            document: ydoc,
+          }),
           StarterKit.configure({
             heading: {
               levels: [1, 2, 3, 4],
             },
+            history: false,
           }),
-        Highlight.configure({
+          Highlight.configure({
           multicolor: true,
-        }),
+          }),
+
+          // CollaborationCaret.configure({
+          //   provider: provider,
+          //   user: {
+          //     name: 'Cyndi Lauper',
+          //     color: '#f783ac',
+          //   },
+          // }),
+      
         Typography,
         ], // define your extension array
         autofocus: "end",
         content: `<h1>${title}</h1>
                 <p>${value}</p>`, // initial content
+        onCreate: ({editor}) => {
+          const yFragment = ydoc.getXmlElement('prosemirror');
+          const isEmpty = yFragment.length === 0;
+          if(isEmpty){
+            editor.commands.setContent(value);
+
+          }
+        }
     })
 
     useEffect(() => {
-        if (editor) {
+
+      if (editor) {
           editor.setEditable(isEditable)
         }
       }, [isEditable, editor])

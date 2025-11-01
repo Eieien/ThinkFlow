@@ -40,14 +40,11 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                         </div>
                         <ThemeSwitcher/>
                     </div>
-                    <section className="w-[90%]">
-                        <div className="max-w-xl mx-auto gap-2">
+                    <section className="w-full">
+                        <div className="max-w-sm xl:max-w-4xl lg:max-w-4xl md:max-w-xl sm:max-w-md mx-auto flex  gap-2">
                             <div>
                                 {children}
 
-                            </div>
-                            <div>
-                                HELLo
                             </div>
 
                         </div>
