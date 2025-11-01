@@ -16,7 +16,7 @@ import { yXmlFragmentToProseMirrorFragment } from "@tiptap/y-tiptap";
 
 const ydoc = new Y.Doc();
 const provider = new HocuspocusProvider({
-  url: "ws://127.0.0.1:1234",
+  url: "ws://localhost:3000/collab",
   name: "example",
   document: ydoc,
 });
