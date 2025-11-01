@@ -1,4 +1,3 @@
-import { Server } from "socket.io";
 import { readFile, writeFile } from "fs/promises";
 
 import { getUploadFilePath } from "./utils/getFileDetails.js";

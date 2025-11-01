@@ -1,4 +1,6 @@
 import express from "express";
+import expressWs from "express-ws";
+import { Hocuspocus } from "@hocuspocus/server";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
 
@@ -14,7 +16,7 @@ import verifyToken from "./middleware/verifyToken.js";
 
 connectToMongoDB();
 
-const app = express();
+const { app } = expressWs(express());
 const PORT = process.env.PORT || 3000;
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
@@ -24,6 +26,14 @@ const limiter = rateLimit({
     },
     standardHeaders: true
 });
+const hocuspocus = new Hocuspocus({
+    async onConnect({ documentName }){
+        console.log(`Client connected to: ${documentName}`);
+    },
+    async onDisconnect(data){
+        console.log(`user disconnected`);
+    }
+})
 
 // middleware
 app.use(express.json());
@@ -39,7 +49,10 @@ app.use('/api/user', userRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/results', resultRoutes);
 
-const appServer = app.listen(PORT, () => {
+app.ws("/collab", (ws, req) => {
+    hocuspocus.handleConnection(ws, req);
+});
+
+app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 });
-startSocket(appServer);
