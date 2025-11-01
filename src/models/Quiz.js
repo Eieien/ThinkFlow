@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { excludedQuizFields } from "../config/mongoConfig.js";
+import { excludeV } from "../config/mongoConfig.js";
 
 const quizSchema = new mongoose.Schema(
     {
@@ -35,7 +35,7 @@ const quizSchema = new mongoose.Schema(
         timestamps: true, 
         statics: {
             findByNoteId: async function(noteId){
-                return await this.findOne({ note: noteId }).select(excludedQuizFields);
+                return await this.findOne({ note: noteId }, excludeV);
             }
         }
     }

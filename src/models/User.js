@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-import { excludedUserFields } from "../config/mongoConfig.js";
+import { excludeV } from "../config/mongoConfig.js";
+
+const tagSchema = new mongoose.Schema(
+    {
+        name: { type: String },
+        color: {
+            type: String,
+            default: 'FFFFFF'
+        }
+    }
+)
 
 const userSchema = new mongoose.Schema(
     {
@@ -19,6 +29,7 @@ const userSchema = new mongoose.Schema(
             required: true,
         },
         pfp: { type: String },
+        tags: [tagSchema],
         deactivated: {
             type: Boolean,
             default: false
@@ -31,7 +42,7 @@ const userSchema = new mongoose.Schema(
         timestamps: true, 
         statics: {
             findByEmail: async function(email) {
-                return await this.findOne({ email: email });
+                return await this.findOne({ email: email }, excludeV);
             }
         },
         methods: {

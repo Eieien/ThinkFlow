@@ -1,10 +1,16 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
-import path from "path";
 
 import { connectToMongoDB } from "./config/mongoConfig.js";
-import routes from "./routes/router.js";
+import startSocket from "./socket.js" 
+
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js"
+import notesRoutes from "./routes/notesRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+import resultRoutes from "./routes/resultRoutes.js";
+import verifyToken from "./middleware/verifyToken.js";
 
 connectToMongoDB();
 
@@ -19,12 +25,21 @@ const limiter = rateLimit({
     standardHeaders: true
 });
 
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(limiter);
-app.use('/api', routes);
 
-export const appServer = app.listen(PORT, () => {
+// routes
+app.use('/api/auth', authRoutes);
+app.use('/api/notes', notesRoutes);
+// router.use(verifyToken);
+app.use('/api/user', userRoutes);
+app.use('/api/quiz', quizRoutes);
+app.use('/api/results', resultRoutes);
+
+const appServer = app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 });
+startSocket(appServer);

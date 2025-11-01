@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import catchError from "../utils/catchError.js";
 import { jwtCookieOptions, formatJwtUserData, createJwts } from "../utils/jwtUtils.js";
+import { excludedUserFields, excludeV } from "../config/mongoConfig.js";
 
 export default class AuthController {
     static signup = async (req, res) => {
@@ -31,9 +32,9 @@ export default class AuthController {
             res.cookie('jwt', refreshToken, jwtCookieOptions);
             foundUser.refreshToken = refreshToken;
             await foundUser.save();
-            const { _id, username, email, pfp, createdAt } = foundUser;
+            const userDetails = await User.findById(foundUser._id, excludedUserFields);
             return res.status(201).json({
-                user: { _id, username, email, pfp, createdAt },
+                user: userDetails,
                 accessToken: accessToken 
             });
         } catch (err) {

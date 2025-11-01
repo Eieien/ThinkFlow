@@ -13,20 +13,27 @@ export default class ResultController {
     }
 
     static postResult = async (req, res) => {
+        const { userId, quizId, score, time } = req.body;
         try {
-            const { userId, quizId, score, time } = req.body;
-            const formattedTime = new Date(time);
-
-            console.log(formattedTime)
-            // const postedResult = await Result.create({
-            //     user: userId,
-            //     quiz: quizId,
-            //     score: score,
-            //     time: time
-            // });
+            const postedResult = await Result.create({
+                user: userId,
+                quiz: quizId,
+                score: score,
+                time: time
+            });
+            const hr =  (Math.floor(time / 3600)).toString().padStart(2, '0');
+            const min = ':' + (Math.floor(time / 60) % 60).toString().padStart(2, '0');
+            const sec = ':' + (time % 60).toString().padStart(2, '0');
+            const formatedTime = hr + min + sec;
+            const editedResult = {
+                user: postedResult._id,
+                quiz: postedResult.quiz,
+                score: postedResult.score,
+                time: formatedTime
+            }
             return res.status(201).json({ 
-                message: 'Result has been posted!',
-                postedResult: null
+                message: 'Result has been submitted!',
+                postedResult: editedResult
             }); 
         } catch (err) {
             return res.status(400).json(catchError(err));
