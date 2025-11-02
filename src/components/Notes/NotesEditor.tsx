@@ -14,12 +14,6 @@ import * as Y from "yjs"
 import { generateJSON, } from '@tiptap/html'
 import { yXmlFragmentToProseMirrorFragment } from "@tiptap/y-tiptap";
 
-const ydoc = new Y.Doc();
-const provider = new HocuspocusProvider({
-  url: "ws://localhost:3000/collab",
-  name: "example",
-  document: ydoc,
-});
 
 export default function NotesEditor(){
 
@@ -28,7 +22,14 @@ export default function NotesEditor(){
     const [isEditable, setEditable] = useState(true);
     const title = "Antitled";
 
-    
+    const ydoc = new Y.Doc();
+    useEffect(() => {
+      const provider = new HocuspocusProvider({
+        url: "ws://localhost:3000/collab",
+        name: "example",
+        document: ydoc,
+      });
+    }, []);
 
     const editor = useEditor({
         extensions: [
