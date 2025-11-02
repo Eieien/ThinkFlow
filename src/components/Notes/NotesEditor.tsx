@@ -18,18 +18,17 @@ import { yXmlFragmentToProseMirrorFragment } from "@tiptap/y-tiptap";
 export default function NotesEditor(){
 
     const [value, setValue] = useState("Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.")
-
-    const [isEditable, setEditable] = useState(true);
-    const title = "Antitled";
-
     const ydoc = new Y.Doc();
-    useEffect(() => {
-      const provider = new HocuspocusProvider({
+
+    const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
         name: "example",
         document: ydoc,
       });
-    }, []);
+
+    const [isEditable, setEditable] = useState(true);
+    const title = "Antitled";
+
 
     const editor = useEditor({
         extensions: [
@@ -57,17 +56,14 @@ export default function NotesEditor(){
         Typography,
         ], // define your extension array
         autofocus: "end",
-        content: `<h1>${title}</h1>
-                <p>${value}</p>`, // initial content
-        onCreate: ({editor}) => {
-          const yFragment = ydoc.getXmlElement('prosemirror');
-          const isEmpty = yFragment.length === 0;
-          if(isEmpty){
-            editor.commands.setContent(value);
-
-          }
-        }
+        
     })
+
+    provider.on('sync', () => {
+      if (editor.isEmpty) {
+        editor.commands.setContent(value);
+      }
+    });
 
     useEffect(() => {
 
