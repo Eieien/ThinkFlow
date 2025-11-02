@@ -18,12 +18,10 @@ import { yXmlFragmentToProseMirrorFragment } from "@tiptap/y-tiptap";
 export default function NotesEditor(){
 
     const [value, setValue] = useState("Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.")
-    const ydoc = new Y.Doc();
 
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: "example",
-        document: ydoc,
+        name: "38691187c718301c38a56daa096540b3",
       });
 
     const [isEditable, setEditable] = useState(true);
@@ -33,7 +31,7 @@ export default function NotesEditor(){
     const editor = useEditor({
         extensions: [
           Collaboration.configure({
-            document: ydoc,
+            document: provider?.document,
           }),
           StarterKit.configure({
             heading: {
@@ -59,11 +57,11 @@ export default function NotesEditor(){
         
     })
 
-    provider.on('sync', () => {
-      if (editor.isEmpty) {
-        editor.commands.setContent(value);
-      }
-    });
+    // provider.on('sync', () => {
+    //   if (editor.isEmpty) {
+    //     editor.commands.setContent(value);
+    //   }
+    // });
 
     useEffect(() => {
 
