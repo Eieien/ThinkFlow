@@ -11,7 +11,7 @@ npm run dev
 ### Communicating with the server
 Axios Documentation - *https://axios-http.com/docs/intro*
 
-##### Create an instance of axios
+#### Create an instance of axios
 Example:
 ```js
 const axiosInstance = axios.create({
@@ -19,7 +19,7 @@ const axiosInstance = axios.create({
 });
 ```
 
-##### Use request methods with instance (get, post, put, delete)
+#### Use request methods with instance (get, post, put, delete)
 Example:
 ```js
 const getRes = axiosInstance.get('/users');
