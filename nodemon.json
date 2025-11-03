@@ -1,4 +1,4 @@
 {
-    "watch": ["src"],
-    "ignore": ["src/uploads/notes"]
+    "watch": ["uploads"],
+    "ignore": ["uploads/notes"]
 }
