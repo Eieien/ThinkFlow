@@ -3,28 +3,33 @@ import { body } from "express-validator";
 
 import NotesController from "../controllers/notesController.js";
 import verifyToken from "../middleware/verifyToken.js";
-import { checkValidationErrors, checkFileUpload} from "../middleware/errorHandler.js";
+import { checkValidationErrors, checkFileUpload} from "../middleware/errorHandlers.js";
 import { noteUploader } from "../config/multerConfig.js";
 
 const notesRouter = Router();
 
 notesRouter.get('/', NotesController.getPublicNotes);
+notesRouter.get('/:id', NotesController.getOneNote);
 // notesRouter.use(verifyToken);
+notesRouter.get('/user/:id', NotesController.getNotesByUserId)
 notesRouter.post('/create',
-  body('userId').notEmpty().withMessage('User ID must be set!'),
   body('title').notEmpty().withMessage('Title must be set!'),
   checkValidationErrors,
   NotesController.createNote);
 notesRouter.route('/:id')
-  .get(NotesController.getNotesByUserId)
-  .put(NotesController.updateNote)
+  .put(
+    body('title').notEmpty().withMessage('Title must be set!'),
+    body('description').exists().withMessage('Description must be set!'),
+    body('options.isPublic').notEmpty().withMessage('Public option must be set!'),
+    body('options.bookmarked').notEmpty().withMessage('Bookmark option must be set!'),
+    body('tags').notEmpty().withMessage('Tags must be set!')
+      .isArray().withMessage('Invalid type for tags!'),
+    checkValidationErrors,
+    NotesController.updateNote)
   .delete(NotesController.deleteNote);
 notesRouter.post('/import',
   noteUploader.single('content'),
   checkFileUpload,
-  body('userId').notEmpty().withMessage('User ID must be set!'),
-  body('title').notEmpty().withMessage('Title must be set!'),
-  checkValidationErrors,
   NotesController.importNote);
 
 export default notesRouter;

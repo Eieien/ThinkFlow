@@ -7,17 +7,15 @@ const validDetails = [
   {
     path: '/import',
     validExts: ['.txt', '.md', '.pdf', '.jpg', '.jpeg', '.png'],
-    uploads_folder: 'notes'
   },
   {
     path: '/pfp/:id',
     validExts: ['.jpg', '.jpeg', '.png'],
-    uploads_folder: 'pfps'
   }
 ]
 
 const noteStorage = multer.diskStorage({
-  destination: 'src/uploads/notes',
+  destination: 'uploads/notes',
   filename: (_req, file, cb) => {
     const randomName = randomBytes(16).toString("hex");
     const fileExt = extname(file.originalname);
@@ -25,7 +23,7 @@ const noteStorage = multer.diskStorage({
   }
 });
 const pfpStorage = multer.diskStorage({
-  destination: 'src/uploads/pfps',
+  destination: 'uploads/images/pfps',
   filename: (_req, file, cb) => {
     const randomName = randomBytes(16).toString("hex");
     const fileExt = extname(file.originalname);

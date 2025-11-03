@@ -45,7 +45,7 @@ const quizSchema = {
     },
     required: ['quizTitle', 'description', 'questions'],
 };
-const quizPrompt = 'Create a 10 mcq quiz based on the contents of this md file.';
+const quizPrompt = 'Create a 10 mcq quiz based on this markdown content:\n\n';
 const quizSystemInstructions = [
     'Generate a JSON object that is either a quiz or an error message.',
     'If you have enough information to generate a quiz, follow the "quizSchema"',

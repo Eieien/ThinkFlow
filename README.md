@@ -9,4 +9,16 @@ npm run dev
 ```
 
 ### Communicating with the server
-uhhh axios yes
+Create an instance of axios
+
+Example:
+```
+const axiosInstance = axios.create();
+```
+
+Use request methods with instance (get, post, put, delete)
+
+Example:
+```
+const res = axiosInstance.get('/api/some-route', );
+```

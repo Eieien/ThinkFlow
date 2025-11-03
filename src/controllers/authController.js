@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import catchError from "../utils/catchError.js";
 import { jwtCookieOptions, formatJwtUserData, createJwts } from "../utils/jwtUtils.js";
-import { excludedUserFields, excludeV } from "../config/mongoConfig.js";
 
 export default class AuthController {
     static signup = async (req, res) => {
@@ -18,7 +17,6 @@ export default class AuthController {
             return res.status(400).json(catchError(err));
         }
     }
-
     static login = async (req, res) => {
         const userData = req.body;
         try {
@@ -32,7 +30,7 @@ export default class AuthController {
             res.cookie('jwt', refreshToken, jwtCookieOptions);
             foundUser.refreshToken = refreshToken;
             await foundUser.save();
-            const userDetails = await User.findById(foundUser._id, excludedUserFields);
+            const userDetails = await User.findById(foundUser._id);
             return res.status(201).json({
                 user: userDetails,
                 accessToken: accessToken 
@@ -41,7 +39,6 @@ export default class AuthController {
             return res.status(400).json(catchError(err));
         }
     }
-
     static refresh = async (req, res) => {
         const refreshToken = req.cookies.jwt;
         try {
@@ -55,7 +52,6 @@ export default class AuthController {
             return res.status(400).json(catchError(err));
         }
     }
-
     static logout = async (req, res) => {
         const refreshToken = req.cookies.jwt;
         try {
@@ -67,7 +63,6 @@ export default class AuthController {
             return res.status(400).json(catchError(err));
         }
     }
-
     static changePassword = async (req, res) => {
         const { email, password, confPassword } = req.body;
         try {

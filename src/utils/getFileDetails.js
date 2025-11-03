@@ -8,12 +8,12 @@ const __dirname = dirname(__filename);
 export function getNoteNameAndPath()
 {
     const randomHex = randomBytes(16).toString('hex');
-    const fileName = randomHex + '.md';
+    const fileName = randomHex + '.bin';
     const filePath = join(__dirname, '..', 'uploads', 'notes', fileName);
     return { fileName, filePath };
 }
 
 export function getUploadFilePath(uploadsFolder, fileName)
 {
-    return join(__dirname, '..', 'uploads', uploadsFolder, fileName);
+    return join(__dirname, '..', '..', 'uploads', uploadsFolder, fileName);
 }

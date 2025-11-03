@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
 export const excludeV = '-__v ';
-export const excludedUserFields = excludeV + '-password -refreshToken';
 // export const excludedNoteFields = excludeV + '';
 // export const excludedQuizFields = excludeV + '';
 // export const excludedResultFields = excludeV + '';
-// export const excludedTagFields = excludeV + '-creator';
 
 export async function connectToMongoDB()
 {

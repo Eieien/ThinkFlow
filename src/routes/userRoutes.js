@@ -3,28 +3,26 @@ import { body } from "express-validator";
 
 import UserController from "../controllers/userController.js";
 import { pfpUploader } from "../config/multerConfig.js";
-import { checkFileUpload } from "../middleware/errorHandler.js";
-import { checkValidationErrors } from "../middleware/errorHandler.js";
+import { checkValidationErrors, checkFileUpload } from "../middleware/errorHandlers.js";
 
 const userRouter = Router();
 
 userRouter.get('/', UserController.getUsers);
-userRouter.get('/:id', UserController.getOneUser);
+userRouter.route('/:id')
+    .get(UserController.getOneUser)
+    .put(body('username').optional().notEmpty().withMessage('Username must be set!'),
+        body('email').optional().notEmpty().withMessage('Email must be set!')
+            .isEmail().withMessage('Invalid email!'),
+        body('deactivated').optional().notEmpty().withMessage('Deactivated must be set!')
+            .isBoolean().withMessage('Deactivated must be boolean value!'),
+        checkValidationErrors,
+        UserController.updateUser);
 
 userRouter.route('/pfp/:id')
+    .get(UserController.getPfp)
     .put(pfpUploader.single('pfp'),
         checkFileUpload,
         UserController.updatePfp)
     .delete(UserController.deletePfp)
-userRouter.get('/pfp/:img', UserController.getPfp)
-
-userRouter.post('/tags/create',
-    body('name').notEmpty().withMessage('Tag name not set!'),
-    body('color').optional().isHexColor().withMessage('Color must be a valid hex color!'),
-    checkValidationErrors,
-    UserController.createTag);
-userRouter.route('/tags/:id')
-    .get(UserController.getUserTags)
-    .delete(UserController.deleteTag);
 
 export default userRouter;

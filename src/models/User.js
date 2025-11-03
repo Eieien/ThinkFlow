@@ -3,16 +3,6 @@ import bcrypt from "bcrypt";
 
 import { excludeV } from "../config/mongoConfig.js";
 
-const tagSchema = new mongoose.Schema(
-    {
-        name: { type: String },
-        color: {
-            type: String,
-            default: 'FFFFFF'
-        }
-    }
-)
-
 const userSchema = new mongoose.Schema(
     {
         username: {
@@ -27,18 +17,19 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
+            select: false
         },
         pfp: { type: String },
-        tags: [tagSchema],
         deactivated: {
             type: Boolean,
             default: false
         },
-        refreshToken: {
-            type: String
+        refreshToken: { 
+            type: String,
+            select: false
         },
     },
-    { 
+    {
         timestamps: true, 
         statics: {
             findByEmail: async function(email) {

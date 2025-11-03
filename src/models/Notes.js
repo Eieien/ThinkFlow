@@ -9,7 +9,7 @@ const accessSchema = new mongoose.Schema(
             ref: 'users'
         }
     },
-    { timestamps: true}
+    { timestamps: true }
 )
 
 const notesSchema = new mongoose.Schema(
@@ -23,7 +23,10 @@ const notesSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        fileContent: { 
+        description: {
+            type: String
+        },
+        fileContent: {
             type: String,
             required: true
         },
@@ -40,6 +43,9 @@ const notesSchema = new mongoose.Schema(
         tags: {
             type: [ mongoose.SchemaTypes.ObjectId ],
             ref: "tags"
+        },
+        access: {
+            type: [ accessSchema ]
         }
     },
     { 
@@ -47,12 +53,12 @@ const notesSchema = new mongoose.Schema(
         statics: {
             findPublic: async function(){
                 return await this.find({ 'options.isPublic': true }, excludeV)
-                    .populate("creator");
+                    .populate("creator", excludeV);
             },
             findByUserId: async function(userId){
                 return await this.find({ creator: userId }, excludeV)
                     .populate("creator", excludeV)
-                    .populate("tags", excludeV);
+                    .populate("tags", excludeV + "-creator");
             }
         }
     }

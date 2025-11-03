@@ -2,17 +2,19 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import QuizController from "../controllers/quizController.js";
-import { checkValidationErrors } from "../middleware/errorHandler.js";
+import { checkValidationErrors } from "../middleware/errorHandlers.js";
 
 const quizRouter = Router();
 
-quizRouter.post('/generate',
-    body('noteId').notEmpty().withMessage('No note ID!'),
-    checkValidationErrors,
-    QuizController.createQuiz);
+quizRouter.post('/generate', QuizController.createQuiz);
+quizRouter.get('/note/:id', QuizController.getQuizByNoteId);
+quizRouter.get('/user/:id', QuizController.getUserQuizzes);
 quizRouter.route('/:id')
-    .get(QuizController.getQuizByNoteId)
-    .put(QuizController.updateQuiz)
+    .get(QuizController.getOneQuiz)
+    .put(
+        body('quizTitle').notEmpty().withMessage('Quiz title must be set!'),
+        checkValidationErrors,
+        QuizController.updateQuiz)
     .delete(QuizController.deleteQuiz)
 
 export default quizRouter;

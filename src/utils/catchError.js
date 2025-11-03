@@ -12,11 +12,17 @@ function checkKeyValue(keyValue)
 function catchError(err)
 {
     console.error(err);
-    let message = err.message;
+    let message;
+    try {
+        err = JSON.parse(err);
+        message = err.message;
+    } catch (error) {
+        message = err.message;
+    }
     if(err?.name){
         switch(err.name){
             case "CastError":
-                message = 'Invalid ID!';
+                message = 'Empty/Invalid ID!';
                 break;
             case "ValidationError":
                 const key = Object.keys(err.errors)[0];
@@ -27,14 +33,14 @@ function catchError(err)
     if(err?.code){
         switch(err.code){
             case 11000:
-                message = checkKeyValue(err.keyValue);
-                break;
+                message = checkKeyValue(err.keyValue); break;
             case "ENOENT":
-                message = "Path doesn't esist!";
-                break;
+                message = "Path doesn't esist!"; break;
+            case "ERR_INVALID_ARG_TYPE":
+                message = "Path is undefined!"; break;
         }
     }
-    return { error: err };
+    return { error: message };
 }
 
 export default catchError;

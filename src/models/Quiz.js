@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import { excludeV } from "../config/mongoConfig.js";
+import Notes from "./Notes.js";
 
 const quizSchema = new mongoose.Schema(
     {
@@ -36,6 +37,12 @@ const quizSchema = new mongoose.Schema(
         statics: {
             findByNoteId: async function(noteId){
                 return await this.findOne({ note: noteId }, excludeV);
+            },
+            findByUserId: async function(userId){
+                const userNotes = await Notes.findByUserId(userId);
+                let noteIds = [];
+                userNotes.forEach(userNote => noteIds.push(userNote._id));
+                return await this.find({ note: { $in: noteIds }});
             }
         }
     }

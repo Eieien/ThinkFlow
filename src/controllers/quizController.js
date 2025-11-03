@@ -6,6 +6,7 @@ import { aiQuizDetails } from "../config/genAiConfig.js";
 import catchError from "../utils/catchError.js";
 import Quiz from "../models/Quiz.js";
 import Notes from "../models/Notes.js";
+import { getUploadFilePath } from "../utils/getFileDetails.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +17,7 @@ export default class QuizController {
     try {
       const foundNote = await Notes.findById(noteId);
       if(!foundNote) return req.status(404).json({ error: 'Note not found! '});
-      const filePath = path.join(__dirname, '..', 'uploads', 'notes', foundNote.fileContent);
+      const filePath = getUploadFilePath('notes', foundNote.fileContent);
       const result = await generateAiContent(filePath, aiQuizDetails);
       if(result.error) return res.status(400).json(result.error);
       const { quizTitle, description, questions } = result.success;
@@ -34,10 +35,17 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
-
+  static getUserQuizzes = async (req, res) => {
+    const userId = req.params.id;
+    try {
+      const userQuizzes = await Quiz.findByUserId(userId);
+      return res.status(200).json(userQuizzes);
+    } catch (err) {
+      return res.status(400).json(catchError(err));
+    }
+  }
   static getQuizByNoteId = async (req, res) => {
     const noteId = req.params.id;
-    if(!noteId) return res.status(400).json({ error: 'No note id!' });
     try {
       const foundQuiz = await Quiz.findByNoteId(noteId);
       if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
@@ -46,16 +54,25 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
-
-  static updateQuiz = async (req, res) => {
+  static getOneQuiz = async (req, res) => {
     const quizId = req.params.id;
-    const quizDetails = req.body;
     try {
       const foundQuiz = await Quiz.findById(quizId);
       if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
-      for(let key of Object.keys(quizDetails)){
-        foundQuiz[key] = quizDetails[key];
-      }
+      return res.status(200).json(foundQuiz);
+    } catch (err) {
+      return res.status(400).json(catchError(err));
+    }
+  }
+  static updateQuiz = async (req, res) => {
+    const quizId = req.params.id;
+    const { quizTitle } = req.body;
+    try {
+      const foundQuiz = await Quiz.findById(quizId);
+      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
+      
+      foundQuiz.quizTitle = quizTitle;
+
       const editedQuiz = await foundQuiz.save();
       return res.status(200).json({ 
         message: 'Quiz has been updated!',
@@ -65,7 +82,6 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
-
   static deleteQuiz = async (req, res) => {
     const quizId = req.params.id;
     try {

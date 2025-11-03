@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, cookie } from "express-validator";
 
 import AuthController from "../controllers/authController.js";
-import { checkValidationErrors } from "../middleware/errorHandler.js";
+import { checkValidationErrors } from "../middleware/errorHandlers.js";
 
 const authRouter = Router();
 
