@@ -41,3 +41,35 @@ const postRes = await axiosInstance.post(
 );
 console.log(getRes.status);
 ```
+
+#### Adding interceptors to instance (For User Authentication)
+Example:
+```js
+// this runs before a request is sent
+axiosInstance.interceptors.request.use(
+    (config) => {
+        // handling req config (ex. setting auth token)
+        const token = localStorage.getItem('accessToken'); // or sessionStorage
+        if(token){
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        // handle req error here (optional)
+        return Promise.reject(error)
+    }
+);
+
+// this runs after a response is sent
+axiosInstance.interceptors.response.use(
+    (response) => {
+        // handle successful res here (optional)
+        return response;
+    },
+    (error) => {
+        // handle res error here (ex. redirect user to login page)
+        return Promise.reject(error);
+    }
+)
+```
