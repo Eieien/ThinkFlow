@@ -22,20 +22,24 @@ const axiosInstance = axios.create({
 ##### Use request methods with instance (get, post, put, delete)
 Example:
 ```js
-const getRes = axiosInstance.get('/users');
+// Remember to put in async function
+const getRes = await axiosInstance.get('/users');
 console.log(getRes.data);
 
-const postRes = axiosInstance.post('/notes/create',
-    {
+const postRes = await axiosInstance.post(
+    '/notes/create', // route
+    { // body data
         userId: "68d7ea6da1474eceea4328dc",
         title: "MY NOTES",
         description: "This is my notes"
     },
-    {
+    { // options
         headers: {
             'Content-Type': 'application/json'
         }
     }
-)
+);
 console.log(getRes.status);
 ```
+
+##### Adding interceptor (For User Authetication)
