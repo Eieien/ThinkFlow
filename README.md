@@ -9,16 +9,33 @@ npm run dev
 ```
 
 ### Communicating with the server
-Create an instance of axios
+Axios Documentation - *https://axios-http.com/docs/intro*
 
+##### Create an instance of axios
 Example:
-```
-const axiosInstance = axios.create();
+```js
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3000/api/',
+});
 ```
 
-Use request methods with instance (get, post, put, delete)
-
+##### Use request methods with instance (get, post, put, delete)
 Example:
-```
-const res = axiosInstance.get('/api/some-route', );
+```js
+const getRes = axiosInstance.get('/users');
+console.log(getRes.data);
+
+const postRes = axiosInstance.post('/notes/create',
+    {
+        userId: "68d7ea6da1474eceea4328dc",
+        title: "MY NOTES",
+        description: "This is my notes"
+    },
+    {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+)
+console.log(getRes.status);
 ```

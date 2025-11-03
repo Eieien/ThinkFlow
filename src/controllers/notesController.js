@@ -51,6 +51,7 @@ export default class NotesController {
       const createdNote = await Notes.create({ 
         creator: userId,
         title: title,
+        description: description,
         fileContent: fileName
       });
       return res.status(201).json({

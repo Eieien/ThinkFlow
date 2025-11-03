@@ -9,7 +9,7 @@ export function getNoteNameAndPath()
 {
     const randomHex = randomBytes(16).toString('hex');
     const fileName = randomHex + '.bin';
-    const filePath = join(__dirname, '..', 'uploads', 'notes', fileName);
+    const filePath = join(__dirname, '..', '..', 'uploads', 'notes', fileName);
     return { fileName, filePath };
 }
 
