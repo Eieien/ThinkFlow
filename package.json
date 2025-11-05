@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^3.4.0",
+    "@hocuspocus/transformer": "^3.4.0",
     "@lexical/markdown": "^0.37.0",
     "@lexical/react": "^0.37.0",
     "@mdxeditor/editor": "^3.48.0",
@@ -24,7 +25,9 @@
     "@tiptap/extension-collaboration-caret": "^3.10.1",
     "@tiptap/extension-heading": "^3.8.0",
     "@tiptap/extension-highlight": "^3.9.0",
+    "@tiptap/extension-image": "^3.10.1",
     "@tiptap/extension-table-of-contents": "^3.9.1",
+    "@tiptap/extension-text-style": "^3.10.1",
     "@tiptap/extension-typography": "^3.9.1",
     "@tiptap/html": "^3.10.1",
     "@tiptap/pm": "^3.8.0",

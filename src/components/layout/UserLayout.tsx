@@ -12,18 +12,6 @@ interface UserLayoutProps{
 }
 export default function UserLayout({title, description, children}: UserLayoutProps){
 
-    const [isCollapsed, setCollapse] = useState(localStorage.getItem("collapsed") === "true" ? true : false);
-
-    useEffect(() => {
-        const collapsed = localStorage.getItem("collapsed") === "true" ? true : false;
-        setCollapse(collapsed);
-    }, [])
-
-    const toggleSidebar = () => {
-        setCollapse(!isCollapsed);
-        const collapsed = !isCollapsed;
-        localStorage.setItem("collapsed", collapsed.toString());
-    }
 
     return(
         <>
@@ -41,14 +29,13 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                         <ThemeSwitcher/>
                     </div>
                     <section className="w-full">
-                        <div className="max-w-sm xl:max-w-4xl lg:max-w-4xl md:max-w-xl sm:max-w-md mx-auto flex  gap-2">
-                            <div>
+                        <div className="max-w-sm xl:max-w-4xl lg:max-w-2xl md:max-w-xl sm:max-w-md mx-auto flex  gap-2">
+                            <div className=" p-2 rounded-md w-full">
                                 {children}
 
                             </div>
-
+                            Wuwa
                         </div>
-
                     </section>
                 </main>
             </SidebarProvider>

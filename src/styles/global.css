@@ -110,6 +110,10 @@
         @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-2 rounded-md p-2 text-sm font-semibold
     }
 
+    .editor-icon{
+        @apply p-1 hover:bg-light-2 transition duration-200
+    }
+
 }
 
 @font-face {
