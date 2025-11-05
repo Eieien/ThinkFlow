@@ -48,6 +48,7 @@ export default function NotesEditor(){
         extensions: [
           Collaboration.configure({
             document: provider?.document,
+            document: provider?.document,
           }),
           StarterKit.configure({
             heading: {
