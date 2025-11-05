@@ -5,7 +5,8 @@ const tagSchema = new mongoose.Schema(
         creator: {
             type: mongoose.SchemaTypes.ObjectId,
             ref: "users",
-            required: true
+            required: true,
+            select: false
         },
         name: { 
             type: String,

@@ -18,8 +18,8 @@ export default class PfpController {
     static getOneUser = async (req, res) => {
         const userId = req.params.id;
         try {
-            const users = await User.findById(userId, excludeV);
-            return res.status(200).json(users);
+            const foundUser = await User.findById(userId, excludeV);
+            return res.status(200).json(foundUser);
         } catch (err) {
             return res.status(400).json(catchError(err));
         }

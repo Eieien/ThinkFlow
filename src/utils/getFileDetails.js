@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
 
-export function getNoteNameAndPath()
+export function createNoteNameAndPath()
 {
     const randomHex = randomBytes(16).toString('hex');
     const fileName = randomHex + '.bin';

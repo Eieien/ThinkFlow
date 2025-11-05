@@ -2,6 +2,7 @@ import Tags from "../models/Tag.js";
 import User from "../models/User.js";
 import Notes from "../models/Notes.js";
 import catchError from "../utils/catchError.js";
+import { excludeV } from "../config/mongoConfig.js";
 
 export default class TagController {
     static createTag = async (req, res) => {
@@ -22,7 +23,7 @@ export default class TagController {
     static getUserTags = async (req, res) => {
         const userId = req.params.id;
         try {
-            const userTags = await Tags.find({ creator: userId });
+            const userTags = await Tags.find({ creator: userId }, excludeV);
             return res.status(200).json(userTags);
         } catch (err) {
             return res.status(400).json(catchError(err));
@@ -31,7 +32,8 @@ export default class TagController {
     static getOneTag = async (req, res) => {
         const tagId = req.params.id;
         try {
-            const tag = await Tags.findById(tagId);
+            const tag = await Tags.findById(tagId, excludeV);
+            if(!tag) return res.status(404).json({ error: 'No tag found!' });
             return res.status(200).json(tag);
         } catch (err) {
             return res.status(400).json(catchError(err));

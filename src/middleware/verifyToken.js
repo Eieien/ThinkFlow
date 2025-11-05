@@ -6,9 +6,9 @@ const verifyToken = (req, res, next) => {
     const accessToken = bearer.split(' ')[1];
     jwt.verify(
         accessToken, 
-        process.env.ACCESS_TOKEN_SECRET, 
+        process.env.ACCESS_TOKEN_SECRET,
         (err) => {
-            if(err) return res.status(401).json({ error: err });
+            if(err) return res.status(401).json({ error: err.message });
             next();
         }
     );

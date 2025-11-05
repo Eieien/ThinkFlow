@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-import { excludeV } from "../config/mongoConfig.js";
+import { excludeV, includeUserFields } from "../config/mongoConfig.js";
 
 const userSchema = new mongoose.Schema(
     {
@@ -30,15 +30,16 @@ const userSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true, 
+        timestamps: true,
         statics: {
             findByEmail: async function(email) {
-                return await this.findOne({ email: email }, excludeV);
+                return await this.findOne({ email: email })
+                    .select(includeUserFields);
             }
         },
         methods: {
             comparePasswords: async function(plainPassword) {
-                return (await bcrypt.compare(plainPassword, this.password)) ? true : false;
+                return await bcrypt.compare(plainPassword, this.password);
             }
         }
     }

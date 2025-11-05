@@ -13,7 +13,6 @@ import notesRoutes from "./routes/notesRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import resultRoutes from "./routes/resultRoutes.js";
-import verifyToken from "./middleware/verifyToken.js";
 
 connectToMongoDB();
 
@@ -36,12 +35,14 @@ app.use(cors());
 app.use(limiter);
 
 // routes
+app.get('/api', (_req, res) => {
+    return res.send("ThinkFlow Api!");
+})
 app.use('/api/auth', authRoutes);
-app.use('/api/notes', notesRoutes);
-app.use('/api/tags', tagRoutes);
-// router.use(verifyToken);
 app.use('/api/users', userRoutes);
-app.use('/api/quiz', quizRoutes);
+app.use('/api/tags', tagRoutes);
+app.use('/api/notes', notesRoutes);
+app.use('/api/quizzes', quizRoutes);
 app.use('/api/results', resultRoutes);
 
 app.ws("/collab", (ws, req) => hocuspocus.handleConnection(ws, req));

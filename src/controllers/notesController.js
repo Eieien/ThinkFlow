@@ -8,7 +8,7 @@ import generateAiContent from "../utils/genAiRes.js";
 import { aiNoteDetails } from "../config/genAiConfig.js";
 import catchError from "../utils/catchError.js";
 import Quiz from "../models/Quiz.js";
-import { getNoteNameAndPath, getUploadFilePath } from "../utils/getFileDetails.js";
+import { createNoteNameAndPath, getUploadFilePath } from "../utils/getFileDetails.js";
 import { excludeV } from "../config/mongoConfig.js";
 
 export default class NotesController {
@@ -45,7 +45,7 @@ export default class NotesController {
 
   static createNote = async (req, res) => {
     const { userId, title, description } = req.body;
-    const { fileName, filePath } = getNoteNameAndPath();
+    const { fileName, filePath } = createNoteNameAndPath();
     try {
       await writeFile(filePath, '');
       const createdNote = await Notes.create({ 
@@ -100,7 +100,6 @@ export default class NotesController {
 
   static importNote = async (req, res) => {
     const oldFilePath = req.file.path;
-    const { filePath } = getNoteNameAndPath();
     try {
       let mdContent;
       if(path.extname(path.basename(oldFilePath)) !== '.md'){
@@ -122,7 +121,6 @@ export default class NotesController {
       });
     } catch (err) {
       if(existsSync(oldFilePath)) await unlink(oldFilePath);
-      if(existsSync(filePath)) await unlink(filePath);
       return res.status(400).json(catchError(err));
     }
   }

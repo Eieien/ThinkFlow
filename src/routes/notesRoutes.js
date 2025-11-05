@@ -2,15 +2,15 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import NotesController from "../controllers/notesController.js";
-import verifyToken from "../middleware/verifyToken.js";
+import verifyOptionalToken from "../middleware/verifyOptionalToken.js";
 import { checkValidationErrors, checkFileUpload} from "../middleware/errorHandlers.js";
 import { noteUploader } from "../config/multerConfig.js";
 
 const notesRouter = Router();
 
+notesRouter.use(verifyOptionalToken);
 notesRouter.get('/', NotesController.getPublicNotes);
 notesRouter.get('/:id', NotesController.getOneNote);
-// notesRouter.use(verifyToken);
 notesRouter.get('/user/:id', NotesController.getNotesByUserId)
 notesRouter.post('/create',
   body('title').notEmpty().withMessage('Title must be set!'),

@@ -26,7 +26,6 @@
     "express-validator": "^7.2.1",
     "express-ws": "^5.0.2",
     "jsonwebtoken": "^9.0.2",
-    "markdown-it": "^14.1.0",
     "mime-types": "^3.0.1",
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",

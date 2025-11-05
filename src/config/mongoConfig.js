@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export const excludeV = '-__v ';
+export const includeUserFields = "username email password";
 // export const excludedNoteFields = excludeV + '';
 // export const excludedQuizFields = excludeV + '';
 // export const excludedResultFields = excludeV + '';

@@ -4,7 +4,7 @@ import * as Y from "yjs";
 import { readFile } from "fs/promises";
 import { extname } from "path";
 
-import { yXmlFragmentToProseMirrorRootNode } from 'y-prosemirror';
+import { yXmlFragmentToProseMirrorRootNode, prosemirrorToYXmlFragment } from 'y-prosemirror';
 import { getSchema } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'

@@ -6,23 +6,27 @@ import { jwtCookieOptions, formatJwtUserData, createJwts } from "../utils/jwtUti
 
 export default class AuthController {
     static signup = async (req, res) => {
-        const userData = req.body;
+        const { username, email, password, confirmPassword} = req.body;
         try {
-            const createdUser = await User.create(userData);
+            if(password !== confirmPassword) return res.status(400).json({ error: "Passwords don't match!" });
+            const createdUser = await User.create({
+                username: username,
+                email: email,
+                password: password
+            });
             return res.status(201).json({
-                message: "User has been created!",
-                createdUser: createdUser
+                message: "You have been registered to ThinkFlow!"
             });
         } catch (err) {
             return res.status(400).json(catchError(err));
         }
     }
     static login = async (req, res) => {
-        const userData = req.body;
+        const { email, password } = req.body;
         try {
-            const foundUser = await User.findByEmail(userData.email);
+            const foundUser = await User.findByEmail(email);
             if(!foundUser) return res.status(404).json({ error: 'User not found!' });
-            const doMatch = await foundUser.comparePasswords(userData.password);
+            const doMatch = await foundUser.comparePasswords(password);
             if(!doMatch) return res.status(401).json({ error: 'Incorrect password!' });
 
             const jwtUserData = formatJwtUserData(foundUser);
@@ -30,7 +34,8 @@ export default class AuthController {
             res.cookie('jwt', refreshToken, jwtCookieOptions);
             foundUser.refreshToken = refreshToken;
             await foundUser.save();
-            const userDetails = await User.findById(foundUser._id);
+            const userDetails = await User.findById(foundUser._id)
+                .select("username email");
             return res.status(201).json({
                 user: userDetails,
                 accessToken: accessToken 
@@ -70,7 +75,7 @@ export default class AuthController {
             const foundUser = await User.findByEmail(email);
             foundUser.password = password;
             await foundUser.save();
-            return res.status(200).json({ message: 'Password has been change!' });
+            return res.status(200).json({ message: 'Password has been changed!' });
         } catch (err) {
             return res.status(400).json(catchError(err));
         }

@@ -43,6 +43,12 @@ const quizSchema = new mongoose.Schema(
                 let noteIds = [];
                 userNotes.forEach(userNote => noteIds.push(userNote._id));
                 return await this.find({ note: { $in: noteIds }});
+            },
+            findPublic: async function(){
+                const publicNotes = await Notes.findPublic();
+                let noteIds = [];
+                publicNotes.forEach(publicNote => noteIds.push(publicNote._id));
+                return await this.find({ note: { $in: noteIds }});
             }
         }
     }

@@ -7,11 +7,20 @@ import catchError from "../utils/catchError.js";
 import Quiz from "../models/Quiz.js";
 import Notes from "../models/Notes.js";
 import { getUploadFilePath } from "../utils/getFileDetails.js";
+import { excludeV } from "../config/mongoConfig.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default class QuizController {
+  static getPublicQuizzes = async (req, res) => {
+    try {
+      const publicQuizzes = await Quiz.findPublic();
+      return res.status(200).json(publicQuizzes);
+    } catch (err) {
+      return res.status(400).json(catchError(err));
+    }
+  }
   static createQuiz = async (req, res) => {
     const noteId = req.body.noteId;
     try {
@@ -35,11 +44,12 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
-  static getUserQuizzes = async (req, res) => {
-    const userId = req.params.id;
+  static getOneQuiz = async (req, res) => {
+    const quizId = req.params.id;
     try {
-      const userQuizzes = await Quiz.findByUserId(userId);
-      return res.status(200).json(userQuizzes);
+      const foundQuiz = await Quiz.findById(quizId, excludeV);
+      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
+      return res.status(200).json(foundQuiz);
     } catch (err) {
       return res.status(400).json(catchError(err));
     }
@@ -54,12 +64,11 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
-  static getOneQuiz = async (req, res) => {
-    const quizId = req.params.id;
+  static getUserQuizzes = async (req, res) => {
+    const userId = req.params.id;
     try {
-      const foundQuiz = await Quiz.findById(quizId);
-      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
-      return res.status(200).json(foundQuiz);
+      const userQuizzes = await Quiz.findByUserId(userId);
+      return res.status(200).json(userQuizzes);
     } catch (err) {
       return res.status(400).json(catchError(err));
     }

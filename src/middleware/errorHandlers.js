@@ -3,7 +3,6 @@ import { unlinkSync } from "fs";
 
 export const checkValidationErrors = async (req, res, next) => {
     const validation = validationResult(req);
-    console.log(validation.errors);
     if(validation.errors.length > 0){
         if(req?.file){
             const uploaded = req.file;

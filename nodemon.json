@@ -1,4 +1,0 @@
-{
-    "watch": ["uploads"],
-    "ignore": ["uploads/notes"]
-}

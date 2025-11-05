@@ -8,7 +8,7 @@ const noteSystemInstructions = [
     'Generate a JSON object that is either md content or an error message.',
     'If you have enough information to generate md content, follow the "noteSchema"',
     'If the content is insufficient or unclear, follow the "errorSchema"',
-    'Make sure the error message is one sentence only'
+    'Make sure the error message is one sentence only that does NOT mention that you are trying to generate markdown'
 ];
 export const aiNoteDetails = { 
     mainSchema: noteSchema, 

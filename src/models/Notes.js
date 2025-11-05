@@ -53,12 +53,13 @@ const notesSchema = new mongoose.Schema(
         statics: {
             findPublic: async function(){
                 return await this.find({ 'options.isPublic': true }, excludeV)
-                    .populate("creator", excludeV);
+                    .populate("creator", excludeV)
+                    .populate("tags", excludeV);
             },
             findByUserId: async function(userId){
                 return await this.find({ creator: userId }, excludeV)
                     .populate("creator", excludeV)
-                    .populate("tags", excludeV + "-creator");
+                    .populate("tags", excludeV);
             }
         }
     }
