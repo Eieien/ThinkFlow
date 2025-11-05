@@ -8,16 +8,16 @@
 --font-satoshi: 'Satoshi', "Helvetica Neue";
 
 /* Light mode and Dark mode colors */
---color-primary-dark: #100F11; /*Background*/
---color-dark-2: #171619;
---color-dark-3: #1B1A1D;
---color-dark-4: #2B2A2D;
---color-dark-border: #3E3D41;
---color-primary-white: #FFFFFF; /*Background*/
---color-light-2: #FAFAFA;
---color-light-3: #F0F0F0;
---color-light-4: #E4E4E4;
---color-light-border: #CDD1DA;
+--color-primary-dark: #121212; /*Background*/
+--color-dark-2: #1A1A1A;
+--color-dark-3: #2B2B2B;
+--color-dark-4: #5E5E5E;
+--color-dark-border: #2B2B2B;
+--color-primary-white: #FCFCFD; /*Background*/
+--color-light-2: #F0F1F2;
+--color-light-3: #D6D9DB;
+--color-light-4: #C8CCD0;
+--color-light-border: #D6D9DB;
 
  /*Light mode Colors*/
 --color-light-primary-blue: #492AE5;
@@ -107,7 +107,7 @@
         @apply text-primary-dark dark:text-primary-white
     }
     .auth-input{
-        @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-2 rounded-md p-2 text-sm font-semibold
+        @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-3 rounded-md p-2 text-sm font-semibold
     }
 
     .editor-icon{
@@ -269,7 +269,7 @@
 
 --radius: 0.625rem;
 
---background: oklch(1 0 0);
+/* --background: oklch(1 0 0); */
 
 --foreground: oklch(0.145 0 0);
 
@@ -334,7 +334,7 @@
 
 .dark {
 
---background: oklch(0.145 0 0);
+/* --background: oklch(0.145 0 0); */
 
 --foreground: oklch(0.985 0 0);
 

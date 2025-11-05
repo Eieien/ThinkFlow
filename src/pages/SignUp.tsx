@@ -58,7 +58,7 @@ export default function SignUp(){
                                             Sign up
                                         </button>
                                     </div>
-                                    <h2 className="text-dark-border text-center font-regular">Already Have an Account? <Link to="/login"><span className="text-light-primary-blue">Login</span></Link></h2>
+                                    <h2 className="text-dark-4 dark:text-light-4 text-center font-regular">Already Have an Account? <Link to="/login"><span className="text-light-primary-blue">Login</span></Link></h2>
 
                                 </div>
 
