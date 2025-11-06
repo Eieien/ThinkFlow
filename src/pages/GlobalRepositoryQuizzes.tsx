@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import NavigationBar from "../components/layout/NavigationBar";
 import {Funnel, NotebookText, Pencil} from "lucide-react";
-import NotesCard from "../components/NotesCard";
+import QuizCard from "../components/QuizCard";
 
 export default function GlobalRepository() {
     
@@ -20,13 +21,15 @@ export default function GlobalRepository() {
                     {/* ======The section where the navigation between notes, search filter, and filter button is placed======  */}
                     <section className="h-50 flex flex-row justify-between items-center">
                         <div className="flex justify-between w-55">
+                            <Link to="/globalrepositorynotes">
                             <button 
-                            className="font-bold bg-light-primary-blue text-primary-white px-4 py-0.5 rounded-md cursor-pointer flex flex-row justify-between items-center">
+                            className="font-bold border border-primary-dark text-primary-dark bg-primary-light px-4 py-0.5 rounded-md cursor-pointer dark:text-primary-white dark:border-primary-white flex flex-row justify-between items-center">
                                 <NotebookText className="h-5"/>
                                 Notes
                             </button>
+                            </Link>
                             <button 
-                            className="font-bold border border-primary-dark text-primary-dark bg-primary-light px-4 py-0.5 rounded-md cursor-pointer dark:text-primary-white dark:border-primary-white flex flex-row justify-between items-center">
+                            className="font-bold bg-light-primary-blue text-primary-white px-4 py-0.5 rounded-md cursor-pointer flex flex-row justify-between items-center">
                                 <Pencil className="h-5"/>
                                 Quizzes
                             </button>
@@ -44,29 +47,45 @@ export default function GlobalRepository() {
                     {/* ======The place where the notes will happen but just using the sample card to show the display design======  */}  
 
                     <section className="grid grid-cols-3 gap-5">
-                        <NotesCard
-                            title="Prog 2 Notes"
-                            dateCreated="Created on Sept. 25, 2025"
+                        <QuizCard
+                            title="Prog 2 Notes Quiz"
+                            noOfBookmarked="10"
+                            noOfQuestions="28"
                             creator="Ivan Ruelan"
-                            description="Stuff ioxdfhusdoifjuspdofgujisdopigsioujj"
+                            tag="Prog II"
+                            description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
                         />
-                        <NotesCard
-                            title="Prog 2 Notes"
-                            dateCreated="Created on Sept. 25, 2025"
+                        <QuizCard
+                            title="Prog 2 Notes Quiz"
+                            noOfBookmarked="10"
+                            noOfQuestions="28"
                             creator="Ivan Ruelan"
-                            description="Stuff ioxdfhusdoifjuspdofgujisdopigsioujj"
+                            tag="Prog II"
+                            description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
                         />
-                        <NotesCard
-                            title="Prog 2 Notes"
-                            dateCreated="Created on Sept. 25, 2025"
+                        <QuizCard
+                            title="Prog 2 Notes Quiz"
+                            noOfBookmarked="10"
+                            noOfQuestions="28"
                             creator="Ivan Ruelan"
-                            description="Stuff ioxdfhusdoifjuspdofgujisdopigsioujj"
+                            tag="Prog II"
+                            description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
                         />
-                        <NotesCard
-                            title="Prog 2 Notes"
-                            dateCreated="Created on Sept. 25, 2025"
+                        <QuizCard
+                            title="Prog 2 Notes Quiz"
+                            noOfBookmarked="10"
+                            noOfQuestions="28"
                             creator="Ivan Ruelan"
-                            description="Stuff ioxdfhusdoifjuspdofgujisdopigsioujj"
+                            tag="Prog II"
+                            description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
+                        />
+                        <QuizCard
+                            title="Prog 2 Notes Quiz"
+                            noOfBookmarked="10"
+                            noOfQuestions="28"
+                            creator="Ivan Ruelan"
+                            tag="Prog II"
+                            description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
                         />
                 </section>   
                 </section>

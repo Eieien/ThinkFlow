@@ -25,7 +25,7 @@ export default function Hero(){
 
                         </div>
                         <div className="flex justify-center items-center gap-2">
-                            <Link to="/globalrepository">
+                            <Link to="/globalrepositorynotes">
                                 <button 
                                 className="px-4 py-2 border border-primary-dark text-primary-dark dark:border-primary-white dark:text-white rounded-md cursor-pointer">
                                     View Published Notes

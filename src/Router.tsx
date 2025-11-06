@@ -7,8 +7,10 @@ import UserPageTest from './pages/UserPageTest.tsx'
 import Home from './pages/Home.tsx'
 import Quiz from './pages/Quiz.tsx'
 import Notes from './pages/Notes.tsx'
-import GlobalRepository from './pages/GlobalRepository.tsx'
+import GlobalRepositoryNotes from './pages/GlobalRepositoryNotes.tsx'
+import GlobalRepositoryQuizzes from './pages/GlobalRepositoryQuizzes.tsx'
 import NotesCard from './components/NotesCard.tsx'
+import QuizCard from './components/QuizCard.tsx'
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -19,7 +21,8 @@ const router = createBrowserRouter([
   {path: '/home', element: <Home/>},
   {path: '/quiz/:id', element: <Quiz/>},
   {path: '/notes/:id', element: <Notes/>},
-  {path: '/globalrepository', element: <GlobalRepository/> },
+  {path: '/globalrepositorynotes', element: <GlobalRepositoryNotes/> },
+  {path: '/globalrepositoryquizzes', element: <GlobalRepositoryQuizzes/> },
 ])
 
 export default router;
