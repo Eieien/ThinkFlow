@@ -1,10 +1,45 @@
-import React from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import Layout from "../components/layout/Layout";
 import ThemeSwitcher from "../components/ThemeSwitcher";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LogoStyle from "../components/LogoStyle";
 
+import axios, { AxiosError, type AxiosResponse } from "axios"
+
 export default function Login(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.interceptors.request.use(
+            (config) => {
+                // config.withCredentials = true (need logout to remove httponly cookie)
+                return config;
+            },
+            (error) => Promise.reject(error)
+        )
+    }, []);
+
+    const handleLogin = async (e : MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+        try {
+            const res : AxiosResponse = await axios.post(
+                'http://localhost:3000/api/auth/login',
+                {
+                    email: email,
+                    password: password
+                }
+            )
+            console.log(res.data);
+            navigate('/home');
+        } catch (err) {
+            if(err instanceof AxiosError){
+                console.log(err?.response?.data.message);
+            } else {
+                console.log(err);
+            }
+        }
+    }
 
     return (
 
@@ -44,14 +79,28 @@ export default function Login(){
                                     <div className="flex flex-col gap-4">
                                         <div className="flex flex-col">
                                             <label>Email</label>
-                                            <input placeholder="Enter your Email Address" className="auth-input"/>
+                                            <input 
+                                                type="text"
+                                                value={email}
+                                                onChange={(e : React.ChangeEvent<HTMLInputElement>) => 
+                                                    setEmail(e.target.value)}
+                                                placeholder="Enter your Email Address" 
+                                                className="auth-input"
+                                            />
                                         </div>
                                         <div className="flex flex-col">
                                             <label>Password</label>
-                                            <input placeholder="Enter your password" className="auth-input"/>
+                                            <input 
+                                                type="password"
+                                                value={password}
+                                                onChange={(e : React.ChangeEvent<HTMLInputElement>) => 
+                                                    setPassword(e.target.value)}
+                                                placeholder="Enter your password" 
+                                                className="auth-input"
+                                            />
                                         </div>
                                         <div className="flex flex-col gap-1">
-                                            <button className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white font-bold rounded-md">
+                                            <button onClick={handleLogin} className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white font-bold rounded-md">
                                                 Login
                                             </button>
                                             <p className="font-medium text-dark-border dark:text-light-border">Forgot Password?</p>
