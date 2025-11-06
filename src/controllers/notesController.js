@@ -69,7 +69,7 @@ export default class NotesController {
     const noteId = req.params.id;
     try {
       const foundNote = await Notes.findById(noteId);
-      if(!foundNote) return res.status(404).json({ error: "Note not found!" });
+      if(!foundNote) return res.status(404).json({ message: "Note not found!" });
       foundNote.title = title;
       foundNote.description = description;
       foundNote.options = options;
@@ -88,8 +88,8 @@ export default class NotesController {
     const noteId = req.params.id;
     try {
       const deletedNote = await Notes.findByIdAndDelete(noteId);
-      if(!deletedNote) return res.status(404).json({ error: "Note not found!" });
-      const filePath = getUploadFilePath('notes', deletedNote.fileContent);
+      if(!deletedNote) return res.status(404).json({ message: "Note not found!" });
+      const filePath = getUploadFilePath('notes/bin', deletedNote.fileContent);
       if(existsSync(filePath)) await unlink(filePath);
       await Quiz.findOneAndDelete({ note: deletedNote._id });
       return res.sendStatus(204);
@@ -107,6 +107,7 @@ export default class NotesController {
         if(result?.success){
           mdContent = result.success;
         } else {
+          await unlink(oldFilePath);
           return res.status(400).json(result.error);
         }
       } else {

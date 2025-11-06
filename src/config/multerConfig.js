@@ -15,7 +15,7 @@ const validDetails = [
 ]
 
 const noteStorage = multer.diskStorage({
-  destination: 'uploads/notes',
+  destination: 'uploads/notes/imports',
   filename: (_req, file, cb) => {
     const randomName = randomBytes(16).toString("hex");
     const fileExt = extname(file.originalname);

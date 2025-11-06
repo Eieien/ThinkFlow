@@ -40,7 +40,7 @@ function catchError(err)
                 message = "Path is undefined!"; break;
         }
     }
-    return { error: message };
+    return { message: message };
 }
 
 export default catchError;

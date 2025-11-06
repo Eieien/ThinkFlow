@@ -61,12 +61,12 @@ export const aiQuizDetails = {
 export const errorSchema = {
     type: Type.OBJECT,
     properties: {
-        error: {
+        message: {
             type: Type.STRING,
         },
         suggestion: {
             type: Type.STRING,
         }
     },
-    required: ['error', 'suggestion'],
+    required: ['message', 'suggestion'],
 };

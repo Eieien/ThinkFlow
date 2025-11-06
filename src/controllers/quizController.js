@@ -25,7 +25,7 @@ export default class QuizController {
     const noteId = req.body.noteId;
     try {
       const foundNote = await Notes.findById(noteId);
-      if(!foundNote) return req.status(404).json({ error: 'Note not found! '});
+      if(!foundNote) return req.status(404).json({ message: 'Note not found! '});
       const filePath = getUploadFilePath('notes', foundNote.fileContent);
       const result = await generateAiContent(filePath, aiQuizDetails);
       if(result.error) return res.status(400).json(result.error);
@@ -48,7 +48,7 @@ export default class QuizController {
     const quizId = req.params.id;
     try {
       const foundQuiz = await Quiz.findById(quizId, excludeV);
-      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
+      if(!foundQuiz) return res.status(404).json({ message: 'Quiz not found!' });
       return res.status(200).json(foundQuiz);
     } catch (err) {
       return res.status(400).json(catchError(err));
@@ -58,7 +58,7 @@ export default class QuizController {
     const noteId = req.params.id;
     try {
       const foundQuiz = await Quiz.findByNoteId(noteId);
-      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
+      if(!foundQuiz) return res.status(404).json({ message: 'Quiz not found!' });
       return res.status(200).json(foundQuiz);
     } catch (err) {
       return res.status(400).json(catchError(err));
@@ -78,7 +78,7 @@ export default class QuizController {
     const { quizTitle } = req.body;
     try {
       const foundQuiz = await Quiz.findById(quizId);
-      if(!foundQuiz) return res.status(404).json({ error: 'Quiz not found!' });
+      if(!foundQuiz) return res.status(404).json({ message: 'Quiz not found!' });
       
       foundQuiz.quizTitle = quizTitle;
 
@@ -95,7 +95,7 @@ export default class QuizController {
     const quizId = req.params.id;
     try {
       const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
-      if(!deletedQuiz) return res.status(404).json({ error: "Quiz not found!" });
+      if(!deletedQuiz) return res.status(404).json({ message: "Quiz not found!" });
       return res.sendStatus(204);
     } catch (err) {
       return res.status(400).json(catchError(err));

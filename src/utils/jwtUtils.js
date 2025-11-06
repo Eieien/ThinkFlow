@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 
 export const jwtCookieOptions = {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-    secure: true
+    secure: true,
+    sameSite: 'none',
+    maxAge: 24 * 60 * 60 * 1000
 }
 
 export function formatJwtUserData(user)

@@ -29,7 +29,7 @@ export default class PfpController {
         const userDetails = req.body;
         try {
             const foundUser = await User.findById(userId);
-            if(!foundUser) return res.status(404).json({ error: 'User not found!' });
+            if(!foundUser) return res.status(404).json({ message: 'User not found!' });
 
             if(userDetails?.username) foundUser.username = userDetails.username;
             if(userDetails?.email) foundUser.email = userDetails.email;
@@ -45,7 +45,7 @@ export default class PfpController {
         const userId = req.params.id;
         try {
             const foundUser = await User.findById(userId);
-            if(!foundUser) return res.status(404).json({ error: 'User not found!' });
+            if(!foundUser) return res.status(404).json({ message: 'User not found!' });
             const filePath = getUploadFilePath('images/pfps', foundUser.pfp);
             return res.status(200).sendFile(filePath);
         } catch (err) {
@@ -58,7 +58,7 @@ export default class PfpController {
         try {
             console.log(pfp);
             const foundUser = await User.findById(userId);
-            if(!foundUser) return res.status(404).json({ error: 'User not found!' });
+            if(!foundUser) return res.status(404).json({ message: 'User not found!' });
             if(foundUser?.pfp) await unlink(getUploadFilePath('images/pfps', foundUser.pfp));
             foundUser.pfp = pfp;
             await foundUser.save();
@@ -76,8 +76,8 @@ export default class PfpController {
         const userId = req.params.id;
         try {
             const foundUser = await User.findByIdAndUpdate(userId, { $unset: { pfp: '' }});
-            if(!foundUser) return res.status(404).json({ error: 'User not found! '});
-            if(!foundUser.pfp) return res.status(404).json({ error: 'No pfp to delete!' });
+            if(!foundUser) return res.status(404).json({ message: 'User not found! '});
+            if(!foundUser.pfp) return res.status(404).json({ message: 'No pfp to delete!' });
             const filePath = getUploadFilePath('images/pfps', foundUser.pfp);
             await unlink(filePath);
             return res.sendStatus(204);

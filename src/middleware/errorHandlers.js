@@ -8,20 +8,20 @@ export const checkValidationErrors = async (req, res, next) => {
             const uploaded = req.file;
             unlinkSync(uploaded.path);
         }
-        return res.status(400).json({ error: validation.errors[0].msg });
+        return res.status(400).json({ message: validation.errors[0].msg });
     }
     next();
 }
 
 export const checkFileUpload = async (err, req, res, next) => {
     if (err)
-        return res.status(400).json({ error: err.message });
+        return res.status(400).json({ message: err.message });
     if(!req.file)
-        return res.status(404).json({ error: 'No file found!' });
+        return res.status(404).json({ message: 'No file found!' });
     next();
 }
 
 export const checkError = async (err, req, res, next) => {
-    if(err) return res.status(400).json({ error: err.message });
+    if(err) return res.status(400).json({ message: err.message });
     next();
 }

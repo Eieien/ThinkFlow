@@ -9,7 +9,7 @@ export default class TagController {
         const { userId, name, color } = req.body;
         try {
             const foundUser = await User.findById(userId);
-            if(!foundUser) return res.status(404).json({ error: 'User not found!' });
+            if(!foundUser) return res.status(404).json({ message: 'User not found!' });
             const createdTag = await Tags.create({ 
                 creator: userId,
                 name: name,
@@ -33,7 +33,7 @@ export default class TagController {
         const tagId = req.params.id;
         try {
             const tag = await Tags.findById(tagId, excludeV);
-            if(!tag) return res.status(404).json({ error: 'No tag found!' });
+            if(!tag) return res.status(404).json({message: 'No tag found!' });
             return res.status(200).json(tag);
         } catch (err) {
             return res.status(400).json(catchError(err));
@@ -44,7 +44,7 @@ export default class TagController {
         const { name, color } = req.body;
         try {
             const foundTag  = await Tags.findById(tagId);
-            if(!foundTag) return res.status(404).json({ error: 'Tag not found! '})
+            if(!foundTag) return res.status(404).json({ message: 'Tag not found! '})
             foundTag.name = name;
             foundTag.color = color;
             const updatedTag = await foundTag.save();
@@ -57,7 +57,7 @@ export default class TagController {
         const tagId = req.params.id;
         try {
             const deletedTag = await Tags.findByIdAndDelete(tagId);
-            if(!deletedTag) return res.status(404).json({ error: "Tag not found!" });
+            if(!deletedTag) return res.status(404).json({ message: "Tag not found!" });
             return res.sendStatus(204);
         } catch (err) {
             return res.status(400).json(catchError(err));

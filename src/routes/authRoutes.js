@@ -12,7 +12,7 @@ authRouter.post('/signup',
         .isEmail().withMessage('Invalid email!'),
     body('password').notEmpty().withMessage('Password is empty!')
         .isLength(8).withMessage('Password must be at least 8 characters long!'),
-    body('confirmPassword').notEmpty().withMessage('Confirm password is empty!'),
+    body('confirmPassword').notEmpty().withMessage('Must confirm password!'),
     checkValidationErrors,
     AuthController.signup);
 authRouter.post('/login',
@@ -25,7 +25,7 @@ authRouter.post('/login',
 authRouter.put('/change-password',
     body('email').notEmpty().withMessage('Email must be set!'),
     body('password').notEmpty().withMessage('New password not set!'),
-    body('confPassword').notEmpty().withMessage('Must confirm password!'),
+    body('confirmPassword').notEmpty().withMessage('Must confirm password!'),
     checkValidationErrors,
     AuthController.changePassword);
 authRouter.use(cookie('jwt').notEmpty().withMessage('You are not logged in!'), checkValidationErrors)

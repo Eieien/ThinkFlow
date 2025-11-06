@@ -9,11 +9,11 @@ export function createNoteNameAndPath()
 {
     const randomHex = randomBytes(16).toString('hex');
     const fileName = randomHex + '.bin';
-    const filePath = join(__dirname, '..', '..', 'uploads', 'notes', fileName);
+    const filePath = join(__dirname, '..', '..', 'uploads', 'notes', 'bin', fileName);
     return { fileName, filePath };
 }
 
-export function getUploadFilePath(uploadsFolder, fileName)
+export function getUploadFilePath(uploadsDir, fileName)
 {
-    return join(__dirname, '..', '..', 'uploads', uploadsFolder, fileName);
+    return join(__dirname, '..', '..', 'uploads', uploadsDir, fileName);
 }
