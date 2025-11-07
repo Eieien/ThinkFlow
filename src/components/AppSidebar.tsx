@@ -10,17 +10,17 @@ import {
     SidebarFooter,
     SidebarHeader,
     SidebarSeparator,
-    SidebarMenuAction,
     useSidebar,
     SidebarMenuBadge,
+    SidebarMenuAction,
   } from "@/components/ui/sidebar"
-import { Bookmark, Home, Inbox, LogOut, Notebook, Search, Settings, User2, Earth } from "lucide-react"
+import { Bookmark, Home, LogOut, Notebook, Search, Settings, User2, Earth, MoreVertical, Plus } from "lucide-react"
 import LogoStyle from "./LogoStyle"
 import Ian from "@/assets/images/Ian.jpg"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@radix-ui/react-menu"
+import { Link } from "react-router"
 
   const notes = [
     {
@@ -43,12 +43,12 @@ import { Label } from "@radix-ui/react-menu"
   const defaultItems = [
     {
       title: "Home",
-      url: "#",
+      url: "/home",
       icon: Home,
     },
     {
         title: "Explore",
-        url: "#",
+        url: "/explore",
         icon: Earth,
     }
   ]
@@ -74,10 +74,11 @@ import { Label } from "@radix-ui/react-menu"
                 {defaultItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                        <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                        </a>
+                        <Link to={item.url}>
+                            <item.icon />
+                            <span>{item.title}</span>
+                        
+                        </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}
@@ -118,8 +119,33 @@ import { Label } from "@radix-ui/react-menu"
                         <span>{item.title}</span>
                         </a>
                     </SidebarMenuButton>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <SidebarMenuAction>
+                                <MoreVertical/>
+                            </SidebarMenuAction>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="right" align="start">
+                            <DropdownMenuItem>
+                                <span>Share</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <span>Delete</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     </SidebarMenuItem>
                 ))}
+                <SidebarMenuItem>
+                    <Link to="/Notes" target="_blank" rel="noopener noreferrer">
+                        <SidebarMenuButton>
+                            <Plus/>
+                            <span>Add Note</span>
+
+                        </SidebarMenuButton>
+                    
+                    </Link>
+                </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
             </SidebarGroup>
@@ -136,6 +162,21 @@ import { Label } from "@radix-ui/react-menu"
                         <span>{item.title}</span>
                         </a>
                     </SidebarMenuButton>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <SidebarMenuAction>
+                                <MoreVertical/>
+                            </SidebarMenuAction>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="right" align="start">
+                            <DropdownMenuItem>
+                                <span>Share</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <span>Delete</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     </SidebarMenuItem>
                 ))}
                 </SidebarMenu>

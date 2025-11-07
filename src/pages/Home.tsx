@@ -20,21 +20,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import useAxiosPrivate from "@/hooks/useAxiosPrivate"
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import NotesGrid from "@/components/layout/NotesGrid"
+import { useCardType } from "@/hooks/useCardType"
 
 export default function Home(){
 
-    const [CardType, setCardType] = useState<String>("Notes");
-
-    useEffect(() => {
-
-        const savedCardType = localStorage.getItem("Card Type") || "Notes";
-        setCardType(savedCardType);
-
-    }, [])
-    const handleNoteCards = (type: String) => {
-        setCardType(type);
-        localStorage.setItem("Card Type", String(type));
-    }
+    const {cardType, notes, quizzes, bookmarks} = useCardType();
 
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
@@ -64,11 +55,11 @@ export default function Home(){
                 
                 <div className="flex justify-between items-center mb-2">
                     <div className="flex gap-2 ">
-                        <button onClick={() => handleNoteCards("Notes")} className="user-buttons">
+                        <button onClick={notes} className="user-buttons">
                             <Notebook className="w-5 h-5"/>
                             <span>Notes</span>
                         </button>
-                        <button onClick={() => handleNoteCards("Quizzes")} className="user-buttons">
+                        <button onClick={quizzes} className="user-buttons">
                             <Pen className="w-5 h-5"/>
                             <span>Quiz</span>
                             
@@ -76,7 +67,7 @@ export default function Home(){
 
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={() => handleNoteCards("Bookmarks")} className="user-buttons">
+                        <button onClick={bookmarks} className="user-buttons">
                             <Bookmark className="w-5 h-5"/>
                             <span>Bookmarks</span>
                             
@@ -128,44 +119,7 @@ export default function Home(){
                     </div>
                 </div>
 
-                    {CardType == "Notes" ? 
-                    
-                    (
-                        <div className="grid grid-cols-2 gap-2">
-                            <NotesCard
-                                title="Prog 2 Notes"
-                                noOfBookmarked="10"
-                                dateCreated="Sept. 25, 2025"
-                                creator="Ivan Ruelan"
-                                tag="Prog II"
-                                description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
-                            />
-                            <NotesCard
-                                title="Prog 2 Notes"
-                                noOfBookmarked="10"
-                                dateCreated="Sept. 25, 2025"
-                                creator="Ivan Ruelan"
-                                tag="Prog II"
-                                description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
-                            />
-                            
-                        </div>
-
-                    ) : (
-                        <div className="grid grid-cols-2 gap-2">
-
-                            <QuizCard
-                            title={"QUIZ"}/>
-                            <QuizCard
-                            title={"QUIZ"}/>
-                            <QuizCard
-                            title={"QUIZ"}/>
-
-                        </div>
-                    )}
-
-
-               
+                    <NotesGrid type={cardType} className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  gap-2"/>
 
             </UserLayout>
         </>

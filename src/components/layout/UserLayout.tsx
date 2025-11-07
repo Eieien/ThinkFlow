@@ -34,7 +34,6 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                                 {children}
 
                             </div>
-                            Wuwa
                         </div>
                     </section>
                 </main>

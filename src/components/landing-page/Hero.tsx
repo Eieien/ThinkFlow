@@ -8,10 +8,7 @@ export default function Hero(){
             <section className="relative w-full min-h-screen">
                 <div className="absolute inset-0 top-40 left-0">
                     <div className="text-center flex flex-col justify-center items-center gap-2">
-                        {/* <img 
-                        className="w-50 h-50" 
-                        loading="lazy"
-                        src={logo}/> */}
+
                         <div className="flex w-full justify-center">
                             <h1 className="text-6xl text-center max-w-3xl font-bold">
                                 Change your Way of <span>thinking</span> with <span>AI</span>
@@ -25,7 +22,7 @@ export default function Hero(){
 
                         </div>
                         <div className="flex justify-center items-center gap-2">
-                            <Link to="/globalrepositorynotes">
+                            <Link to="/explore" target="_blank" rel="noopener noreferrer">
                                 <button 
                                 className="px-4 py-2 border border-primary-dark text-primary-dark dark:border-primary-white dark:text-white rounded-md cursor-pointer">
                                     View Published Notes

@@ -7,22 +7,12 @@ import NotesCard from "../components/NotesCard";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import NotesGrid from "@/components/layout/NotesGrid";
+import {useCardType} from "@/hooks/useCardType";
 
 export default function Explore() {
 
-    const [CardType, setCardType] = useState<String>("Notes");
+    const {cardType, notes, quizzes} = useCardType();
 
-    useEffect(() => {
-
-        const savedCardType = localStorage.getItem("Card Type") || "Notes";
-        setCardType(savedCardType);
-
-    }, [])
-
-    const handleCardTypes = (type: String) => {
-        setCardType(type);
-        localStorage.setItem("Card Type", String(type));
-    }
     return (
         <>
             <Layout
@@ -35,14 +25,14 @@ export default function Explore() {
                         <div className="flex justify-between gap-2">
                             <button 
                             className="user-buttons"
-                            onClick={() => handleCardTypes("Notes")}>
+                            onClick={notes}>
                                 <NotebookText className="h-5"/>
                                 Notes
                             </button>
 
                             <button 
                             className="user-buttons"
-                            onClick={() => handleCardTypes("Quiz")}>
+                            onClick={quizzes}>
                             
                                 <Pencil className="h-5"/>
                                 Quizzes
@@ -76,7 +66,7 @@ export default function Explore() {
                         </div>
                     </section>
 
-                    <NotesGrid type={CardType}/>
+                    <NotesGrid type={cardType}/>
 
                 </section>
             </Layout>

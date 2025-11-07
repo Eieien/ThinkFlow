@@ -1,17 +1,17 @@
-import react from "react"
 import NotesCard from "@/components/NotesCard";
 import QuizCard from "@/components/QuizCard";
 
 interface NotesGridProps{
     type: String;
+    className?: String;
 }
 
-export default function NotesGrid( {type} :  NotesGridProps){
+export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 "} :  NotesGridProps){
 
     return (
         <>
             {type == "Notes" ? 
-                <section className="grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
+                <section className={String(className)}>
                 <NotesCard
                     title="Prog 2 Notes"
                     noOfBookmarked="10"
@@ -57,7 +57,7 @@ export default function NotesGrid( {type} :  NotesGridProps){
 
                 </section>
                 :
-                <section className="grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
+                <section className={String(className)}>
                 <QuizCard
                             title="Prog 2 Notes Quiz"
                             noOfBookmarked="10"
