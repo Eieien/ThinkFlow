@@ -12,11 +12,15 @@ import {
     SidebarSeparator,
     SidebarMenuAction,
     useSidebar,
+    SidebarMenuBadge,
   } from "@/components/ui/sidebar"
-import { Bookmark, Calendar, Home, Inbox, LogOut, Notebook, Search, Settings, User2 } from "lucide-react"
+import { Bookmark, Home, Inbox, LogOut, Notebook, Search, Settings, User2, Earth } from "lucide-react"
 import LogoStyle from "./LogoStyle"
 import Ian from "@/assets/images/Ian.jpg"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@radix-ui/react-menu"
 
   const notes = [
     {
@@ -42,17 +46,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
       url: "#",
       icon: Home,
     },
+    {
+        title: "Explore",
+        url: "#",
+        icon: Earth,
+    }
   ]
 
   
   export function AppSidebar() {
-    const {state,
-        open,
-        setOpen,
-        openMobile,
-        setOpenMobile,
-        isMobile,
-        toggleSidebar,} = useSidebar();
+    const {state} = useSidebar();
     
     
         return (
@@ -79,12 +82,26 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
                     </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
-                    <SidebarMenuButton>
-                        <Search />
-                        <span>Search</span>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                    <Dialog>
+                        <DialogTrigger className="w-full flex items-center gap-1">
+                            <SidebarMenuButton>
+                                <Search />
+                                <span>Search</span>
+                            </SidebarMenuButton>
+                            <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>
+
+                        </DialogTrigger>
+                        <DialogContent className="min-h-60 flex flex-col justify-start">
+                            <DialogTitle>Search</DialogTitle>
+                            <DialogHeader>
+                                <Input id="search" type="text" placeholder="Wuthering Waves notes..."/>
+
+                            </DialogHeader>
+                        </DialogContent>
+
+                    </Dialog>
+                </SidebarMenuItem>
+            </SidebarMenu>
 
             </SidebarGroupContent>
             </SidebarGroup>

@@ -2,12 +2,12 @@ import React from "react";
 import {Bookmark} from "lucide-react";
 
 interface NotesCardProps{
-    title: String;
-    noOfBookmarked: String;
-    dateCreated: String;
-    creator: String;
-    description: String;
-    tag: String;
+    title?: String;
+    noOfBookmarked?: String;
+    dateCreated?: String;
+    creator?: String;
+    description?: String;
+    tag?: String;
 }
 
 export default function NotesCard({title, noOfBookmarked, dateCreated, creator, tag, description} : NotesCardProps){

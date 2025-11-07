@@ -100,7 +100,7 @@
         @apply transition duration-200 bg-primary-white text-dark-3 dark:bg-primary-dark dark:text-primary-white
     }
     .card{
-        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md dark:bg-dark-2
+        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md dark:bg-dark-2 dark:border-dark-border
     }
 
     label{
@@ -108,6 +108,10 @@
     }
     .auth-input{
         @apply border-light-border border bg-light-2 dark:border-dark-border dark:bg-dark-3 rounded-md p-2 text-sm font-semibold
+    }
+
+    .user-buttons{
+        @apply border-light-border border dark:border-dark-border flex items-center gap-1 px-2 py-0.5 rounded-md cursor-pointer  
     }
 
     .editor-icon{
@@ -269,7 +273,7 @@
 
 --radius: 0.625rem;
 
-/* --background: oklch(1 0 0); */
+--background: #FCFCFD;
 
 --foreground: oklch(0.145 0 0);
 
@@ -334,7 +338,7 @@
 
 .dark {
 
-/* --background: oklch(0.145 0 0); */
+--background: #121212;
 
 --foreground: oklch(0.985 0 0);
 

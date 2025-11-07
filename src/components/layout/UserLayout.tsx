@@ -39,22 +39,7 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                     </section>
                 </main>
             </SidebarProvider>
-            
-            {/* <div className="relative">
-                <div className="flex">
-                    <Sidebar collapsed={isCollapsed}/>
-                    <section className={`${isCollapsed ? "ml-16" : "ml-60"} transition-all duration-200 flex w-full flex-col gap-2`}>
-                        <UserNavigationBar collapsed={isCollapsed} toggleSidebar={toggleSidebar}/>
-                        <div className="max-w-screen-lg mx-auto w-[95%]">
-                            {children}
 
-                            
-                        </div>
-                    </section>
-                    
-                </div>
-
-            </div> */}
 
         </>
 

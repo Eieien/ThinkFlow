@@ -3,11 +3,11 @@ import {Bookmark} from "lucide-react";
 
 interface NotesCardProps{
     title: String;
-    noOfBookmarked: String;
-    noOfQuestions: String;
-    creator: String;
-    description: String;
-    tag: String;
+    noOfBookmarked?: String;
+    noOfQuestions?: String;
+    creator?: String;
+    description?: String;
+    tag?: String;
 }
 
 export default function NotesCard({title, noOfBookmarked, noOfQuestions, creator, tag, description} : NotesCardProps){
