@@ -132,8 +132,22 @@ export default function Home(){
                     
                     (
                         <div className="grid grid-cols-2 gap-2">
-                            <NotesCard/>
-                            <NotesCard/>
+                            <NotesCard
+                                title="Prog 2 Notes"
+                                noOfBookmarked="10"
+                                dateCreated="Sept. 25, 2025"
+                                creator="Ivan Ruelan"
+                                tag="Prog II"
+                                description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
+                            />
+                            <NotesCard
+                                title="Prog 2 Notes"
+                                noOfBookmarked="10"
+                                dateCreated="Sept. 25, 2025"
+                                creator="Ivan Ruelan"
+                                tag="Prog II"
+                                description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
+                            />
                             
                         </div>
 
