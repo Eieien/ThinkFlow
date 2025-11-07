@@ -12,7 +12,7 @@ const notesRouter = Router();
 notesRouter.use(verifyOptionalToken);
 notesRouter.get('/', NotesController.getPublicNotes);
 notesRouter.get('/:id', NotesController.getOneNote);
-// notesRouter.use(verifyToken);
+notesRouter.use(verifyToken);
 notesRouter.get('/user/:id', NotesController.getNotesByUserId)
 notesRouter.post('/create',
   body('title').notEmpty().withMessage('You must have a title to create a note!'),
