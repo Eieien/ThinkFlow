@@ -7,6 +7,7 @@ import UserPageTest from './pages/UserPageTest.tsx'
 import Home from './pages/Home.tsx'
 import Quiz from './pages/Quiz.tsx'
 import Notes from './pages/Notes.tsx'
+import Users from './pages/Users.tsx'
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
   {path: '/home', element: <Home/>},
   {path: '/quiz/:id', element: <Quiz/>},
   {path: '/notes/:id', element: <Notes/>},
+  {path: '/user/:user', element: <Users/>},
 ])
 
 export default router;

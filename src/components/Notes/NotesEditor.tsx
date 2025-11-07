@@ -15,14 +15,21 @@ import {CollaborationCaret} from '@tiptap/extension-collaboration-caret'
 import * as Y from "yjs"
 import { generateJSON, } from '@tiptap/html'
 import { TiptapTransformer } from "@hocuspocus/transformer";
+import axios from "axios";
 
-export default function NotesEditor(){
+interface NotesEditorProps{
+  data?: String;
+  file?: String;
+}
+
+export default function NotesEditor({data, file} : NotesEditorProps){
 
     // html imported from database
-    const data = `
-      <h1>Untitled</h1>
-      <p>Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.</p>
-    `;
+    // const datad = `
+    //   <h1>Untitled</h1>
+    //   <p>Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.</p>
+    // `;
+    
 
     // HTML to prosemirror JSON
     // Or we can just send JSON directly without setting html
@@ -33,11 +40,11 @@ export default function NotesEditor(){
       "default",
       [StarterKit]
     );
-    
-    // console.log("Generated JSON:", dataJSON)
+    console.log("Generated JSON");
+    console.log(file);
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: "Wuwa",
+        name: "README.md",
         document: ydoc,
       });
 
@@ -47,7 +54,6 @@ export default function NotesEditor(){
     const editor = useEditor({
         extensions: [
           Collaboration.configure({
-            document: provider?.document,
             document: provider?.document,
           }),
           StarterKit.configure({
@@ -75,8 +81,6 @@ export default function NotesEditor(){
         // editor.commands.setContent(dataJSON);
     })
       
-
-
     useEffect(() => {
 
       if (editor) {

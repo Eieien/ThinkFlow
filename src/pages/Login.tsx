@@ -29,7 +29,7 @@ export default function Login(){
                         </Link>
                         <ThemeSwitcher/>
                     </div>
-                    <div className="absolute inset-0 top-30 left-0">
+                    <div className="flex items-center justify-center min-h-[75vh]">
                         <div className="flex justify-center items-center">
                             <div className="bg-primary-white dark:bg-dark-2 inset-shadow-sm p-4 min-w-100 w-110 max-w-120 h-auto border border-light-border dark:border-dark-border  rounded-lg ">
                                 <div className="flex flex-col gap-4 mx-8">

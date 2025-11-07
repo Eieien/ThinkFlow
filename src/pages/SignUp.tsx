@@ -25,7 +25,7 @@ export default function SignUp(){
                         </Link>
                         <ThemeSwitcher/>
                     </div>
-                    <div className="absolute inset-0 top-20 left-0">
+                    <div className="flex items-center justify-center min-h-[75vh]">
                         <div className="flex justify-center items-center">
                             <div className="bg-primary-white inset-shadow-sm min-w-100 w-110 max-w-120 h-auto rounded-md p-4 border border-light-border dark:bg-dark-2 dark:border-dark-border">
                                 <div className="flex flex-col gap-4 mx-8">
