@@ -48,11 +48,7 @@ Example:
 // this runs before a request is sent
 axiosInstance.interceptors.request.use(
     (config) => {
-        // handling req config (ex. setting auth token)
-        const token = localStorage.getItem('accessToken'); // or sessionStorage
-        if(token){
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+        // handling req config (ex. setting auth token in header)
         return config;
     },
     (error) => {

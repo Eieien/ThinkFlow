@@ -45,11 +45,11 @@ export default class AuthController {
         }
     }
     static refresh = async (req, res) => {
-        const refreshToken = req.cookies.jwt;
+        const refreshToken = req?.cookies?.jwt;
         try {
+            if(!refreshToken) return res.sendStatus(401);
+            if(!await User.findRefresh(refreshToken)) return res.sendStatus(403);
             const decodedUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-            const foundUser = await User.findById(decodedUser._id);
-            if(!foundUser) return res.status(404).json({ message: "User not found!" });
             const userData = formatJwtUserData(decodedUser);
             const accessToken = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
             return res.status(201).json({ accessToken: accessToken });

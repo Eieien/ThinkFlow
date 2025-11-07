@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { excludeV } from "../config/mongoConfig.js";
+import { excludedQuizFields, excludeV } from "../config/mongoConfig.js";
 import Notes from "./Notes.js";
 
 const quizSchema = new mongoose.Schema(
@@ -36,19 +36,19 @@ const quizSchema = new mongoose.Schema(
         timestamps: true, 
         statics: {
             findByNoteId: async function(noteId){
-                return await this.findOne({ note: noteId }, excludeV);
+                return await this.find({ note: noteId }, excludedQuizFields);
             },
             findByUserId: async function(userId){
                 const userNotes = await Notes.findByUserId(userId);
                 let noteIds = [];
                 userNotes.forEach(userNote => noteIds.push(userNote._id));
-                return await this.find({ note: { $in: noteIds }});
+                return await this.find({ note: { $in: noteIds }}, excludedQuizFields);
             },
             findPublic: async function(){
                 const publicNotes = await Notes.findPublic();
                 let noteIds = [];
                 publicNotes.forEach(publicNote => noteIds.push(publicNote._id));
-                return await this.find({ note: { $in: noteIds }});
+                return await this.find({ note: { $in: noteIds }}, excludedQuizFields);
             }
         }
     }

@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
     {
         timestamps: true,
         statics: {
+            findRefresh: async function(token) {
+                return await this.findOne({ refreshToken: token })
+                    .select(includeUserFields);
+            },
             findByEmail: async function(email) {
                 return await this.findOne({ email: email })
                     .select(includeUserFields);
@@ -50,10 +54,6 @@ userSchema.pre('save', async function(next) {
     if(this.isModified('password')){
         salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
-    }
-    if(this.isModified('refreshToken')){
-        salt = await bcrypt.genSalt(10);
-        this.refreshToken = await bcrypt.hash(this.refreshToken, salt);
     }
     next();
 });

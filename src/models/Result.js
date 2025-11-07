@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { excludeV } from "../config/mongoConfig.js";
+import { includedResultFields } from "../config/mongoConfig.js";
 
 const resultSchema = new mongoose.Schema(
     {
@@ -16,18 +16,17 @@ const resultSchema = new mongoose.Schema(
             required: true
         },
         time: {
-            type: String,
+            type: Number,
             required: true
         }
     },
-    { 
-        timestamps: true,
+    {
         statics: {
-            findByQuizId: async function(quizId){
-                return await this.find({ quiz: quizId }, excludeV)
+            findNumResults: async function(quizId){
+                return await this.find({ quiz: quizId })
+                    .select(includedResultFields)
                     .sort({ score: -1 })
-                    .sort({ time: 1 })
-                    .populate('user', excludeV);
+                    .sort({ time: 1 });
             }
         }
     }

@@ -12,7 +12,7 @@ quizRouter.use(verifyOptionalToken);
 quizRouter.get('/', QuizController.getPublicQuizzes)
 quizRouter.get('/:id', QuizController.getOneQuiz);
 quizRouter.get('/note/:id', QuizController.getQuizByNoteId);
-quizRouter.use(verifyToken);
+// quizRouter.use(verifyToken);
 quizRouter.get('/user/:id', QuizController.getUserQuizzes);
 quizRouter.post('/generate', QuizController.createQuiz);
 quizRouter.route('/:id')

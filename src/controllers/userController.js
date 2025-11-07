@@ -19,6 +19,7 @@ export default class PfpController {
         const userId = req.params.id;
         try {
             const foundUser = await User.findById(userId, excludeV);
+            if(!foundUser) return res.status(404).json({ message: 'User not found!' });
             return res.status(200).json(foundUser);
         } catch (err) {
             return res.status(400).json(catchError(err));

@@ -8,18 +8,17 @@ import verifyToken from "../middleware/verifyToken.js";
 
 const userRouter = Router();
 
-userRouter.use(verifyToken);
+// userRouter.use(verifyToken);
 userRouter.get('/', UserController.getUsers);
 userRouter.route('/:id')
     .get(UserController.getOneUser)
-    .put(body('username').optional().notEmpty().withMessage('Username must be set!'),
-        body('email').optional().notEmpty().withMessage('Email must be set!')
+    .put(body('username').notEmpty().withMessage('Username must be set!'),
+        body('email').notEmpty().withMessage('Email must be set!')
             .isEmail().withMessage('Invalid email!'),
-        body('deactivated').optional().notEmpty().withMessage('Deactivated must be set!')
+        body('deactivated').notEmpty().withMessage('Deactivated must be set!')
             .isBoolean().withMessage('Deactivated must be boolean value!'),
         checkValidationErrors,
         UserController.updateUser);
-
 userRouter.route('/pfp/:id')
     .get(UserController.getPfp)
     .put(pfpUploader.single('pfp'),

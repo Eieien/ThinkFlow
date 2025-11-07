@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 export const excludeV = '-__v ';
 export const includeUserFields = "username email password";
-// export const excludedNoteFields = excludeV + '';
-// export const excludedQuizFields = excludeV + '';
-// export const excludedResultFields = excludeV + '';
+export const excludedQuizFields = excludeV + '-questions';
+export const includedResultFields = "-_id score time";
 
 export async function connectToMongoDB()
 {
