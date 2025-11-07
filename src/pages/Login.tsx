@@ -5,36 +5,30 @@ import { Link, useNavigate } from "react-router-dom";
 import LogoStyle from "../components/LogoStyle";
 
 import axios, { AxiosError, type AxiosResponse } from "axios"
+import axiosPublic from "@/api/axiosInstances";
+import useAuth from "@/hooks/useAuth";
 
 export default function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.interceptors.request.use(
-            (config) => {
-                // config.withCredentials = true (need logout to remove httponly cookie)
-                return config;
-            },
-            (error) => Promise.reject(error)
-        )
-    }, []);
-
+    const { setAuth } = useAuth();
+    
     const handleLogin = async (e : MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
         try {
-            const res : AxiosResponse = await axios.post(
-                'http://localhost:3000/api/auth/login',
+            const res = await axiosPublic.post(
+                '/auth/login',
                 {
                     email: email,
                     password: password
-                }
-            )
-            console.log(res.data);
+                },
+                { withCredentials: true }
+            );
+            setAuth(res.data);
             navigate('/home');
         } catch (err) {
             if(err instanceof AxiosError){
-                console.log(err?.response?.data.message);
+                console.log(err?.response?.data);
             } else {
                 console.log(err);
             }

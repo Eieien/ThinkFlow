@@ -1,10 +1,31 @@
-import react from "react";
+import react, { useEffect } from "react";
 import Layout from "../components/layout/Layout";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { Link } from "react-router-dom";
 import LogoStyle from "../components/LogoStyle";
+import axiosPublic from "@/api/axiosInstances";
+import { AxiosError } from "axios";
 
 export default function SignUp(){
+    useEffect(() => {
+        async function logout(){ // test logout
+            try {
+                const res = await axiosPublic.delete(
+                    '/auth/logout',
+                    { withCredentials: true }
+                )
+                console.log(res.status);
+            } catch (err) {
+                if(err instanceof AxiosError){
+                    console.log(err?.response?.data);
+                } else {
+                    console.log(err);
+                }
+            }
+        }
+        logout();
+    }, []);
+
     return (
         <>
             <Layout

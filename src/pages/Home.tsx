@@ -17,6 +17,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
+import useAxiosPrivate from "@/hooks/useAxiosPrivate"
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+
 export default function Home(){
 
     const [CardType, setCardType] = useState<String>("Notes");
@@ -31,6 +35,25 @@ export default function Home(){
         setCardType(type);
         localStorage.setItem("Card Type", String(type));
     }
+
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        async function getNotes(){
+            try {
+                const res = await axiosPrivate.get('/notes');
+                console.log(res.data);
+            } catch (err) {
+                if(err instanceof AxiosError){
+                    console.log(err?.response?.data);
+                } else {
+                    console.log(err);
+                }
+            }
+        }
+        getNotes();
+    }, []);
 
     return(
         <>
