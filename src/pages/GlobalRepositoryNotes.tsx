@@ -5,9 +5,10 @@ import NavigationBar from "../components/layout/NavigationBar";
 import {Funnel, NotebookText, Pencil} from "lucide-react";
 import NotesCard from "../components/NotesCard";
 
-export default function GlobalRepository() {
+export default function GlobalRepositoryNotes() {
     
-    //JavaScript Area for Filter and Changing Notes and Quizzes
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
 
     return (
         <>
@@ -34,15 +35,36 @@ export default function GlobalRepository() {
                                 Quizzes
                             </button>
                             </Link>
-                            
+
                         </div>
-                        <div className="flex justify-between w-70">
-                            <input type="search" placeholder="Search" className="auth-input py-1"/>
-                            <button
-                            className="font-bold border border-primary-dark text-primary-dark bg-primary-light px-4 py-0.5 rounded-md cursor-pointer dark:text-primary-white dark:border-primary-white flex flex-row justify-between items-center">
-                                <Funnel className="h-5"/>
+                        <div className="relative flex justify-between w-70">
+                            <input
+                                onClick={() => setIsFilterOpen(false)}
+                                type="search"
+                                placeholder="Search"
+                                className="auth-input py-1"
+                            />
+
+                            <div className="relative">
+                                <button
+                                onClick={toggleFilter}
+                                className="font-bold border border-primary-dark text-primary-dark bg-primary-light px-5 py-0.5 rounded-md cursor-pointer dark:text-primary-white dark:border-primary-white flex flex-row justify-between items-center"
+                                >
+                                <Funnel className="h-5" />
                                 Filter
-                            </button>
+                                </button>
+
+                                {/* The dropdown appears once the button of Filter is clicked*/}
+                                {isFilterOpen && (
+                                <div className="absolute top-full w-26 right-0 border border-primary-dark bg-primary-white dark:bg-primary-dark dark:border-primary-white rounded-md">
+                                    <ul className="flex flex-col text-sm">
+                                    <li className="px-3 py-2 hover:bg-light-2 dark:hover:bg-dark-2 cursor-pointer rounded-md">Title</li>
+                                    <li className="px-3 py-2 hover:bg-light-2 dark:hover:bg-dark-2 cursor-pointer rounded-md">Date</li>
+                                    <li className="px-3 py-2 hover:bg-light-2 dark:hover:bg-dark-2 cursor-pointer rounded-md">Created By</li>
+                                    </ul>
+                                </div>
+                                )}
+                            </div>
                         </div>
                     </section>
 
@@ -52,7 +74,7 @@ export default function GlobalRepository() {
                         <NotesCard
                             title="Prog 2 Notes"
                             noOfBookmarked="10"
-                            dateCreated="Created on Sept. 25, 2025"
+                            dateCreated="Sept. 25, 2025"
                             creator="Ivan Ruelan"
                             tag="Prog II"
                             description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
@@ -60,7 +82,7 @@ export default function GlobalRepository() {
                         <NotesCard
                             title="Prog 2 Notes"
                             noOfBookmarked="10"
-                            dateCreated="Created on Sept. 25, 2025"
+                            dateCreated="Sept. 25, 2025"
                             creator="Ivan Ruelan"
                             tag="DSA"
                             description="Created from the depths of hell of Programming 2 in my 2nd semestral of college life"
@@ -68,7 +90,7 @@ export default function GlobalRepository() {
                         <NotesCard
                             title="Prog 2 Notes"
                             noOfBookmarked="10"
-                            dateCreated="Created on Sept. 25, 2025"
+                            dateCreated="Sept. 25, 2025"
                             creator="Ivan Ruelan"
                             tag="DSA"
                             description="Created from the depths of hell of Programming 2 in my 2nd semestral of college lifeStuff ioxdfhusdoifjuspdofgujisdopigsioujj"
@@ -76,7 +98,7 @@ export default function GlobalRepository() {
                         <NotesCard
                             title="Prog 2 Notes"
                             noOfBookmarked="9"
-                            dateCreated="Created on Sept. 25, 2025"
+                            dateCreated="Sept. 25, 2025"
                             creator="Ivan Ruelan"
                             tag="DSA"
                             description="Stuff ioxdfhusdoifjuspdofgujisdopigsioujj"

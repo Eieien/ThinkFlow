@@ -13,7 +13,7 @@ interface NotesCardProps{
 export default function NotesCard({title, noOfBookmarked, noOfQuestions, creator, tag, description} : NotesCardProps){
 
     return (
-        <div className="w-full card">
+        <div className="w-full card cursor-pointer">
             <div className="flex gap-2 justify-between">
                 <h1 className="text-2xl font-bold ">{title}</h1>
                 <div className="flex gap-2 justify-between items-center">
