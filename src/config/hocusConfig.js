@@ -12,7 +12,7 @@ const hocuspocus = new Hocuspocus({
     async onLoadDocument(data){
         const ydoc = new Y.Doc();
         try {
-            const binData = await readFile(`uploads/notes/bin/${data.documentName}.bin`);
+            const binData = await readFile(`uploads/notes/bin/${data.documentName}`);
             Y.applyUpdate(ydoc, binData);
             return ydoc;
         } catch (e) {
@@ -21,7 +21,7 @@ const hocuspocus = new Hocuspocus({
     },
     async onStoreDocument(data){
         const encodedDoc = Y.encodeStateAsUpdate(data.document);
-        await writeFile(`uploads/notes/bin/${data.documentName}.bin`, encodedDoc);
+        await writeFile(`uploads/notes/bin/${data.documentName}`, encodedDoc);
         console.log('note stored');
     }
 });
