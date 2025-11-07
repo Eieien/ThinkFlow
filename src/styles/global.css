@@ -100,7 +100,7 @@
         @apply transition duration-200 bg-primary-white text-dark-3 dark:bg-primary-dark dark:text-primary-white
     }
     .card{
-        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md
+        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md dark:bg-dark-2
     }
 
     label{

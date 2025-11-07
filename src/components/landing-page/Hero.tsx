@@ -1,4 +1,6 @@
 import react from "react";
+import { Link } from "react-router-dom";
+
 export default function Hero(){
 
     return (
@@ -23,10 +25,12 @@ export default function Hero(){
 
                         </div>
                         <div className="flex justify-center items-center gap-2">
-                            <button 
-                            className="px-4 py-2 border border-primary-dark text-primary-dark dark:border-primary-white dark:text-white rounded-md cursor-pointer">
-                                View Published Notes
-                            </button>
+                            <Link to="/globalrepositorynotes">
+                                <button 
+                                className="px-4 py-2 border border-primary-dark text-primary-dark dark:border-primary-white dark:text-white rounded-md cursor-pointer">
+                                    View Published Notes
+                                </button>
+                             </Link>
                             <button 
                             className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white rounded-md cursor-pointer">
                                 Create your notes

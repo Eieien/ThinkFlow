@@ -4,13 +4,13 @@ import {Bookmark} from "lucide-react";
 interface NotesCardProps{
     title: String;
     noOfBookmarked: String;
-    dateCreated: String;
+    noOfQuestions: String;
     creator: String;
     description: String;
     tag: String;
 }
 
-export default function NotesCard({title, noOfBookmarked, dateCreated, creator, tag, description} : NotesCardProps){
+export default function NotesCard({title, noOfBookmarked, noOfQuestions, creator, tag, description} : NotesCardProps){
 
     return (
         <div className="w-full card cursor-pointer">
@@ -24,7 +24,7 @@ export default function NotesCard({title, noOfBookmarked, dateCreated, creator, 
                 </div>
             </div>
             <div className="flex gap-2">
-                <h3 className="text-dark-border dark:text-light-border">Created On {dateCreated}</h3>
+                <h3 className="text-dark-border dark:text-light-border">{noOfQuestions} Questions</h3>
                 <h3 className="text-dark-border dark:text-light-border">{creator}</h3>
             </div>
             <div className="flex gap-2">
