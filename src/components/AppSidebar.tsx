@@ -293,11 +293,9 @@ import { Children } from "react"
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
-                            side="right"
-                            className="w-70 ml-1 mb-2 bg-primary-white rounded-md border border-border-light p-2 dark:bg-primary-dark"
                             >
                             <DropdownMenuItem className="flex gap-1">
-                                <img src={Ian} className="w-13 h-13 rounded-full"/>
+                                <img src={Ian} className="w-13 h-13 object-contain rounded-full"/>
                                 <div className={``}>
                                     <h2 className="text-lg font-bold">
                                         Ivan Paul RUelan

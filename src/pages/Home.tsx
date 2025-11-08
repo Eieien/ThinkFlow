@@ -22,6 +22,7 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import NotesGrid from "@/components/layout/NotesGrid"
 import { useCardType } from "@/hooks/useCardType"
+import axiosPublic from "@/api/axiosInstances"
 
 export default function Home(){
 
@@ -33,7 +34,7 @@ export default function Home(){
     useEffect(() => {
         async function getNotes(){
             try {
-                const res = await axiosPrivate.get('/notes');
+                const res = await axiosPublic.get('/notes');
                 console.log(res.data);
             } catch (err) {
                 if(err instanceof AxiosError){

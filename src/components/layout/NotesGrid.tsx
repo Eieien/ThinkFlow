@@ -10,10 +10,17 @@ interface NotesGridProps{
     className?: String;
 }
 
+interface DataState{
+    notes: Note[];
+    quizzes: Quiz[];
+}
+
 export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 "} :  NotesGridProps){
 
-    const [notes, setNotes] = useState<Note[]>([]);
-    const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+    const [data, setData] = useState<DataState>({
+        notes: [],
+        quizzes: [],
+    })
 
     const axiosInstance = axios.create({
         baseURL: 'http://localhost:3000/api/',
@@ -23,9 +30,8 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
         const getNotes = async () => {
             try{
                 const getNotes = await axiosInstance.get('/notes/');
-                setNotes(getNotes.data);
                 const getQuizzes = await axiosInstance.get("/quizzes");
-                setQuizzes(getQuizzes.data);
+                setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
             }catch(err){
                 if(err instanceof AxiosError){
                     console.log(err?.response?.data);
@@ -41,7 +47,7 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
         <>
             {type == "Notes" ? 
                 <section className={String(className)}>
-                    {notes.map((note) => (
+                    {data.notes.map((note) => (
                         <NotesCard key={note._id}
                         title={note.title}
                         noOfBookmarked="10"
@@ -54,7 +60,7 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                 </section>
                 :
                 <section className={String(className)}>
-                    {quizzes.map((quiz) => (
+                    {data.quizzes.map((quiz) => (
                         <QuizCard
                             title={quiz.quizTitle}
                             noOfBookmarked="10"
