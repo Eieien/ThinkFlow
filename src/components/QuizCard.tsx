@@ -3,7 +3,7 @@ import {Bookmark} from "lucide-react";
 interface NotesCardProps{
     title: String;
     noOfBookmarked?: String;
-    noOfQuestions?: String;
+    noOfQuestions?: number;
     creator?: String;
     description?: String;
     tag?: String;

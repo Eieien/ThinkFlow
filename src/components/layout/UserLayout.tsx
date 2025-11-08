@@ -24,7 +24,7 @@ export default function UserLayout({title, description, children}: UserLayoutPro
                     <div className="flex justify-between gap-2 items-center px-1 py-2">
                         <div className="flex gap-2 items-center">
                             <SidebarTrigger/>
-                            <h1>Page Title</h1>
+                            <h1>{title}</h1>
                         </div>
                         <ThemeSwitcher/>
                     </div>

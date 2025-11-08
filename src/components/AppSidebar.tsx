@@ -21,6 +21,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Link } from "react-router"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
+import ConditionalWrapper from "./layout/ConditionalWrapper"
+import { Children } from "react"
 
   const notes = [
     {
@@ -52,8 +59,6 @@ import { Link } from "react-router"
         icon: Earth,
     }
   ]
-
-  
   export function AppSidebar() {
     const {state} = useSidebar();
     
@@ -72,24 +77,59 @@ import { Link } from "react-router"
             <SidebarGroupContent>
                 <SidebarMenu>
                 {defaultItems.map((item) => (
+                    
                     <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                        <Link to={item.url}>
-                            <item.icon />
-                            <span>{item.title}</span>
-                        
-                        </Link>
-                    </SidebarMenuButton>
+                    <ConditionalWrapper
+                    condition = {state === "collapsed"}
+                    wrapper={ (children) =>(
+                        <Tooltip>
+                            <TooltipTrigger> 
+                                {children}
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {item.title}
+                            </TooltipContent>
+                        </Tooltip>
+                    )}>
+                        <SidebarMenuButton asChild>
+                            <Link to={item.url}>
+                                <item.icon />
+                                {state !== "collapsed" && <span>{item.title}</span>}
+                            </Link>
+                        </SidebarMenuButton>
+
+
+                    </ConditionalWrapper>
                     </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
                     <Dialog>
                         <DialogTrigger className="w-full flex items-center gap-1">
-                            <SidebarMenuButton>
-                                <Search />
-                                <span>Search</span>
-                            </SidebarMenuButton>
-                            <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>
+                            <ConditionalWrapper
+                            condition={state === "collapsed"}
+                            wrapper={(children) => (
+                                <Tooltip>
+                                    <TooltipTrigger> 
+                                        {children}
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                        Search
+                                    </TooltipContent>
+                                </Tooltip>
+                            )}
+                            >
+                                <SidebarMenuButton>
+                                    <Search />
+                                    {state !== "collapsed" && <span>Search</span>}
+                                    
+                                </SidebarMenuButton>
+                                {state !== "collapsed" && <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>}
+
+                              
+
+                            </ConditionalWrapper>
+
+                            
 
                         </DialogTrigger>
                         <DialogContent className="min-h-60 flex flex-col justify-start">
@@ -113,12 +153,30 @@ import { Link } from "react-router"
                 <SidebarMenu>
                 {notes.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                        <a href={item.url}>
+                    
+                    <ConditionalWrapper
+                    condition = {state === "collapsed"}
+                    wrapper={ (children) =>(
+                        <Tooltip>
+                            <TooltipTrigger> 
+                                {children}
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {item.title}
+                            </TooltipContent>
+                        </Tooltip>
+                    )}>
+                        <SidebarMenuButton asChild>
+
+                        <Link to={item.url}>
                         <item.icon />
-                        <span>{item.title}</span>
-                        </a>
-                    </SidebarMenuButton>
+                        {state !== "collapsed" && <span>{item.title}</span>}
+                        
+                        </Link>
+
+                        </SidebarMenuButton>
+
+                    </ConditionalWrapper>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuAction>
@@ -137,6 +195,18 @@ import { Link } from "react-router"
                     </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
+                    <ConditionalWrapper
+                    condition={state === "collapsed"}
+                    wrapper={(children) => (
+                        <Tooltip>
+                            <TooltipTrigger> 
+                                {children}
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                Add Note
+                            </TooltipContent>
+                        </Tooltip>
+                    )}>
                     <Link to="/Notes" target="_blank" rel="noopener noreferrer">
                         <SidebarMenuButton>
                             <Plus/>
@@ -145,6 +215,8 @@ import { Link } from "react-router"
                         </SidebarMenuButton>
                     
                     </Link>
+
+                    </ConditionalWrapper>
                 </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
@@ -156,12 +228,28 @@ import { Link } from "react-router"
                 <SidebarMenu>
                 {bookmarks.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                        <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                        </a>
-                    </SidebarMenuButton>
+                    
+                        <ConditionalWrapper
+                        condition={state === "collapsed"}
+                        wrapper={(children) => (
+                            <Tooltip>
+                            <TooltipTrigger> 
+                                {children}
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {item.title}
+                            </TooltipContent>
+                        </Tooltip>
+                        )}>
+                        <SidebarMenuButton asChild>
+                            <a href={item.url}>
+                            <item.icon />
+                            {state !== "collapsed" && <span>{item.title}</span>}
+                            
+                            </a>
+                        </SidebarMenuButton>
+
+                        </ConditionalWrapper>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuAction>
@@ -205,7 +293,7 @@ import { Link } from "react-router"
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
-                            side="top"
+                            side="right"
                             className="w-70 ml-1 mb-2 bg-primary-white rounded-md border border-border-light p-2 dark:bg-primary-dark"
                             >
                             <DropdownMenuItem className="flex gap-1">

@@ -16,8 +16,8 @@ export default function Explore() {
     return (
         <>
             <Layout
-            title="Global Repository"
-            description="testing sidebar"
+            title="Explore"
+            description="Explore public notes created by people"
             >
                 <section className="relative">
                     <NavigationBar/>
