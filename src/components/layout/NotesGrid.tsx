@@ -22,14 +22,10 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
         // imma try catch this later
         const getNotes = async () => {
             try{
-                if(type === "Notes"){
-                    const getNotes = await axiosInstance.get('/notes/');
-                    setNotes(getNotes.data);
-                }else{
-                    const getQuizzes = await axiosInstance.get("/quizzes");
-                    setQuizzes(getQuizzes.data);
-                }
-                console.log(type);
+                const getNotes = await axiosInstance.get('/notes/');
+                setNotes(getNotes.data);
+                const getQuizzes = await axiosInstance.get("/quizzes");
+                setQuizzes(getQuizzes.data);
             }catch(err){
                 if(err instanceof AxiosError){
                     console.log(err?.response?.data);
@@ -39,9 +35,8 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
             }
         }
         getNotes();
-    }, [type])
+    }, [])
 
-    console.log(quizzes);
     return (
         <>
             {type == "Notes" ? 
