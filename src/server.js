@@ -19,10 +19,10 @@ connectToMongoDB();
 const { app } = expressWs(express());
 const PORT = process.env.PORT || 3000;
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 min
+    windowMs: 60 * 1000 * 15, // 15 min
     limit: 100, // 100 requests per windowMs
     message: (_req, res) => {
-        return res.status(429).json({ error: 'Too many requests, please try again later.' });
+        return res.status(429).json({ message: 'Too many requests, please try again later.' });
     },
     standardHeaders: true
 });
@@ -35,7 +35,7 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
-app.use(limiter);
+// app.use(limiter);
 
 // routes
 app.get('/api', (_req, res) => {
