@@ -20,7 +20,7 @@ import Ian from "@/assets/images/Ian.jpg"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import {
     Tooltip,
     TooltipContent,
@@ -28,6 +28,8 @@ import {
   } from "@/components/ui/tooltip"
 import ConditionalWrapper from "./layout/ConditionalWrapper"
 import { Children } from "react"
+import useAuth from "@/hooks/useAuth"
+import axiosPublic from "@/api/axiosInstances"
 
   const notes = [
     {
@@ -61,6 +63,22 @@ import { Children } from "react"
   ]
   export function AppSidebar() {
     const {state} = useSidebar();
+    const { setAuth } = useAuth();
+    const navigate = useNavigate();
+
+    async function handleLogout(){
+        try {
+            const res = await axiosPublic.delete(
+                    '/auth/logout',
+                    { withCredentials: true }
+                );
+            console.log(res.status);
+            setAuth({});
+            navigate('/login');
+        } catch (err) {
+
+        }
+    }
     
     
         return (
@@ -313,7 +331,7 @@ import { Children } from "react"
                                 <Settings/>
                                 <span>Settings</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex gap-2">
+                            <DropdownMenuItem onClick={handleLogout} className="flex gap-2">
                                 <LogOut/>
                                 <span>Sign Out</span>
                             </DropdownMenuItem>

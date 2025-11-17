@@ -29,12 +29,11 @@ export default function Home(){
     const {cardType, notes, quizzes, bookmarks} = useCardType();
 
     const axiosPrivate = useAxiosPrivate();
-    const navigate = useNavigate();
 
     useEffect(() => {
         async function getNotes(){
             try {
-                const res = await axiosPublic.get('/notes');
+                const res = await axiosPrivate.get('/notes');
                 console.log(res.data);
             } catch (err) {
                 if(err instanceof AxiosError){
