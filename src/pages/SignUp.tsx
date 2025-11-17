@@ -1,30 +1,40 @@
-import react, { useEffect } from "react";
+import react, { useEffect, useState } from "react";
 import Layout from "../components/layout/Layout";
 import ThemeSwitcher from "../components/ThemeSwitcher";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LogoStyle from "../components/LogoStyle";
 import axiosPublic from "@/api/axiosInstances";
 import { AxiosError } from "axios";
 
 export default function SignUp(){
-    useEffect(() => {
-        async function logout(){ // test logout
-            try {
-                const res = await axiosPublic.delete(
-                    '/auth/logout',
-                    { withCredentials: true }
-                )
-                console.log(res.status);
-            } catch (err) {
-                if(err instanceof AxiosError){
-                    console.log(err?.response?.data);
-                } else {
-                    console.log(err);
-                }
+    const [username, setUsername] = useState<string>();
+    const [email, setEmail] = useState<string>();
+    const [password, setPassword] = useState<string>();
+    const [confPassword, setConfPassword] = useState<string>();
+    const navigate = useNavigate();
+
+    const handleSignup = async () => {
+        try {
+            const res = await axiosPublic.post(
+                '/auth/signup',
+                {
+                    email: email,
+                    username: username,
+                    password: password,
+                    confirmPassword: confPassword
+                },
+                { withCredentials: true }
+            );
+            console.log(res.data);
+            navigate('/login');
+        } catch (err) {
+            if(err instanceof AxiosError){
+                console.log(err?.response?.data);
+            } else {
+                console.log(err);
             }
         }
-        logout();
-    }, []);
+    }
 
     return (
         <>
@@ -60,22 +70,22 @@ export default function SignUp(){
                                     </div>
                                     <div className="flex flex-col">
                                         <label>Username</label>
-                                        <input placeholder="Enter your Username" className="auth-input"/>
+                                        <input onChange={(e) => setUsername(e.target.value)} placeholder="Enter your Username" className="auth-input"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <label>Email</label>
-                                        <input placeholder="Enter your Email Address" className="auth-input"/>
+                                        <input onChange={(e) => setEmail(e.target.value)} placeholder="Enter your Email Address" className="auth-input"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <label>Password</label>
-                                        <input placeholder="Enter your password" className="auth-input"/>
+                                        <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Enter your password" className="auth-input"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <label>Confirm Password</label>
-                                        <input placeholder="Re-enter your password" className="auth-input"/>
+                                        <input onChange={(e) => setConfPassword(e.target.value)} type="password" placeholder="Re-enter your password" className="auth-input"/>
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <button className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white font-bold rounded-md">
+                                        <button onClick={handleSignup} className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white font-bold rounded-md">
                                             Sign up
                                         </button>
                                     </div>
