@@ -10,7 +10,6 @@ function App() {
       <Layout
         title="Thinkflow"
         description="Wuwa">
-          <NavigationBar/>
 
           <Hero/>
           <About/>

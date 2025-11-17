@@ -1,9 +1,8 @@
 import {useEffect, useState, useContext, ReactNode} from "react";
-import Sidebar from "../../components/layout/Sidebar"
-import UserNavigationBar from "../../components/layout/UserNavigationBar"
+import Sidebar from "../Sidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import ThemeSwitcher from "../ThemeSwitcher";
+import ThemeSwitcher from "../../ThemeSwitcher";
 interface UserLayoutProps{
     title: String;
     description: string;

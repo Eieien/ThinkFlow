@@ -1,27 +1,17 @@
-import react, { useEffect } from "react";
+import react from "react";
 import {Link} from "react-router-dom";
-import ThemeSwitcher from "../ThemeSwitcher.tsx";
-import LogoStyle from "../LogoStyle.tsx";
-import useAuth from "@/hooks/useAuth.ts";
-import GuestNavigationBar from "./Guest/GuestNavigationBar.tsx";
-import { AppSidebar } from "../AppSidebar.tsx";
+import ThemeSwitcher from "../../ThemeSwitcher.tsx";
+import LogoStyle from "../../LogoStyle.tsx";
 
-export default function NavigationBar(){
+export default function GuestNavigationBar(){
 
-    const {auth} = useAuth();
-
-    useEffect(() => {
-        console.log(auth);
-    })
 
     return (
         <>
-            {Object.keys(auth).length === 0 ? 
-            <GuestNavigationBar/> : <AppSidebar/>
-            }
             <div className="h-20 flex flex-row justify-between items-center">
                 <Link to="/">
                     <LogoStyle type="horizontal"/>
+                
                 </Link>
 
                 <div className="flex flex-row gap-2 items-center">

@@ -1,17 +1,17 @@
 import react, {useState, useEffect} from "react"
-import UserLayout from "../components/layout/UserLayout"
+import UserLayout from "../components/layout/User/UserLayout"
 import NotesEditor from "../components/Notes/NotesEditor"
 import axios from "axios"
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 export default function UserPageTest(){
 
-    const axiosInstance = axios.create({
-        baseURL: 'http://localhost:3000/api/',
-    });
 
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState("");
     const [data, setData] = useState("");
+
+    const axiosPrivate = useAxiosPrivate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files){
@@ -27,7 +27,7 @@ export default function UserPageTest(){
         const formData = new FormData();
         formData.append("content", file);
 
-        const postRes = await axiosInstance.post(
+        const postRes = await axiosPrivate.post(
             '/notes/import',
             formData,
             {

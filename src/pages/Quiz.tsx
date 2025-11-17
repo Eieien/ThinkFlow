@@ -1,4 +1,4 @@
-import UserLayout from "@/components/layout/UserLayout";
+import UserLayout from "@/components/layout/User/UserLayout";
 import {useState, useEffect} from "react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";

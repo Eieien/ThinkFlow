@@ -20,7 +20,6 @@ export default function Explore() {
             description="Explore public notes created by people"
             >
                 <section className="relative">
-                    <NavigationBar/>
                     <section className="mb-8 flex flex-row justify-between items-center">
                         <div className="flex justify-between gap-2">
                             <button 

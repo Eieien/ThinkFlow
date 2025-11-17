@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import type { Note, Quiz } from "@/configs/DataTypeConfig";
+import axiosPublic from "@/api/axiosInstances";
 
 interface NotesGridProps{
     type: String;
@@ -22,15 +23,13 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
         quizzes: [],
     })
 
-    const axiosInstance = axios.create({
-        baseURL: 'http://localhost:3000/api/',
-    });
+
     useEffect(() => {
         // imma try catch this later
         const getNotes = async () => {
             try{
-                const getNotes = await axiosInstance.get('/notes/');
-                const getQuizzes = await axiosInstance.get("/quizzes");
+                const getNotes = await axiosPublic.get('/notes/');
+                const getQuizzes = await axiosPublic.get("/quizzes");
                 setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
             }catch(err){
                 if(err instanceof AxiosError){

@@ -1,4 +1,7 @@
-import React, {ReactNode} from "react";
+import useAuth from "@/hooks/useAuth";
+import React, {ReactNode, useEffect, useState} from "react";
+import UserLayout from "./User/UserLayout";
+import GuestLayout from "./Guest/GuestLayout";
 
 interface LayoutProps{
     title: string;
@@ -8,20 +11,23 @@ interface LayoutProps{
 
 export default function Layout({title, description, children} : LayoutProps){
 
+    const {auth} = useAuth();
+    const [loggedIn, isLoggedIn] = useState();
+
+    useEffect(() => {
+
+        console.log(auth);
+
+    }, [])
+
     return(
         <>
-            <div>
-                <title>{title}</title>
-                <meta name="description" content={description}/>
-            </div>
-
-            <div className="antialiased max-w-screen-xl mx-auto flex flex-col justify-center">
-                <div className="min-h-screen w-full">
-                    {children}
-
-                </div>
-
-            </div>
+            {Object.keys(auth).length == 0 ? 
+                <GuestLayout title={title} description={description} children={children}/>
+                :
+                <UserLayout title={title} description={description} children={children}/>
+            }
+            
 
         
         </>

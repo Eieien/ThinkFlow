@@ -7,6 +7,8 @@ import NotesEditor from "../components/Notes/NotesEditor";
 
 export default function Notes(){
     const {id} = useParams();
+    
+
 
     return(
         <>
@@ -14,7 +16,6 @@ export default function Notes(){
                 title={id?.toString()}
                 description="Wuwa"
             >
-                <GuestHeader/>
                 <div className="max-w-2xl mx-auto">
                     <NotesEditor/>
 

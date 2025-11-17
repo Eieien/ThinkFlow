@@ -1,5 +1,5 @@
 import react, {useState, useEffect} from "react"
-import UserLayout from "../components/layout/UserLayout"
+import UserLayout from "../components/layout/User/UserLayout"
 import NotesCard from "@/components/NotesCard"
 import QuizCard from "@/components/QuizCard"
 import {Bookmark, Notebook, Pen, FilePlus, Filter} from "lucide-react"
@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import NotesGrid from "@/components/layout/NotesGrid"
 import { useCardType } from "@/hooks/useCardType"
 import axiosPublic from "@/api/axiosInstances"
+import useAuth from "@/hooks/useAuth"
 
 export default function Home(){
 
@@ -45,6 +46,7 @@ export default function Home(){
             }
         }
         getNotes();
+
     }, []);
 
     return(
