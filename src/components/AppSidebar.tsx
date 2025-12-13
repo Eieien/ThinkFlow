@@ -77,9 +77,16 @@ import axiosPublic from "@/api/axiosInstances"
             navigate('/login');
         } catch (err) {
 
+            
         }
     }
     
+    const onCreateNote = async () => {
+        console.log("Clciked");
+        try {
+            const res = await axiosPublic.post()
+        }
+    }
     
         return (
       <Sidebar collapsible="icon">
@@ -220,19 +227,17 @@ import axiosPublic from "@/api/axiosInstances"
                             <TooltipTrigger> 
                                 {children}
                             </TooltipTrigger>
-                            <TooltipContent side="right">
+                            <TooltipContent onClick={onCreateNote} side="right">
                                 Add Note
                             </TooltipContent>
                         </Tooltip>
                     )}>
-                    <Link to="/Notes" target="_blank" rel="noopener noreferrer">
-                        <SidebarMenuButton>
-                            <Plus/>
-                            <span>Add Note</span>
+                    <SidebarMenuButton>
+                        <Plus/>
+                        <span>Add Note</span>
 
-                        </SidebarMenuButton>
+                    </SidebarMenuButton>
                     
-                    </Link>
 
                     </ConditionalWrapper>
                 </SidebarMenuItem>
