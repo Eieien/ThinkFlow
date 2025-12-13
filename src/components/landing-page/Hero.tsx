@@ -5,6 +5,7 @@ export default function Hero(){
 
     return (
         <>
+
             <section className="relative w-full min-h-screen">
                 <div className="absolute inset-0 top-40 left-0">
                     <div className="text-center flex flex-col justify-center items-center gap-2">
@@ -13,13 +14,11 @@ export default function Hero(){
                             <h1 className="text-6xl text-center max-w-3xl font-bold">
                                 Change your Way of <span>thinking</span> with <span>AI</span>
                             </h1>
-
                         </div>
                         <div className="flex w-full justify-center">
                             <p className="text-2xl font-medium max-w-2xl text-dark-4 dark:text-light-4">
                                 Transform the Way You Study With AI-Generated Quizzes From Your Own Notes
                             </p>
-
                         </div>
                         <div className="flex justify-center items-center gap-2">
                             <Link to="/explore" >
@@ -33,11 +32,12 @@ export default function Hero(){
                                 Create your notes
                             </button>
                         </div>
-
+                        {/* Pic of the Art of War example in Figma */}
+                        <div className="px-100 py-60 border border-light-border dark:border-dark-border dark:bg-dark-2 m-5">
+                            
+                        </div>
                     </div>
-
                 </div>
-
             </section>
         
         </>
