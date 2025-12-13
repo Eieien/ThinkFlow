@@ -83,9 +83,9 @@ import axiosPublic from "@/api/axiosInstances"
     
     const onCreateNote = async () => {
         console.log("Clciked");
-        try {
-            const res = await axiosPublic.post()
-        }
+        // try {
+        //     const res = await axiosPublic.post()
+        // }
     }
     
         return (
