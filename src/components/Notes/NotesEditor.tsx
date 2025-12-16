@@ -45,7 +45,6 @@ export default function NotesEditor({data, file} : NotesEditorProps){
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
         name: file,
-        document: ydoc,
       });
 
     const [isEditable, setEditable] = useState(true);

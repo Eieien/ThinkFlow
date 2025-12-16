@@ -36,6 +36,20 @@ export default function SignUp(){
         }
     }
 
+    // async function handleLogout(){
+    //     try {
+    //         const res = await axiosPublic.delete(
+    //                 '/auth/logout',
+    //                 { withCredentials: true }
+    //             );
+    //         console.log(res.status);
+    //     } catch (err) {
+
+            
+    //     }
+    // }
+    // handleLogout();
+
     return (
         <>
             <Layout

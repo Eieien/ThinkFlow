@@ -92,24 +92,24 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
         console.log("Clciked");
         try {
 
-            const res = await axiosPrivate.post('/notes/create', 
-                {
-                    userId: auth.user?._id,
-                    title: "Untitled",
-                    description: "Untitled description"
-                },
-                { 
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-            // console.log(res.data.createdNote._id);
-            const noteId = res.data.createdNote._id;
-            // const updateTitle = await axiosPrivate.put(`/notes/${noteId}`,{
-            //     title: "Untitled" 
-            // })
-            const getNote = await axiosPrivate.get(`/notes/${noteId}`);
+            // const res = await axiosPrivate.post('/notes/create', 
+            //     {
+            //         userId: auth.user?._id,
+            //         title: "Untitled",
+            //         description: "Untitled description"
+            //     },
+            //     { 
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         }
+            //     }
+            // )
+            // // console.log(res.data.createdNote._id);
+            // const noteId = res.data.createdNote._id;
+            // // const updateTitle = await axiosPrivate.put(`/notes/${noteId}`,{
+            // //     title: "Untitled" 
+            // // })
+            const getNote = await axiosPrivate.get(`/notes/69417943e18cce72c9cdaa4b`);
             // console.log(getNote.data._id);
             navigate(`/notes/${getNote.data._id}`);
         }catch(err){
