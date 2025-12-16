@@ -42,7 +42,7 @@ export default function NotesEditor({data, id} : NotesEditorProps){
               try{
                   const file = await axiosPrivate.get(`/notes/${id}`);
                   setFileContent(file.data.fileContent);
-                  
+                  console.log(fileContent);
               }catch(err){
                   console.log(err);
               }
@@ -53,7 +53,7 @@ export default function NotesEditor({data, id} : NotesEditorProps){
 
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: fileContent,
+        name: "fd8586cd48f8653fb440bd2aa340dd6a.bin", // fix dis
       });
 
     const [isEditable, setEditable] = useState(true);
