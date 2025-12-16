@@ -1,4 +1,3 @@
-import React from 'react'
 import useAuth from './useAuth';
 import axiosPublic from '@/api/axiosInstances';
 
@@ -10,9 +9,8 @@ const useRefreshToken = () => {
             'auth/refresh',
             { withCredentials: true }
         );
-        setAuth(prev => {
-            const newAccessToken: string = res.data.accessToken;
-            return {...prev, accessToken: newAccessToken}
+        setAuth(() => {
+            return {...res.data}
         });
         return res.data.accessToken;
     }
