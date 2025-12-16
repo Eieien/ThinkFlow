@@ -29,7 +29,8 @@ import {
 import ConditionalWrapper from "./layout/ConditionalWrapper"
 import { Children, useEffect } from "react"
 import useAuth from "@/hooks/useAuth"
-import axiosPublic from "@/api/axiosInstances"
+import axiosPublic, { axiosPrivate } from "@/api/axiosInstances"
+import useAxiosPrivate from "@/hooks/useAxiosPrivate"
 
   const notes = [
     {
@@ -61,11 +62,12 @@ import axiosPublic from "@/api/axiosInstances"
         icon: Earth,
     }
   ]
+
   export function AppSidebar() {
     const {state} = useSidebar();
     const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
-
+    const axiosPrivate = useAxiosPrivate();
     useEffect(() => {
         console.log(auth);   
     })
@@ -90,7 +92,7 @@ import axiosPublic from "@/api/axiosInstances"
         console.log("Clciked");
         try {
 
-            const res = await axiosPublic.post('/notes/create', 
+            const res = await axiosPrivate.post('/notes/create', 
                 {
                     userId: auth.user?._id,
                     title: "Untitled",
@@ -102,9 +104,14 @@ import axiosPublic from "@/api/axiosInstances"
                     }
                 }
             )
-            // console.log(auth.user?._id);
-            // console.log(res.status);
-            navigate(`/notes/Untitled`);
+            // console.log(res.data.createdNote._id);
+            const noteId = res.data.createdNote._id;
+            // const updateTitle = await axiosPrivate.put(`/notes/${noteId}`,{
+            //     title: "Untitled" 
+            // })
+            const getNote = await axiosPrivate.get(`/notes/${noteId}`);
+            // console.log(getNote.data._id);
+            navigate(`/notes/${getNote.data._id}`);
         }catch(err){
             console.log(err);
         }

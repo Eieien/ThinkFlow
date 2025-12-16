@@ -40,8 +40,8 @@ export default function NotesEditor({data, file} : NotesEditorProps){
       "default",
       [StarterKit]
     );
-    console.log("Generated JSON");
-    console.log(file);
+    // console.log("Generated JSON");
+    // console.log(file);
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
         name: file,
