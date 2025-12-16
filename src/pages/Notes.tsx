@@ -12,7 +12,6 @@ export default function Notes(){
     const {id} = useParams();
 
     const axiosPrivate = useAxiosPrivate();
-    const [fileContent, setFileContent] = useState("");
     const [fileName, setFileName] = useState("");
 
     useEffect(() => {
@@ -20,7 +19,6 @@ export default function Notes(){
             try{
                 const file = await axiosPrivate.get(`/notes/${id}`);
                 console.log(file);
-                setFileContent(file.data.fileContent);
                 setFileName(file.data.title);
 
             }catch(err){
@@ -39,7 +37,7 @@ export default function Notes(){
             >
                 <div className="max-w-2xl mx-auto">
                     <input className="text-4xl focus:outline-0" value={fileName}/>
-                    <NotesEditor file={fileContent}/>
+                    <NotesEditor id={id}/>
 
                 </div>
 

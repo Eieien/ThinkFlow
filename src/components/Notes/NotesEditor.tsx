@@ -16,35 +16,44 @@ import * as Y from "yjs"
 import { generateJSON, } from '@tiptap/html'
 import { TiptapTransformer } from "@hocuspocus/transformer";
 import axios from "axios";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
 interface NotesEditorProps{
   data?: String;
-  file?: String;
+  id?: String;
 }
 
-export default function NotesEditor({data, file} : NotesEditorProps){
+export default function NotesEditor({data, id} : NotesEditorProps){
 
-    // html imported from database
-    // const datad = `
-    //   <h1>Untitled</h1>
-    //   <p>Welcome to the Simple Editor template! This template integrates open source UI components and Tiptap extensions licensed under MIT.</p>
-    // `;
+  
+    // const dataJSON : JSONContent = generateJSON(data, [StarterKit]);
+    const [fileContent, setFileContent] = useState("");
     
+    const axiosPrivate = useAxiosPrivate();
 
-    // HTML to prosemirror JSON
-    // Or we can just send JSON directly without setting html
-    const dataJSON : JSONContent = generateJSON(data, [StarterKit]);
-    
-    const ydoc = TiptapTransformer.toYdoc(
-      dataJSON, //JSON
-      "default",
-      [StarterKit]
-    );
-    // console.log("Generated JSON");
-    // console.log(file);
+    // const ydoc = TiptapTransformer.toYdoc(
+    //   dataJSON, //JSON
+    //   "default",
+    //   [StarterKit]
+    // );
+
+    useEffect(() => {
+          const loadNote = async () => {
+              try{
+                  const file = await axiosPrivate.get(`/notes/${id}`);
+                  setFileContent(file.data.fileContent);
+                  
+              }catch(err){
+                  console.log(err);
+              }
+          }
+
+          loadNote();
+      })
+
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: file,
+        name: fileContent,
       });
 
     const [isEditable, setEditable] = useState(true);
