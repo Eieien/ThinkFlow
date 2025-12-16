@@ -50,9 +50,17 @@ export default class AuthController {
             if(!refreshToken) return res.sendStatus(401);
             if(!await User.findRefresh(refreshToken)) return res.sendStatus(403);
             const decodedUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-            const userData = formatJwtUserData(decodedUser);
+            const userDetails = await User.findById(decodedUser._id);
+            const userData = formatJwtUserData(userDetails);
             const accessToken = jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
-            return res.status(201).json({ accessToken: accessToken });
+            return res.status(201).json({
+                user: {
+                    _id: userData._id,
+                    username: userData.username,
+                    email: userData.email,
+                },
+                accessToken: accessToken 
+            });
         } catch (err) {
             return res.status(400).json(catchError(err));
         }
