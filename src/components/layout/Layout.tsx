@@ -11,14 +11,10 @@ interface LayoutProps{
 
 export default function Layout({title, description, children} : LayoutProps){
 
-    const {auth} = useAuth();
+    const {setAuth, auth} = useAuth();
     const [loggedIn, isLoggedIn] = useState();
 
-    useEffect(() => {
-
-        console.log(auth);
-
-    }, [])
+    
 
     return(
         <>

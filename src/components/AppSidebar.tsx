@@ -27,7 +27,7 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import ConditionalWrapper from "./layout/ConditionalWrapper"
-import { Children } from "react"
+import { Children, useEffect } from "react"
 import useAuth from "@/hooks/useAuth"
 import axiosPublic from "@/api/axiosInstances"
 
@@ -63,8 +63,12 @@ import axiosPublic from "@/api/axiosInstances"
   ]
   export function AppSidebar() {
     const {state} = useSidebar();
-    const { setAuth } = useAuth();
+    const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log(auth);   
+    })
 
     async function handleLogout(){
         try {
@@ -80,12 +84,30 @@ import axiosPublic from "@/api/axiosInstances"
             
         }
     }
-    
+
+
     const onCreateNote = async () => {
         console.log("Clciked");
-        // try {
-        //     const res = await axiosPublic.post()
-        // }
+        try {
+
+            const res = await axiosPublic.post('/notes/create', 
+                {
+                    userId: auth.user?._id,
+                    title: "Untitled",
+                    description: "Untitled description"
+                },
+                { 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            // console.log(auth.user?._id);
+            // console.log(res.status);
+            navigate(`/notes/Untitled`);
+        }catch(err){
+            console.log(err);
+        }
     }
     
         return (
@@ -227,12 +249,12 @@ import axiosPublic from "@/api/axiosInstances"
                             <TooltipTrigger> 
                                 {children}
                             </TooltipTrigger>
-                            <TooltipContent onClick={onCreateNote} side="right">
+                            <TooltipContent  side="right">
                                 Add Note
                             </TooltipContent>
                         </Tooltip>
                     )}>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton onClick={onCreateNote}>
                         <Plus/>
                         <span>Add Note</span>
 

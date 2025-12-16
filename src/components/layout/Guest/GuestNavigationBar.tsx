@@ -8,7 +8,7 @@ export default function GuestNavigationBar(){
 
     return (
         <>
-            <div className="h-20 flex flex-row justify-between items-center">
+            <div className="h-20 flex mx-auto flex-row justify-between items-center">
                 <Link to="/">
                     <LogoStyle type="horizontal"/>
                 

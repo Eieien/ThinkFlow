@@ -4,19 +4,20 @@ import NavigationBar from "./components/layout/NavigationBar.tsx"
 import Layout from "./components/layout/Layout.tsx"
 import Benefits from "./components/landing-page/Benefits.tsx"
 import Footer from "./components/layout/Footer.tsx"
+import GuestLayout from "@/components/layout/Guest/GuestLayout";
 
 function App() {
 
   return (
     <>
-      <Layout
+      <GuestLayout
         title="Thinkflow"
         description="Wuwa">
 
           <Hero/>
           <About/>
           <Benefits/>
-      </Layout>
+      </GuestLayout>
       <Footer/>
     </>
   )

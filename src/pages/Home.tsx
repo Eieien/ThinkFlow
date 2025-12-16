@@ -35,7 +35,7 @@ export default function Home(){
         async function getNotes(){
             try {
                 const res = await axiosPrivate.get('/notes');
-                console.log(res.data);
+                // console.log(res.data);
             } catch (err) {
                 if(err instanceof AxiosError){
                     console.log(err?.response?.data);
@@ -48,6 +48,7 @@ export default function Home(){
 
     }, []);
 
+    
     return(
         <>
             <UserLayout
@@ -121,7 +122,7 @@ export default function Home(){
                     </div>
                 </div>
 
-                    <NotesGrid type={cardType} className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  gap-2"/>
+                    <NotesGrid type={cardType} className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  gap-2" ownedNotes={true}/>
 
             </UserLayout>
         </>

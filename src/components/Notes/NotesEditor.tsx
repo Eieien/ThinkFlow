@@ -44,7 +44,7 @@ export default function NotesEditor({data, file} : NotesEditorProps){
     console.log(file);
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: "README.md",
+        name: file,
         document: ydoc,
       });
 

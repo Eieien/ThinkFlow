@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import type { Note, Quiz } from "@/configs/DataTypeConfig";
 import axiosPublic from "@/api/axiosInstances";
+import useAuth from "@/hooks/useAuth";
 
 interface NotesGridProps{
     type: String;
     className?: String;
+    ownedNotes?: boolean;
 }
 
 interface DataState{
@@ -16,20 +18,24 @@ interface DataState{
     quizzes: Quiz[];
 }
 
-export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 "} :  NotesGridProps){
+export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ", ownedNotes = false} :  NotesGridProps){
 
     const [data, setData] = useState<DataState>({
         notes: [],
         quizzes: [],
     })
 
-
+    const {auth} = useAuth();
+    
     useEffect(() => {
         // imma try catch this later
         const getNotes = async () => {
             try{
-                const getNotes = await axiosPublic.get('/notes/');
-                const getQuizzes = await axiosPublic.get("/quizzes");
+                const notesDir = (ownedNotes == true) ? `/notes/user/${auth.user?._id}` : '/notes/';
+                const quizDir = (ownedNotes == true) ?  `/quizzes/user/${auth.user?._id}` : '/quizzes/';
+                
+                const getNotes = await axiosPublic.get(notesDir);
+                const getQuizzes = await axiosPublic.get(quizDir);
                 setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
             }catch(err){
                 if(err instanceof AxiosError){
@@ -44,10 +50,14 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
 
     return (
         <>
-            {type == "Notes" ? 
+            {type === "Notes" ? (
                 <section className={String(className)}>
-                    {data.notes.map((note) => (
-                        <NotesCard key={note._id}
+                    {data.notes.length === 0 ? (
+                    <p className="text-gray-500 text-sm">No notes found</p>
+                    ) : (
+                    data.notes.map((note) => (
+                        <NotesCard
+                        key={note._id}
                         title={note.title}
                         noOfBookmarked="10"
                         dateCreated={note.creator.createdAt}
@@ -55,22 +65,29 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                         tag="Prog II"
                         description={note.description}
                         />
-                    ))}
+                    ))
+                    )}
                 </section>
-                :
+                ) : (
                 <section className={String(className)}>
-                    {data.quizzes.map((quiz) => (
+                    {data.quizzes.length === 0 ? (
+                    <p className="text-gray-500 text-sm">No quizzes found</p>
+                    ) : (
+                    data.quizzes.map((quiz) => (
                         <QuizCard
-                            title={quiz.quizTitle}
-                            noOfBookmarked="10"
-                            noOfQuestions={quiz.questions.length}
-                            creator={quiz._id}
-                            tag="Prog II"
-                            description={quiz.description}
+                        key={quiz._id}
+                        title={quiz.quizTitle}
+                        noOfBookmarked="10"
+                        noOfQuestions={quiz.questions.length}
+                        creator={quiz._id}
+                        tag="Prog II"
+                        description={quiz.description}
                         />
-                    ))}
-            </section>
-            }
+                    ))
+                    )}
+                </section>
+            )}
+
             
         </>
     )
