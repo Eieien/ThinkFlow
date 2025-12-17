@@ -1,6 +1,7 @@
 import { Hocuspocus } from "@hocuspocus/server";
 import { writeFile, readFile } from "fs/promises";
 import * as Y from "yjs";
+import Notes from "../models/Notes.js";
 
 const hocuspocus = new Hocuspocus({
     async onConnect({ documentName }){
@@ -12,7 +13,9 @@ const hocuspocus = new Hocuspocus({
     async onLoadDocument(data){
         const ydoc = new Y.Doc();
         try {
-            const binData = await readFile(`uploads/notes/bin/${data.documentName}`);
+            const noteData = await Notes.findById(data.documentName);
+            console.log(noteData.fileContent);
+            const binData = await readFile(`uploads/notes/bin/${noteData.fileContent}`);
             Y.applyUpdate(ydoc, binData);
             return ydoc;
         } catch (e) {
@@ -20,9 +23,15 @@ const hocuspocus = new Hocuspocus({
         }
     },
     async onStoreDocument(data){
-        const encodedDoc = Y.encodeStateAsUpdate(data.document);
-        await writeFile(`uploads/notes/bin/${data.documentName}`, encodedDoc);
-        console.log('note stored');
+        try {
+            const noteData = await Notes.findById(data.documentName);
+            console.log(noteData.fileContent);
+            const encodedDoc = Y.encodeStateAsUpdate(data.document);
+            await writeFile(`uploads/notes/bin/${noteData.fileContent}`, encodedDoc);
+            console.log('note stored');
+        } catch (e) {
+            console.log('note NOT stored');
+        }
     }
 });
 
