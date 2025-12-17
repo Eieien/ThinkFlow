@@ -329,7 +329,9 @@ import axiosPublic from "@/api/axiosInstances"
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex gap-2">
                                 <Settings/>
-                                <span>Settings</span>
+                                <Link to="/settings">
+                                    <span>Settings</span>
+                                </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleLogout} className="flex gap-2">
                                 <LogOut/>
