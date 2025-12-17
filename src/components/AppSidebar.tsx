@@ -27,19 +27,14 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import ConditionalWrapper from "./layout/ConditionalWrapper"
-import { Children, useEffect } from "react"
+import { Children, useContext, useEffect, useState } from "react"
 import useAuth from "@/hooks/useAuth"
 import axiosPublic, { axiosPrivate } from "@/api/axiosInstances"
 import useAxiosPrivate from "@/hooks/useAxiosPrivate"
-
-  const notes = [
-    {
-        // Fetch notes Here
-        title: "Wuwa",
-        url: "#", // url of website
-        icon: Notebook
-    }
-  ]
+import type { Note, Quiz } from "@/configs/DataTypeConfig"
+import { useActions } from "@/hooks/useActions"
+import HomePage from "@/pages/Home"
+import { useDataContext } from "@/hooks/useDataContext"
 
   const bookmarks = [
     {
@@ -63,14 +58,14 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
     }
   ]
 
-  export function AppSidebar() {
+
+
+export function AppSidebar() {
     const {state} = useSidebar();
     const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
-    const axiosPrivate = useAxiosPrivate();
-    useEffect(() => {
-        console.log(auth);   
-    })
+    const {onCreateNote, deleteNote} = useActions();
+    const {userNotes} = useDataContext();
 
     async function handleLogout(){
         try {
@@ -82,41 +77,14 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
             setAuth({});
             navigate('/login');
         } catch (err) {
-
-            
+            console.error(err);
         }
     }
 
+  
 
-    const onCreateNote = async () => {
-        console.log("Clciked");
-        try {
-
-            const res = await axiosPrivate.post('/notes/create', 
-                {
-                    userId: auth.user?._id,
-                    title: "Untitled",
-                    description: "Untitled description"
-                },
-                { 
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-            // console.log(res.data.createdNote._id);
-            const noteId = res.data.createdNote._id;
-            
-            const getNote = await axiosPrivate.get(`/notes/${noteId}`);
-            // console.log(getNote.data._id);
-            navigate(`/notes/${getNote.data._id}`);
-        }catch(err){
-            console.log(err);
-        }
-    }
-    
-        return (
-      <Sidebar collapsible="icon">
+    return (
+     <Sidebar collapsible="icon">
         <SidebarHeader>
             <div className="flex gap-1 items-center py-1">
                 <LogoStyle type="single" styles="w-8"/>
@@ -177,7 +145,7 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
                                 </SidebarMenuButton>
                                 {state !== "collapsed" && <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>}
 
-                              
+                                
 
                             </ConditionalWrapper>
 
@@ -200,11 +168,12 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
             </SidebarGroup>
             <SidebarGroup>
             <SidebarSeparator />
+            {/* Sidebar Nptes */}
             <SidebarGroupLabel>Notes</SidebarGroupLabel>
             <SidebarGroupContent>
-                <SidebarMenu>
-                {notes.map((item) => (
-                    <SidebarMenuItem key={item.title}>
+                <SidebarMenu className="max-h-50 overflow-scroll">
+                {userNotes.map((item) => (
+                    <SidebarMenuItem key={item._id}>
                     
                     <ConditionalWrapper
                     condition = {state === "collapsed"}
@@ -220,10 +189,9 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
                     )}>
                         <SidebarMenuButton asChild>
 
-                        <Link to={item.url}>
-                        <item.icon />
-                        {state !== "collapsed" && <span>{item.title}</span>}
-                        
+                        <Link to={`../notes/${item._id}`}>
+                            <Notebook/>
+                            {state !== "collapsed" && <span>{item.title}</span>}
                         </Link>
 
                         </SidebarMenuButton>
@@ -239,14 +207,16 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
                             <DropdownMenuItem>
                                 <span>Share</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {deleteNote(item._id);}}>
                                 <span>Delete</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     </SidebarMenuItem>
                 ))}
-                <SidebarMenuItem>
+
+
+                <SidebarMenuItem >
                     <ConditionalWrapper
                     condition={state === "collapsed"}
                     wrapper={(children) => (
@@ -375,6 +345,6 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate"
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarFooter>
-      </Sidebar>
+        </Sidebar>
     )
-  }
+}

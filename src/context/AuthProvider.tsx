@@ -2,7 +2,7 @@ import { createContext, useState, type ReactNode } from "react";
 
 export interface AuthState {
   user?: {
-    id: string;
+    _id: string;
     name: string;
     email: string;
   };

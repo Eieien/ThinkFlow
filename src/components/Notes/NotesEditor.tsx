@@ -17,32 +17,25 @@ import { generateJSON, } from '@tiptap/html'
 import { TiptapTransformer } from "@hocuspocus/transformer";
 import axios from "axios";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesEditorProps{
-  data?: String;
   id?: String;
 }
 
-export default function NotesEditor({data, id} : NotesEditorProps){
+export default function NotesEditor({id} : NotesEditorProps){
 
-  
-    // const dataJSON : JSONContent = generateJSON(data, [StarterKit]);
-    const [fileContent, setFileContent] = useState("");
-    
     const axiosPrivate = useAxiosPrivate();
 
-    // const ydoc = TiptapTransformer.toYdoc(
-    //   dataJSON, //JSON
-    //   "default",
-    //   [StarterKit]
-    // );
+    const {currentNoteId, setCurrentNoteId} = useDataContext();
 
     useEffect(() => {
           const loadNote = async () => {
               try{
+                  id && setCurrentNoteId(id?.toString());
                   const file = await axiosPrivate.get(`/notes/${id}`);
-                  setFileContent(file.data.fileContent);
-                  
+                  console.log(currentNoteId);
+
               }catch(err){
                   console.log(err);
               }
@@ -53,7 +46,7 @@ export default function NotesEditor({data, id} : NotesEditorProps){
 
     const provider = new HocuspocusProvider({
         url: "ws://localhost:3000/collab",
-        name: fileContent,
+        name: String(id),
       });
 
     const [isEditable, setEditable] = useState(true);
@@ -68,7 +61,6 @@ export default function NotesEditor({data, id} : NotesEditorProps){
             heading: {
               levels: [1, 2, 3, 4],
             },
-            history: false,
           }),
           Highlight.configure({
           multicolor: true,
@@ -95,22 +87,6 @@ export default function NotesEditor({data, id} : NotesEditorProps){
           editor.setEditable(isEditable)
         }
       }, [isEditable, editor])
-    
-
-    // useEffect(() => {
-    //     if (!editor) return
-    //     // Ensure the title always exists when the editor mounts
-    //     const json = editor.getJSON()
-    //     const firstNode = json.content?.[0]
-    //     if (!firstNode || firstNode.type !== 'heading') {
-    //       editor.commands.insertContentAt({ from: 0, to: 0 }, {
-    //         type: 'heading',
-    //         attrs: { level: 1 },
-    //         content: [{ type: 'text', text: '' }],
-    //       })
-    //     }
-    //   }, [editor])
-      
 
     // Memoize the provider value to avoid unnecessary re-renders
     const providerValue = useMemo(() => ({ editor }), [editor]);

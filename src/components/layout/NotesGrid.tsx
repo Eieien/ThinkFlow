@@ -6,6 +6,9 @@ import { AxiosError } from "axios";
 import type { Note, Quiz } from "@/configs/DataTypeConfig";
 import axiosPublic from "@/api/axiosInstances";
 import useAuth from "@/hooks/useAuth";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesGridProps{
     type: String;
@@ -26,17 +29,27 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
     })
 
     const {auth} = useAuth();
-    
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+
+    const {userNotes} = useDataContext();
+
     useEffect(() => {
-        // imma try catch this later
+        const isLoggedIn = Boolean(auth.user?._id);
+        // if(!auth)return;
         const getNotes = async () => {
             try{
-                const notesDir = (ownedNotes == true) ? `/notes/user/${auth.user?._id}` : '/notes/';
-                const quizDir = (ownedNotes == true) ?  `/quizzes/user/${auth.user?._id}` : '/quizzes/';
                 
-                const getNotes = await axiosPublic.get(notesDir);
-                const getQuizzes = await axiosPublic.get(quizDir);
-                setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
+                if(isLoggedIn && ownedNotes){
+                    setData((prev) => ({...prev, notes: userNotes}));
+
+                }else{
+                    const getNotes = await axiosPublic.get('/notes/');
+                    console.log(getNotes.data);
+                    const getQuizzes = await axiosPublic.get('/quizzes/');
+                    setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
+                }
+
             }catch(err){
                 if(err instanceof AxiosError){
                     console.log(err?.response?.data);
@@ -46,7 +59,7 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
             }
         }
         getNotes();
-    }, [])
+    }, [auth, userNotes])
 
     return (
         <>
@@ -57,13 +70,14 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                     ) : (
                     data.notes.map((note) => (
                         <NotesCard
-                        key={note._id}
-                        title={note.title}
-                        noOfBookmarked="10"
-                        dateCreated={note.creator.createdAt}
-                        creator={note.creator.username}
-                        tag="Prog II"
-                        description={note.description}
+                            key={note._id}
+                            title={note.title}
+                            noOfBookmarked="10"
+                            dateCreated={note.creator.createdAt}
+                            creator={note.creator.username}
+                            tag="Prog II"
+                            description={note.description}
+                            navigate ={() => navigate(`/notes/${note._id}`)}
                         />
                     ))
                     )}
@@ -84,7 +98,7 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                         description={quiz.description}
                         />
                     ))
-                    )}
+                )}
                 </section>
             )}
 

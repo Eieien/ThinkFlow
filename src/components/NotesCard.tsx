@@ -7,12 +7,13 @@ interface NotesCardProps{
     creator?: String;
     description?: String;
     tag?: String;
+    navigate?: () => void;
 }
 
-export default function NotesCard({title, noOfBookmarked, dateCreated, creator, tag, description} : NotesCardProps){
+export default function NotesCard({title, noOfBookmarked, dateCreated, creator, tag, description, navigate} : NotesCardProps){
 
     return (
-        <div className="w-full card cursor-pointer">
+        <div className="w-full card cursor-pointer" onClick={navigate}>
             <div className="flex gap-2 justify-between">
                 <h1 className="text-2xl font-bold ">{title}</h1>
                 <div className="flex gap-2 justify-between items-center">

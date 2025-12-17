@@ -1,4 +1,4 @@
-import react, {useState, useEffect} from "react"
+import react, {useState, useEffect, createContext} from "react"
 import UserLayout from "../components/layout/User/UserLayout"
 import NotesCard from "@/components/NotesCard"
 import QuizCard from "@/components/QuizCard"
@@ -24,13 +24,18 @@ import NotesGrid from "@/components/layout/NotesGrid"
 import { useCardType } from "@/hooks/useCardType"
 import axiosPublic from "@/api/axiosInstances"
 import useAuth from "@/hooks/useAuth"
+import { useActions } from "@/hooks/useActions"
+import type { Note } from "@/configs/DataTypeConfig"
+import {DataProvider} from "@/context/DataProvider"
 
 export default function Home(){
 
     const {cardType, notes, quizzes, bookmarks} = useCardType();
-
+    const homeContext = createContext<Note[]>([]);
     const axiosPrivate = useAxiosPrivate();
 
+    const {userNotes} = useActions();
+    
     useEffect(() => {
         async function getNotes(){
             try {
