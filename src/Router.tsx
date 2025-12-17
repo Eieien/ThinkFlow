@@ -9,6 +9,7 @@ import Quiz from './pages/Quiz.tsx'
 import Notes from './pages/Notes.tsx'
 import Users from './pages/Users.tsx'
 import Explore from './pages/Explore.tsx'
+import Settings from './pages/Settings.tsx'
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   {path: '/notes/:id', element: <Notes/>},
   {path: '/explore', element: <Explore/> },
   {path: '/user/:user', element: <Users/>},
+  {path: '/settings', element: <Settings/>},
 ])
 
 export default router;

@@ -1,6 +1,7 @@
 import react, {useState, useEffect} from "react";
 import { House, Search, Bookmark, Tag, Notebook, Plus } from 'lucide-react';
 import Logo from "../LogoStyle";
+import Settings from '../../pages/Settings.tsx'
 
 interface SidebarProps{
     collapsed: boolean;
