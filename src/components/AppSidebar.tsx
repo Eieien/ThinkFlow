@@ -35,15 +35,9 @@ import type { Note, Quiz } from "@/configs/DataTypeConfig"
 import { useActions } from "@/hooks/useActions"
 import HomePage from "@/pages/Home"
 import { useDataContext } from "@/hooks/useDataContext"
+import SidebarDropdown from "./sidebar/SidebarDropdown"
 
-  const bookmarks = [
-    {
-        // Fetch bookmark data
-        title: "Wuwa",
-        url: "#", // url of website
-        icon: Bookmark
-    }
-  ]
+
 
   const defaultItems = [
     {
@@ -64,8 +58,8 @@ export function AppSidebar() {
     const {state} = useSidebar();
     const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
-    const {onCreateNote, deleteNote} = useActions();
-    const {userNotes} = useDataContext();
+    const {onCreateNote, deleteNote, handleBookmark} = useActions();
+    const {userNotes, bookmarks} = useDataContext();
 
     async function handleLogout(){
         try {
@@ -144,12 +138,7 @@ export function AppSidebar() {
                                     
                                 </SidebarMenuButton>
                                 {state !== "collapsed" && <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>}
-
-                                
-
                             </ConditionalWrapper>
-
-                            
 
                         </DialogTrigger>
                         <DialogContent className="min-h-60 flex flex-col justify-start">
@@ -163,7 +152,6 @@ export function AppSidebar() {
                     </Dialog>
                 </SidebarMenuItem>
             </SidebarMenu>
-
             </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
@@ -197,21 +185,7 @@ export function AppSidebar() {
                         </SidebarMenuButton>
 
                     </ConditionalWrapper>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <SidebarMenuAction>
-                                <MoreVertical/>
-                            </SidebarMenuAction>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent side="right" align="start">
-                            <DropdownMenuItem>
-                                <span>Share</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => {deleteNote(item._id);}}>
-                                <span>Delete</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <SidebarDropdown note={item}/>
                     </SidebarMenuItem>
                 ))}
 
@@ -262,29 +236,16 @@ export function AppSidebar() {
                         </Tooltip>
                         )}>
                         <SidebarMenuButton asChild>
-                            <a href={item.url}>
-                            <item.icon />
+                            <Link to={`../notes/${item._id}`}>
+                            <Bookmark />
                             {state !== "collapsed" && <span>{item.title}</span>}
                             
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
 
                         </ConditionalWrapper>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <SidebarMenuAction>
-                                <MoreVertical/>
-                            </SidebarMenuAction>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent side="right" align="start">
-                            <DropdownMenuItem>
-                                <span>Share</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <span>Delete</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                        <SidebarDropdown note={item}/>
+
                     </SidebarMenuItem>
                 ))}
                 </SidebarMenu>
@@ -340,7 +301,6 @@ export function AppSidebar() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         
-
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>

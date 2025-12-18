@@ -51,3 +51,12 @@ export type Quiz = {
     updatedAt: string; 
 }
    
+export type Users = {
+    _id: string,
+    username: string,
+    email: string,
+    createdAt: string,
+    updatedAt: string,
+    deactivated: boolean
+
+}

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useDataContext } from "./useDataContext";
+import type { Users } from "@/configs/DataTypeConfig";
 
 
 export function useActions() {
@@ -9,7 +10,7 @@ export function useActions() {
     const {auth, setAuth} = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
-    const {userNotes, setUserNotes} = useDataContext();
+    const {userNotes, setUserNotes, setBookmarks, bookmarks, usersList} = useDataContext();
 
     const onCreateNote = async () => {
         try {
@@ -28,6 +29,7 @@ export function useActions() {
             )
             const noteId = res.data.createdNote._id;
             const getNote = await axiosPrivate.get(`/notes/${noteId}`);
+            setUserNotes((prev) => [...prev, getNote.data]);
             navigate(`/notes/${getNote.data._id}`);
         }catch(err){
             console.log(err);
@@ -41,16 +43,77 @@ export function useActions() {
                 prev.filter(note => note._id !== noteId)
             );
             const res = await axiosPrivate.delete(`/notes/${noteId}`);
-            console.log("DELETED");
+            
+            if(bookmarks.find(note => note._id == noteId)){
+                setBookmarks(prev => prev.filter(note => note._id !== noteId));
+            }
+
         }catch(err){
             console.log("DELETED WENT WRONG");
             console.error(err);
         }
     };
 
+    const handleBookmark = async(noteId: string) => {
+        try{
+            
+            const file = await axiosPrivate.get(`/notes/${noteId}`);
+
+            
+            const isBookmarked = !file.data.options.bookmarked;
+            // console.log(isBookmarked);
+            const currentItem = userNotes.find(note => note._id == noteId);
+            const res = await axiosPrivate.put(`/notes/${noteId}`,
+                {
+                    title: file.data.title,
+                    description: file.data.description,
+                    options: {
+                        isPublic: file.data.options.isPublic,
+                        bookmarked: isBookmarked,
+                    },
+                    tags: file.data.tags,
+                    access: file.data.access,
+                }
+            )
+
+            setUserNotes(prevNotes => 
+                prevNotes.map(note => 
+                    note._id === noteId 
+                    ? { ...note, options: { ...note.options, bookmarked: !note.options.bookmarked } }
+                    : note
+                )
+            );
+
+            if(!isBookmarked){
+                setBookmarks(prev => prev.filter(note => note._id !== noteId));
+            }else{
+                if (currentItem) {
+                    setBookmarks(prev => [...prev, { 
+                      ...currentItem, 
+                      options: { ...currentItem.options, bookmarked: true } 
+                    }]);
+                  }
+            }
+            console.log(isBookmarked);
+        }catch(err){
+            console.error(err);
+        }
+    }
+    
+    const filterPeople = (users : Users[], query: string) => {
+        const q = query.toLowerCase();
+
+        return users.filter(user => 
+            user.username.toLowerCase().includes(q) ||
+            user.username.toLowerCase().includes(q)
+        );
+    }
+
     return {
         onCreateNote,
         deleteNote,
         userNotes,
+        handleBookmark,
+        filterPeople,
     };
 }

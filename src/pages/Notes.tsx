@@ -22,7 +22,6 @@ export default function Notes(){
         const loadNote = async () => {
             try{
                 const file = await axiosPrivate.get(`/notes/${id}`);
-                // console.log(file);
                 setFileName(file.data.title);
                 setDescription(file.data.description);
 
