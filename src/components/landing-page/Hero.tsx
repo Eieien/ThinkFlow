@@ -27,6 +27,7 @@ export default function Hero(){
                                     View Published Notes
                                 </button>
                              </Link>
+
                             <button 
                             className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white rounded-md cursor-pointer">
                                 Create your notes
