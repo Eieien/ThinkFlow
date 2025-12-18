@@ -28,10 +28,12 @@ export default function Hero(){
                                 </button>
                              </Link>
 
+                            <Link to="/">
                             <button 
                             className="px-4 py-2 bg-light-primary-blue dark:bg-dark-primary-blue text-primary-white rounded-md cursor-pointer">
                                 Create your notes
                             </button>
+                            </Link>
                         </div>
                         {/* Pic of the Art of War example in Figma */}
                         <div className="px-100 py-60 border border-light-border dark:border-dark-border dark:bg-dark-2 m-5">
