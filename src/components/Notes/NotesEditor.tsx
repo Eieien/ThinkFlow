@@ -70,7 +70,6 @@ export default function NotesEditor({ id }: NotesEditorProps) {
       ydocRef.current = null;
     }
 
-    // Create new Y.Doc and provider
     const ydoc = new Y.Doc();
     ydocRef.current = ydoc;
 
@@ -81,7 +80,6 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     });
     providerRef.current = provider;
 
-    // Create new editor with new collaboration document
     const editor = new Editor({
       extensions: [
         ...extensionsConfig,

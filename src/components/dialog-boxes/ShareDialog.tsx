@@ -53,22 +53,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
 
     
     useEffect(() => {
-        // if (!note?.access?.length) return;
-
-        // const loadAccessUsers = async () => {
-        //     const users = await Promise.all(
-        //     note.access.map((id: string) => convertIdToUser(id))
-        //     );
-
-        //     setHasAccess(users);
-        //     console.log(hasAccess);
-        // };
-
-        // loadAccessUsers();
-        
         setHasAccess(note.access);
-
-
     }, [note._id])
 
     const handleAccessChange = async (userId: string) => {
