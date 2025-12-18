@@ -18,9 +18,10 @@ import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesEditorProps {
   id?: string;
+  onEditorReady?: (importFn: (htmlContent: string) => void) => void;
 }
 
-export default function NotesEditor({ id }: NotesEditorProps) {
+export default function NotesEditor({ id, onEditorReady }: NotesEditorProps) {
   const axiosPrivate = useAxiosPrivate();
   const { currentNoteId, setCurrentNoteId } = useDataContext();
   
@@ -43,20 +44,32 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     Color,
   ]).current;
 
-  // Load note data
+  const importContent = useCallback((htmlContent: string) => {
+    if (editorRef.current && ydocRef.current) {
+      ydocRef.current.transact(() => {
+        editorRef.current?.commands.setContent(htmlContent);
+      });
+      console.log('Content imported successfully');
+    } else {
+      console.error('Editor not ready for import');
+    }
+  }, []);
+
   const loadNote = useCallback(async (noteId: string) => {
     try {
       setCurrentNoteId(noteId);
       const file = await axiosPrivate.get(`/notes/${noteId}`);
       console.log(file.data);
+      
+      if (file.data.content) {
+        importContent(file.data.content);
+      }
     } catch (err) {
       console.error('Failed to load note:', err);
     }
-  }, [axiosPrivate, setCurrentNoteId]);
+  }, [axiosPrivate, setCurrentNoteId, importContent]);
 
-  // Switch document by recreating editor with new provider
   const switchDocument = useCallback((newId: string) => {
-    // Destroy old instances
     if (editorRef.current) {
       editorRef.current.destroy();
       editorRef.current = null;
@@ -91,11 +104,9 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     editorRef.current = editor;
     currentIdRef.current = newId;
     
-    // Update state to trigger re-render
     setEditor(editor);
   }, [extensionsConfig]);
 
-  // Initialize editor once
   useEffect(() => {
     if (!id || isInitializedRef.current) return;
 
@@ -121,10 +132,9 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     currentIdRef.current = id;
     isInitializedRef.current = true;
 
-    // Load initial note
     loadNote(id);
 
-    // Cleanup on unmount only
+    //cleanuppp
     return () => {
       editor.destroy();
       provider.destroy();
@@ -134,7 +144,6 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     };
   }, []); // Empty deps - only run once
 
-  // Handle document switching
   useEffect(() => {
     if (!id || !isInitializedRef.current || currentIdRef.current === id) return;
 
@@ -142,12 +151,17 @@ export default function NotesEditor({ id }: NotesEditorProps) {
     loadNote(id);
   }, [id, switchDocument, loadNote]);
 
-  // Get editor for hooks (convert ref to state-like value)
   const [editor, setEditor] = useState<Editor | null>(null);
   
   useEffect(() => {
     setEditor(editorRef.current);
   }, [isInitializedRef.current]);
+
+  useEffect(() => {
+    if (editor && onEditorReady) {
+      onEditorReady(importContent);
+    }
+  }, [editor, onEditorReady, importContent]);
 
   // Memoize the provider value to avoid unnecessary re-renders
   const providerValue = useMemo(() => ({ editor }), [editor]);
