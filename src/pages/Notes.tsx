@@ -20,7 +20,6 @@ export default function Notes(){
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState("");
     const [data, setData] = useState("");
-    const {currentNoteId, setCurrentNoteId} = useDataContext();
     const [importFunction, setImportFunction] = useState<((html: string) => void) | null>(null);
 
     
@@ -30,7 +29,7 @@ export default function Notes(){
                 const file = await axiosPrivate.get(`/notes/${id}`);
                 setFileName(file.data.title);
                 setDescription(file.data.description);
-                setCurrentNoteId(String(id));
+                
             }catch(err){
                 console.log(err);
             }
@@ -68,9 +67,6 @@ export default function Notes(){
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files){
           setFile(e.target.files[0])
-          return 0;
-        }else{
-            return 1;
         }
     }
     
@@ -103,9 +99,6 @@ export default function Notes(){
         }
     }
     
-
-    
-
     return(
         <>
             <UserLayout
@@ -114,12 +107,12 @@ export default function Notes(){
                 notesPage={true}
                 onFileChange={handleFileChange}
                 onFileUpload={handleFileUpload}
-
+                id={String(id)}
             >
                 <div className="max-w-2xl mx-auto">
                     <input className="text-4xl focus:outline-0" value={fileName} onChange={handleChangeTitle}/>
                     <NotesEditor id={id} onEditorReady={(importFn) => setImportFunction(() => importFn)}
-/>
+                    />
 
                 </div>
 

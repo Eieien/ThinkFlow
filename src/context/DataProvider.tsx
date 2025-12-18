@@ -9,6 +9,8 @@ interface DataProviderProps {
   }
 
 export interface Data{
+    globalNotes: Note[],
+    globalQuizzes: Quiz[],
     usersList: Users[],
     userNotes: Note[],
     bookmarks: Note[],
@@ -20,6 +22,8 @@ export interface Data{
 }
 
 const DataContext = createContext<Data>({
+    globalNotes: [],
+    globalQuizzes: [],
     usersList: [],
     userNotes: [],
     bookmarks: [],
@@ -33,6 +37,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     
     const [userNotes, setUserNotes] = useState<Note[]>([]);
     const [usersList, setUserList] = useState<Users[]>([]);
+    const [globalNotes, setGlobalNotes] = useState<Note[]>([]);
+    const [globalQuizzes, setGlobalQuizzes] = useState<Quiz[]>([]);
     const [userQuizzes, setUserQuizzes] = useState<Quiz[]>([]);
     const [bookmarks, setBookmarks] = useState<Note[]>([]);
     const [currentNoteId, setCurrentNoteId] = useState("");
@@ -45,15 +51,21 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         }
         try{
             const getData = async() => {
-                const getNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
-                const getQuizzes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
+                const globalNotes = await axiosPrivate.get('/notes/');
+                const globalQuizzes = await axiosPrivate.get('/quizzes/');
+
+                const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
+                const getUserQuizzes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
 
                 const getUsersList = await axiosPrivate.get("/users/");
                 
+                setGlobalNotes(globalNotes.data);
+                setGlobalQuizzes(globalQuizzes.data);
+
                 setUserList(getUsersList.data);
-                setUserQuizzes(getQuizzes.data);
-                setUserNotes(getNotes.data);
-                setBookmarks(getNotes.data.filter((note : Note) => note.options.bookmarked == true));
+                setUserQuizzes(getUserQuizzes.data);
+                setUserNotes(getUserNotes.data);
+                setBookmarks(globalNotes.data.filter((note : Note) => note.options.bookmarked == true));
             }
             getData();
         }catch(err){
@@ -64,7 +76,19 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
 
     return (
-        <DataContext.Provider value={{ userNotes, setUserNotes, currentNoteId, setCurrentNoteId, bookmarks, setBookmarks, usersList}}>
+        <DataContext.Provider value={
+            { 
+                globalNotes,
+                globalQuizzes,
+                userNotes, 
+                setUserNotes, 
+                currentNoteId, 
+                setCurrentNoteId, 
+                bookmarks, 
+                setBookmarks, 
+                usersList,
+            }
+            }>
         {children}
         </DataContext.Provider>
     );

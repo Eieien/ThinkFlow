@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useDataContext } from "./useDataContext";
-import type { Users } from "@/configs/DataTypeConfig";
+import type { Note, Quiz, Users } from "@/configs/DataTypeConfig";
 
 
 export function useActions() {
@@ -109,11 +109,31 @@ export function useActions() {
         );
     }
 
+    const filterNotesAndQuizzes = (notes: Note[], quizzes: Quiz[], query: string) => {
+        const q = query.toLowerCase();
+        
+        const filteredNotes = notes
+          .filter(note => 
+            note.title?.toLowerCase().includes(q) || 
+            note.description?.toLowerCase().includes(q)
+          )
+          .map(note => ({ ...note, type: 'note' as const, displayTitle: note.title }));
+        
+        const filteredQuizzes = quizzes
+          .filter(quiz => 
+            quiz.quizTitle?.toLowerCase().includes(q) || 
+            quiz.description?.toLowerCase().includes(q)
+          )
+          .map(quiz => ({ ...quiz, type: 'quiz' as const, displayTitle: quiz.quizTitle }));
+        
+        return [...filteredNotes, ...filteredQuizzes];
+      }
     return {
         onCreateNote,
         deleteNote,
         userNotes,
         handleBookmark,
         filterPeople,
+        filterNotesAndQuizzes,
     };
 }

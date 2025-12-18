@@ -32,6 +32,7 @@ import {
 import { useDataContext } from "@/hooks/useDataContext";
 import { debounce } from "@tiptap/extension-table-of-contents";
 import ImportDialog from "@/components/dialog-boxes/ImportDialog";
+import GenerateQuizDialog from "@/components/dialog-boxes/GenerateQuizDialog";
   
 
 interface UserLayoutProps{
@@ -41,20 +42,16 @@ interface UserLayoutProps{
     notesPage?: Boolean,    
     onFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onFileUpload?: () => void;
+    id?: string;
 }
-export default function UserLayout({title, description, children, notesPage = false, onFileChange, onFileUpload}: UserLayoutProps){
-    const [file, setFile] = useState<File | null>(null);
-    const [message, setMessage] = useState("");
-    const [data, setData] = useState("");
+export default function UserLayout({title, description, children, notesPage = false, onFileChange, onFileUpload, id}: UserLayoutProps){
     
     const [openImport, setOpenImport] = useState(false);
-
     const [visibility, setVisibility] = useState<Boolean>(false);
-    const {currentNoteId} = useDataContext();
-
+    // const {currentNoteId, setCurrentNoteId} = useDataContext();
     const axiosPrivate = useAxiosPrivate();
 
-    
+    const [genereateQuiz, setGenerateQuiz] = useState(false);
 
     const handleOpenImport = () => {
         setOpenImport(true);
@@ -64,29 +61,31 @@ export default function UserLayout({title, description, children, notesPage = fa
 
         try{
             const getNoteData = async () => {
-                const res = await axiosPrivate.get(`/notes/${currentNoteId}`);
-                setVisibility(res.data[0].options.isPublic);
+                const res = await axiosPrivate.get(`/notes/${id}`);
+                setVisibility(res.data.options.isPublic);
+                console.log("Current VISIBILITY: " + res.data.options.isPublic);
             }
-  
             getNoteData();
         }catch(err){
             console.error(err);
         }
-    }, [currentNoteId])
+    }, [id])
 
-    const saveVisibility = async () => {
+    const saveVisibility = async (isPublic: boolean) => {
         try{
-            const file = await axiosPrivate.get(`/notes/${currentNoteId}`);
-            console.log(file.data);
-            const res = await axiosPrivate.put(`/notes/${currentNoteId}`,{
+            const file = await axiosPrivate.get(`/notes/${id}`);
+            const res = await axiosPrivate.put(`/notes/${id}`,{
                 title: file.data.title,
                 description: file.data.description,
-                options: file.data.options,
+                options: {
+                    isPublic: isPublic,
+                    bookmarked: file.data.options.bookmarked,
+                },
                 tags: file.data.tags,
                 access: file.data.access,
             })
-
-            console.log(res.status);
+            
+            console.log(visibility);
 
         }catch(err){
             console.error(err);
@@ -96,8 +95,11 @@ export default function UserLayout({title, description, children, notesPage = fa
 
     const handleVisibility = (isPublic: boolean) => {
         setVisibility(isPublic);
-        debounce(saveVisibility,500);
-        saveVisibility();
+        saveVisibility(isPublic);
+    }
+    
+    const handleGenerateOpen = () => {
+        setGenerateQuiz(true);
     }
 
 
@@ -118,6 +120,7 @@ export default function UserLayout({title, description, children, notesPage = fa
                         <div className="flex gap-2 items-center">
                             {notesPage && 
                                 <div className="flex gap-2 items-center">
+                                    <Button onClick={handleGenerateOpen}>Generate Quiz</Button>
                                     <Button onClick={handleOpenImport}>Import Note</Button>
                                     <Dialog>
                                         <DialogTrigger asChild>
@@ -158,6 +161,7 @@ export default function UserLayout({title, description, children, notesPage = fa
                 </main>
             </SidebarProvider>
             
+            <GenerateQuizDialog open={genereateQuiz} onOpenChange={setGenerateQuiz} id={String(id)}/>
             <ImportDialog open={openImport} onOpenChange={setOpenImport} onFileChange={onFileChange} onFileUpload={onFileUpload}/>
 
         </DataProvider>

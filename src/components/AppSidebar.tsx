@@ -36,6 +36,8 @@ import { useActions } from "@/hooks/useActions"
 import HomePage from "@/pages/Home"
 import { useDataContext } from "@/hooks/useDataContext"
 import SidebarDropdown from "./sidebar/SidebarDropdown"
+import SearchDialog from "./dialog-boxes/SearchDialog"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 
 
@@ -55,11 +57,17 @@ import SidebarDropdown from "./sidebar/SidebarDropdown"
 
 
 export function AppSidebar() {
-    const {state} = useSidebar();
     const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
     const {onCreateNote, deleteNote, handleBookmark} = useActions();
     const {userNotes, bookmarks} = useDataContext();
+    const {state} = useSidebar();
+    const isCollapsed = state === "collapsed"
+    const [search, openSearch] = useState(false);
+
+    useEffect(() => {
+        console.log(userNotes);
+    })
 
     async function handleLogout(){
         try {
@@ -117,45 +125,34 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
-                    <Dialog>
-                        <DialogTrigger className="w-full flex items-center gap-1">
-                            <ConditionalWrapper
-                            condition={state === "collapsed"}
-                            wrapper={(children) => (
-                                <Tooltip>
-                                    <TooltipTrigger> 
-                                        {children}
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right">
-                                        Search
-                                    </TooltipContent>
-                                </Tooltip>
-                            )}
-                            >
-                                <SidebarMenuButton>
-                                    <Search />
-                                    {state !== "collapsed" && <span>Search</span>}
-                                    
-                                </SidebarMenuButton>
-                                {state !== "collapsed" && <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>}
-                            </ConditionalWrapper>
+                    <ConditionalWrapper
+                        condition={state === "collapsed"}
+                        wrapper={(children) => (
+                            <Tooltip>
+                                <TooltipTrigger> 
+                                    {children}
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    Search
+                                </TooltipContent>
+                            </Tooltip>
+                        )}
+                        >
+                            <SidebarMenuButton onClick={() => openSearch(true)}>
+                                <Search />
+                                {state !== "collapsed" && <span>Search</span>}
+                                
+                            </SidebarMenuButton>
+                            {state !== "collapsed" && <SidebarMenuBadge>Ctrl + k</SidebarMenuBadge>}
+                    </ConditionalWrapper>
 
-                        </DialogTrigger>
-                        <DialogContent className="min-h-60 flex flex-col justify-start">
-                            <DialogTitle>Search</DialogTitle>
-                            <DialogHeader>
-                                <Input id="search" type="text" placeholder="Wuthering Waves notes..."/>
-
-                            </DialogHeader>
-                        </DialogContent>
-
-                    </Dialog>
+                    <SearchDialog open={search} setOpen={openSearch}/>
                 </SidebarMenuItem>
             </SidebarMenu>
             </SidebarGroupContent>
             </SidebarGroup>
+            <SidebarSeparator className="max-w-[92%]"/>
             <SidebarGroup>
-            <SidebarSeparator />
             {/* Sidebar Nptes */}
             <SidebarGroupLabel>Notes</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -215,10 +212,10 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarGroupContent>
             </SidebarGroup>
-            <SidebarSeparator />
+            <SidebarSeparator className="max-w-[92%]"/>
             <SidebarGroup>
             <SidebarGroupLabel>Bookmarks</SidebarGroupLabel>
-            <SidebarGroupContent>
+            <SidebarGroupContent className="max-h-50 overflow-scroll">
                 <SidebarMenu>
                 {bookmarks.map((item) => (
                     <SidebarMenuItem key={item.title}>
@@ -252,38 +249,38 @@ export function AppSidebar() {
             </SidebarGroupContent>
             </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
+        <SidebarSeparator className="max-w-[92%]"/>
+            <SidebarFooter>
             <SidebarMenu >
                 <SidebarMenuItem >
-                    <SidebarMenuButton >
-                        <DropdownMenu >
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton >
-                                    <div className="flex gap-1 ">
-                                        <img src={Ian}
-                                        className="w-10 h-10 rounded-full"/>
-                                        <div className={`${state === "collapsed" ? "opacity-0" : "opacity-100"} transition duration-75 `}>
-                                            <h2 className="text font-bold">
-                                                Ivan Paul RUelan
-                                            </h2>
-                                            <p className="text-xs">
-                                                Johndoe@gmail.com
-                                            </p>
-                                        </div>
+                    <DropdownMenu >
+                        <DropdownMenuTrigger asChild>
+                            <SidebarMenuButton  asChild>
+                                <div className={isCollapsed ? "flex justify-center" : "flex items-center gap-3"}>
+                                    <Avatar className="min-h-8 min-w-8">
+                                        <AvatarImage src={Ian} alt="User" />
+                                        <AvatarFallback>U</AvatarFallback>
+                                    </Avatar>
+                                    {!isCollapsed && (
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium">John Doe</span>
+                                        <span className="text-xs text-muted-foreground">john@example.com</span>
                                     </div>
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                            >
+                                    )}
+                                </div>
+                            </SidebarMenuButton>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
                             <DropdownMenuItem className="flex gap-1">
-                                <img src={Ian} className="w-13 h-13 object-contain rounded-full"/>
-                                <div className={``}>
-                                    <h2 className="text-lg font-bold">
-                                        Ivan Paul RUelan
-                                    </h2>
-                                    <p className="text-sm">
-                                        Johndoe@gmail.com
-                                    </p>
+                                <div className={"flex items-center gap-3"}>
+                                    <Avatar className="min-h-12 min-w-12">
+                                        <AvatarImage src={Ian} alt="User" />
+                                        <AvatarFallback>U</AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium">John Doe</span>
+                                        <span className="text-xs text-muted-foreground">john@example.com</span>
+                                    </div>
                                 </div>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex gap-2">
@@ -300,10 +297,9 @@ export function AppSidebar() {
                                 <LogOut/>
                                 <span>Sign Out</span>
                             </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                         
-                    </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarFooter>

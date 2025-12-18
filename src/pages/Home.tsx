@@ -34,7 +34,7 @@ export default function Home(){
     const homeContext = createContext<Note[]>([]);
     const axiosPrivate = useAxiosPrivate();
 
-    const {userNotes} = useActions();
+    const {userNotes, onCreateNote} = useActions();
     
     useEffect(() => {
         async function getNotes(){
@@ -80,26 +80,10 @@ export default function Home(){
                             <span>Bookmarks</span>
                             
                         </button>
-                        <Dialog>
-                            <DialogTrigger className="user-buttons">
-                                <FilePlus className="w-5 h-5"/>
-                                <span>Add note</span>
-                                </DialogTrigger>
-                            <DialogContent>
-                                <DialogTitle className="font-bold">Create note</DialogTitle>    
-                                <DialogDescription>Create or import a new note to start writing</DialogDescription>
-                                <DialogHeader>
-                                    <Label>Import</Label>
-                                    <Input id="note-import" type="file"/>
-                                </DialogHeader>
-                                <DialogFooter>
-                                    <Button variant="outline">Wuwa</Button>
-                                    <Button className="bg-light-primary-blue hover:bg-light-secondary-blue" type="submit">Create</Button>
-                                </DialogFooter>
-                            
-                            </DialogContent>                                
-                        </Dialog>
-
+                        <button className="user-buttons" onClick={onCreateNote}>
+                            <FilePlus className="w-5 h-5"/>
+                            Add note
+                        </button>
                         <DropdownMenu>
                             <DropdownMenuTrigger className="user-buttons">
                                 <Filter className="w-5 h-5"/>

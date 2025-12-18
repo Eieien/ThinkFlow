@@ -58,5 +58,5 @@ export type Users = {
     createdAt: string,
     updatedAt: string,
     deactivated: boolean
-
 }
+
