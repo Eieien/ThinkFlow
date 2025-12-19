@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import NavigationBar from "../components/layout/NavigationBar";
-import {Funnel, NotebookText, Pencil} from "lucide-react";
+import {Funnel, Notebook, Pen} from "lucide-react";
 import NotesCard from "../components/NotesCard";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ export default function Explore() {
                             <button 
                             className="user-buttons"
                             onClick={notes}>
-                                <NotebookText className="h-5"/>
+                                <Notebook className="h-5"/>
                                 Notes
                             </button>
 
@@ -33,7 +33,7 @@ export default function Explore() {
                             className="user-buttons"
                             onClick={quizzes}>
                             
-                                <Pencil className="h-5"/>
+                                <Pen className="h-5"/>
                                 Quizzes
                             </button>
 
