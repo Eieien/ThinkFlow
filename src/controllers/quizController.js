@@ -75,12 +75,14 @@ export default class QuizController {
   }
   static updateQuiz = async (req, res) => {
     const quizId = req.params.id;
-    const { quizTitle } = req.body;
+    const { quizTitle, description, questions } = req.body;
     try {
       const foundQuiz = await Quiz.findById(quizId);
       if(!foundQuiz) return res.status(404).json({ message: 'Quiz not found!' });
       
       foundQuiz.quizTitle = quizTitle;
+      foundQuiz.description = description;
+      foundQuiz.questions = questions;
 
       const editedQuiz = await foundQuiz.save();
       return res.status(200).json({ 
