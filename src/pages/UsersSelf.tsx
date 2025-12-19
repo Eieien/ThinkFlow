@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import Layout from "@/components/layout/Layout";
 import NavigationBar from "@/components/layout/NavigationBar"
 import ian from "@/assets/images/Ian.jpg"
-import { Facebook, Twitch, Notebook, Pen, MoreVertical, Plus, X, Youtube, Linkedin, Instagram } from "lucide-react";
+import { Facebook, Twitch, Notebook, Pen, MoreVertical, Plus, X, Youtube, Linkedin, Instagram, ChevronDown } from "lucide-react";
 import NotesGrid from "@/components/layout/NotesGrid";
 import { useCardType } from "@/hooks/useCardType"
 import UserLayout from "@/components/layout/User/UserLayout";
@@ -22,6 +22,7 @@ export default function UsersSelf() {
     const [isEditing, setIsEditing] = useState(false);
     const [description, setDescription] = useState("Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum repudiandae obcaecati tenetur quas eligendi adipisci. Ipsa ratione odit alias nulla! Eum itaque in natus ea harum, esse minima eveniet temporibus?");
     const [tempDescription, setTempDescription] = useState(description);
+    const [openPlatformDropdown, setOpenPlatformDropdown] = useState<number | null>(null);
     
     const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
         { id: 1, platform: "Facebook", url: "https://facebook.com" },
@@ -94,6 +95,11 @@ export default function UsersSelf() {
         }
     };
 
+    const selectPlatform = (linkId: number, platform: string) => {
+        updateSocialLink(linkId, 'platform', platform);
+        setOpenPlatformDropdown(null);
+    };
+
     return (
         <>
             <UserLayout
@@ -117,7 +123,7 @@ export default function UsersSelf() {
                                     <div className="absolute left-0 mt-2 w-32 bg-[#FCFCFD] dark:bg-[#1A1A1A] border border-[#D6D9DB] dark:border-[#2B2B2B] rounded-md shadow-lg z-10">
                                         <button
                                             onClick={handleEdit}
-                                            className="w-full text-left px-4 py-3 hover:bg-[#D6D9DB] dark:hover:bg-[#2B2B2B] cursor-pointer text-primary-dark dark:text-primary-white transition-colors"
+                                            className="w-full text-left px-4 py-3 hover:bg-[#D6D9DB] dark:hover:bg-[#2B2B2B] cursor-pointer text-primary-dark dark:text-primary-white transition-colors rounded-md"
                                         >
                                             Edit
                                         </button>
@@ -151,19 +157,34 @@ export default function UsersSelf() {
                                     <div className="flex flex-col gap-3 mb-4">
                                         {tempSocialLinks.map((link) => (
                                             <div key={link.id} className="flex items-center gap-3 bg-[#FCFCFD] dark:bg-[#2B2B2B] rounded-md p-3 border border-[#D6D9DB] dark:border-[#2B2B2B]">
-                                                <div className="flex items-center gap-2 w-40">
+                                                <div className="flex items-center gap-2 w-40 relative">
                                                     {getSocialIcon(link.platform)}
-                                                    <select
-                                                        value={link.platform}
-                                                        onChange={(e) => updateSocialLink(link.id, 'platform', e.target.value)}
-                                                        className="flex-1 bg-transparent border-none focus:outline-none cursor-pointer text-primary-dark dark:text-primary-white"
-                                                    >
-                                                        {availablePlatforms.map((platform) => (
-                                                            <option key={platform} value={platform}>
-                                                                {platform}
-                                                            </option>
-                                                        ))}
-                                                    </select>
+                                                    
+                                                    {/* Custom Dropdown */}
+                                                    <div className="flex-1 relative">
+                                                        <button
+                                                            onClick={() => setOpenPlatformDropdown(openPlatformDropdown === link.id ? null : link.id)}
+                                                            className="w-full flex items-center justify-between bg-transparent text-primary-dark dark:text-primary-white cursor-pointer hover:bg-[#D6D9DB] dark:hover:bg-[#1A1A1A] rounded px-2 py-1 transition-colors"
+                                                        >
+                                                            <span>{link.platform}</span>
+                                                            <ChevronDown className={`w-4 h-4 transition-transform ${openPlatformDropdown === link.id ? 'rotate-180' : ''}`} />
+                                                        </button>
+                                                        
+                                                        {openPlatformDropdown === link.id && (
+                                                            <div className="absolute top-full left-0 mt-1 w-full bg-[#FCFCFD] dark:bg-[#1A1A1A] border border-[#D6D9DB] dark:border-[#2B2B2B] rounded-md shadow-lg z-20 overflow-hidden">
+                                                                {availablePlatforms.map((platform) => (
+                                                                    <button
+                                                                        key={platform}
+                                                                        onClick={() => selectPlatform(link.id, platform)}
+                                                                        className="w-full flex items-center gap-2 px-3 py-2 hover:bg-[#D6D9DB] dark:hover:bg-[#2B2B2B] cursor-pointer text-primary-dark dark:text-primary-white transition-colors text-left"
+                                                                    >
+                                                                        {getSocialIcon(platform)}
+                                                                        <span>{platform}</span>
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                                 <Input
                                                     type="text"
