@@ -13,7 +13,7 @@
 --color-dark-3: #2B2B2B;
 --color-dark-4: #5E5E5E;
 --color-dark-border: #2B2B2B;
---color-primary-white: #FCFCFD; /*Background*/
+--color-primary-white: #ffffff; /*Background*/
 --color-light-2: #F0F1F2;
 --color-light-3: #D6D9DB;
 --color-light-4: #C8CCD0;
@@ -100,7 +100,7 @@
         @apply transition duration-200 bg-primary-white text-dark-3 dark:bg-primary-dark dark:text-primary-white
     }
     .card{
-        @apply bg-light-2 border border-light-border p-2 flex flex-col gap-2 rounded-md dark:bg-dark-2 dark:border-dark-border
+        @apply bg-primary-white border border-light-3 p-4 inset-shadow-2xs flex flex-col rounded-md dark:bg-dark-2 dark:border-dark-border
     }
 
     label{
@@ -273,7 +273,7 @@
 
 --radius: 0.625rem;
 
---background: #FCFCFD;
+--background: #ffffff;
 
 --foreground: oklch(0.145 0 0);
 

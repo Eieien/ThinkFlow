@@ -1,7 +1,28 @@
-import {Bookmark} from "lucide-react";
+import {Bookmark, EllipsisVertical, MoreVertical} from "lucide-react";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+  import { Input } from "@/components/ui/input"
+  import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import SidebarDropdown from "./sidebar/SidebarDropdown";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import type { Note } from "@/configs/DataTypeConfig";
+import { useState } from "react";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useActions } from "@/hooks/useActions";
+import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesCardProps{
     title?: String;
+    note: Note,
     noOfBookmarked?: String;
     dateCreated?: String;
     creator?: String;
@@ -10,29 +31,57 @@ interface NotesCardProps{
     navigate?: () => void;
 }
 
-export default function NotesCard({title, noOfBookmarked, dateCreated, creator, tag, description, navigate} : NotesCardProps){
+export default function NotesCard({title, note, noOfBookmarked, dateCreated, creator, tag, description, navigate} : NotesCardProps){
 
+    const {handleBookmark, deleteNote} = useActions();
+    const [openShare, setOpenShare] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const createdDate = new Date(note.createdAt);
+    const lastUpdatedDate = new Date(note.updatedAt);
+    const axiosPrivate = useAxiosPrivate();
+    
+    const [newTitle, setNewTitle] = useState(note.title);
+    const [newDescription, setNewDescription] = useState(note.description);
+    
+    const [newOptions, setNewOptions] = useState(note.options);
+    const [newTags, setNewTags] = useState(note.tags);
+
+    // const {setUserNotes, setBookmarks} = useDataContext();
+    const lastEdited = new Date(dateCreated);
+    const options = {year: 'numeric', month: 'short', day: 'numeric' }
     return (
-        <div className="w-full card cursor-pointer" onClick={navigate}>
-            <div className="flex gap-2 justify-between">
-                <h1 className="text-2xl font-bold ">{title}</h1>
+        <div className="w-full card cursor-pointer break-words" onClick={navigate}>
+            <div className="flex justify-between">
+                <h1 className="text-lg font-bold ">{title}</h1>
                 <div className="flex gap-2 justify-between items-center">
-                    <button id="bookmarkBtn" className="cursor-pointer">
-                        <Bookmark className="h-5"/>
-                    </button>
-                    <h3 className="text-dark-border dark:text-light-border w-5">{noOfBookmarked}</h3>
+                    <h3 className="text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <MoreVertical/>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="left" align="start">
+                            <DropdownMenuItem onSelect={() => setOpenEdit(true)}>
+                            <span>Options</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setOpenShare(true)}>
+                            <span>Share</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {handleBookmark(note._id)}}>
+                            <span>{(note.options.bookmarked) ? "Remove from Bookmark" : "Add to Bookmark"}</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {deleteNote(note._id);}}>
+                            <span>Delete</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
-            <div className="flex gap-2">
-                <h3 className="text-dark-border dark:text-light-border">Created On {dateCreated}</h3>
-                <h3 className="text-dark-border dark:text-light-border">{creator}</h3>
+            <div className="flex gap-1">
+                <div className="px-2.5 py-0.5 border border-light-border rounded-full">
+                    wuwa
+                </div>
             </div>
-            <div className="flex gap-2">
-                <h3 className="border border-light-border bg-primary-white text-dark-border bg-primary-light px-7 py-0.5  rounded-4xl dark:text-light-border dark:border-light-border dark:bg-primary-dark">{tag}</h3>
-                <h3 className="border border-light-border bg-primary-white text-dark-border bg-primary-light px-7 py-0.5  rounded-4xl dark:text-light-border dark:border-light-border dark:bg-primary-dark">{tag}</h3>
-            </div>
-
-            <h2 className="mt-5 mb-5">
+            <h2 className="text-dark-4 break-words">
                 {description}
             </h2>
 

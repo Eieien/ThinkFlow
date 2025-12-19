@@ -32,46 +32,47 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
-    const {userNotes} = useDataContext();
+    const {userNotes, globalNotes, globalQuizzes} = useDataContext();
 
-    useEffect(() => {
-        const isLoggedIn = Boolean(auth.user?._id);
-        // if(!auth)return;
-        const getNotes = async () => {
-            try{
+    // useEffect(() => {
+    //     const isLoggedIn = Boolean(auth.user?._id);
+    //     // if(!auth)return;
+    //     const getNotes = async () => {
+    //         try{
                 
-                if(isLoggedIn && ownedNotes){
-                    setData((prev) => ({...prev, notes: userNotes}));
+    //             if(isLoggedIn && ownedNotes){
+    //                 setData((prev) => ({...prev, notes: userNotes}));
 
-                }else{
-                    const getNotes = await axiosPublic.get('/notes/');
-                    console.log(getNotes.data);
-                    const getQuizzes = await axiosPublic.get('/quizzes/');
-                    setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
-                }
+    //             }else{
+    //                 const getNotes = await axiosPublic.get('/notes/');
+    //                 console.log(getNotes.data);
+    //                 const getQuizzes = await axiosPublic.get('/quizzes/');
+    //                 setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
+    //             }
 
-            }catch(err){
-                if(err instanceof AxiosError){
-                    console.log(err?.response?.data);
-                } else {
-                    console.log(err);
-                }
-            }
-        }
-        getNotes();
-    }, [auth, userNotes])
+    //         }catch(err){
+    //             if(err instanceof AxiosError){
+    //                 console.log(err?.response?.data);
+    //             } else {
+    //                 console.log(err);
+    //             }
+    //         }
+    //     }
+    //     getNotes();
+    // }, [auth, userNotes])
 
     return (
         <>
             {type === "Notes" ? (
                 <section className={String(className)}>
-                    {data.notes.length === 0 ? (
+                    {userNotes.length === 0 ? (
                     <p className="text-gray-500 text-sm">No notes found</p>
                     ) : (
-                    data.notes.map((note) => (
+                        userNotes.map((note) => (
                         <NotesCard
                             key={note._id}
                             title={note.title}
+                            note={note}
                             noOfBookmarked="10"
                             dateCreated={note.creator.createdAt}
                             creator={note.creator.username}
@@ -84,7 +85,7 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                 </section>
                 ) : (
                 <section className={String(className)}>
-                    {data.quizzes.length === 0 ? (
+                    {globalQuizzes.length === 0 ? (
                     <p className="text-gray-500 text-sm">No quizzes found</p>
                     ) : (
                     data.quizzes.map((quiz) => (
