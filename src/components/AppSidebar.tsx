@@ -285,7 +285,9 @@ export function AppSidebar() {
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex gap-2">
                                 <User2/>
+                                <Link to="/userself">
                                 <span>Profile</span>
+                                </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex gap-2">
                                 <Settings/>
