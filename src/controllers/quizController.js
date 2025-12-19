@@ -26,7 +26,7 @@ export default class QuizController {
     try {
       const foundNote = await Notes.findById(noteId);
       if(!foundNote) return req.status(404).json({ message: 'Note not found! '});
-      const filePath = getUploadFilePath('notes', foundNote.fileContent);
+      const filePath = getUploadFilePath('notes/bin', foundNote.fileContent);
       const result = await generateAiContent(filePath, aiQuizDetails);
       if(result.error) return res.status(400).json(result.error);
       const { quizTitle, description, questions } = result.success;
