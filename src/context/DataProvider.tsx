@@ -75,12 +75,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         }
         try{
             const getData = async() => {
-                const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
+                const getUserData = await axiosPublic.get(`/users/${auth.user?._id}`);
                 const globalNotes = await axiosPublic.get('/notes/');
                 const globalQuizzes = await axiosPublic.get('/quizzes/');
                 const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
                 const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
-                const getUsersList = await axiosPrivate.get("/users/");
+                const getUsersList = await axiosPublic.get("/users/");
                 
                 setUserData(getUserData.data);
                 setGlobalNotes(globalNotes.data);

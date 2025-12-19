@@ -24,13 +24,7 @@ interface DataState{
 export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ", source = "owned" 
 } :  NotesGridProps){
 
-    const [data, setData] = useState<DataState>({
-        notes: [],
-        quizzes: [],
-    })
 
-    const {auth} = useAuth();
-    const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
     const {userNotes,userQuizzes, globalNotes, globalQuizzes, bookmarks} = useDataContext();

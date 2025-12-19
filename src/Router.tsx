@@ -8,7 +8,7 @@ import Home from './pages/Home.tsx'
 import Quiz from './pages/Quiz.tsx'
 import Notes from './pages/Notes.tsx'
 import Users from './pages/Users.tsx'
-import UsersSelf from './pages/UsersSelf.tsx'
+import Profile from './pages/Profile.tsx'
 import Explore from './pages/Explore.tsx'
 import Settings from './pages/Settings.tsx'
 import Results from './pages/ResultsForm.tsx'
@@ -31,6 +31,7 @@ const router = createBrowserRouter([
       {path: '/home', element: <Home/>},
       {path: '/quiz/:id', element: <Quiz/>},
       {path: '/quiz-settings/:id', element: <QuizCreate/>},
+      {path: '/profile/:id', element: <Profile/>},
       {path: '/notes/:id', element: <Notes/>},
       {path: '/explore', element: <Explore/> },
       {path: '/user/:user', element: <Users/>},

@@ -60,7 +60,7 @@ export function AppSidebar() {
     const {auth, setAuth } = useAuth();
     const navigate = useNavigate();
     const {onCreateNote, deleteNote, handleBookmark} = useActions();
-    const {userNotes, bookmarks} = useDataContext();
+    const {userNotes, userData, bookmarks} = useDataContext();
     const {state} = useSidebar();
     const isCollapsed = state === "collapsed"
     const [search, openSearch] = useState(false);
@@ -283,17 +283,13 @@ export function AppSidebar() {
                                     </div>
                                 </div>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex gap-2">
+                            <DropdownMenuItem onClick={() => navigate(`/profile/${userData._id}`)} className="flex gap-2">
                                 <User2/>
-                                <Link to="/userself">
                                 <span>Profile</span>
-                                </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex gap-2">
+                            <DropdownMenuItem onClick={() => navigate('/settings')} className="flex gap-2">
                                 <Settings/>
-                                <Link to="/settings">
-                                    <span>Settings</span>
-                                </Link>
+                                <span>Settings</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleLogout} className="flex gap-2">
                                 <LogOut/>
