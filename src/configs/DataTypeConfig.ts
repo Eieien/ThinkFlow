@@ -4,7 +4,7 @@ export type Tag = {
     color: string;
 }
 
-type Questions = {
+export type Questions = {
     question: string;
     options: {
         a: string;

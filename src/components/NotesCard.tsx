@@ -21,29 +21,22 @@ import { useActions } from "@/hooks/useActions";
 import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesCardProps{
-    title?: String;
     note: Note,
-    noOfBookmarked?: String;
-    dateCreated?: String;
-    creator?: String;
-    description?: String;
     tag?: String;
     navigate?: () => void;
 }
 
-export default function NotesCard({title, note, noOfBookmarked, dateCreated, creator, tag, description, navigate} : NotesCardProps){
+export default function NotesCard({note, navigate} : NotesCardProps){
 
-
-    
     // const {setUserNotes, setBookmarks} = useDataContext();
     const lastEdited = new Date(note.updatedAt);
-    const options = {year: 'numeric', month: 'short', day: 'numeric' }
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric' }
     return (
-        <div className="w-full card cursor-pointer break-words" onClick={navigate}>
+        <div className="w-full card hover:bg-light-2 transition cursor-pointer break-words" onClick={navigate}>
             <div className="flex justify-between">
-                <h1 className="text-lg font-bold ">{title}</h1>
+                <h1 className="text-lg font-bold ">{note.title}</h1>
                 <div className="flex gap-2 justify-between items-center">
-                    <h3 className="text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
+                    <h3 className="text-sm text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
                     <SidebarDropdown note={note}/>
                 </div>
             </div>
@@ -53,7 +46,7 @@ export default function NotesCard({title, note, noOfBookmarked, dateCreated, cre
                 </div>
             </div>
             <h2 className="text-dark-4 break-words">
-                {description}
+                {note.description}
             </h2>
 
         </div>

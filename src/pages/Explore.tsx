@@ -65,7 +65,7 @@ export default function Explore() {
                         </div>
                     </section>
 
-                    <NotesGrid type={cardType}/>
+                    <NotesGrid type={cardType} source="global"/>
 
                 </section>
             </Layout>

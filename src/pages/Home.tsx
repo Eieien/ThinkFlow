@@ -30,7 +30,7 @@ import {DataProvider} from "@/context/DataProvider"
 
 export default function Home(){
 
-    const {cardType, notes, quizzes, bookmarks} = useCardType();
+    const {cardType, source, notes, quizzes, bookmarks} = useCardType();
     const homeContext = createContext<Note[]>([]);
     const axiosPrivate = useAxiosPrivate();
 
@@ -111,7 +111,7 @@ export default function Home(){
                     </div>
                 </div>
 
-                    <NotesGrid type={cardType} className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  gap-2" ownedNotes={true}/>
+                <NotesGrid type={cardType} className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  gap-2" source={source}/>
 
             </UserLayout>
         </>

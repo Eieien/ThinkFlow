@@ -2,7 +2,7 @@ import {useState, useEffect} from "react"
 
 export function useCardType(initialCardType = "Notes"){
     const [cardType, setCardType] = useState(initialCardType);
-
+    const [source, setSource] = useState("owned");
     useEffect(() => {
 
         const savedCardType = localStorage.getItem("Card Type") || "Notes";
@@ -12,16 +12,18 @@ export function useCardType(initialCardType = "Notes"){
 
     const notes = () => {
         setCardType("Notes")
+        setSource("owned");
         localStorage.setItem("Card Type", "Notes");
     };
     const quizzes = () => {
-        setCardType("Quiz")
-        localStorage.setItem("Card Type", "Quiz");
+        setCardType("Quizzes")
+        localStorage.setItem("Card Type", "Quizzes");
     };
     const bookmarks = () => {
-        setCardType("Bookmarks")
-        localStorage.setItem("Card Type", "Bookmarks");
+        setSource("bookmarks")
+        setCardType("Notes")
+        // localStorage.setItem("Card Type", "Bookmarks");
     };
 
-    return {cardType, notes, quizzes, bookmarks};
+    return {cardType, source, notes, quizzes, bookmarks};
 }

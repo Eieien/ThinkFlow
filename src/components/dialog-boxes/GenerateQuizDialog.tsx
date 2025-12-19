@@ -34,6 +34,7 @@ export default function GenerateQuizDialog({open, onOpenChange, id} : GenerateQu
     const navigate = useNavigate();
     const [timer, setTimer] = useState(0);
     const timerRef = useRef<number | null>(null);
+    const {setGlobalQuizzes} = useDataContext();
 
     const generateQuiz = async () => {
         setGenerate(true);
@@ -48,15 +49,16 @@ export default function GenerateQuizDialog({open, onOpenChange, id} : GenerateQu
                 }
             })
 
-            navigate("/")
             console.log(res.data.createdQuiz._id);
             setGenerate(false);
-
+            
             if(timerRef.current){
                 clearInterval(timerRef.current);
             }
             setTimer(0);
             onOpenChange(false);
+            setGlobalQuizzes(prev => [...prev, res.data.createdQuiz]);
+            navigate(`/quiz-settings/${res.data.createdQuiz._id}`);
         }catch(err){
             console.error(err?.response?.data);
         }

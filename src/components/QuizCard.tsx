@@ -1,38 +1,31 @@
+import type { Quiz } from "@/configs/DataTypeConfig";
 import {Bookmark} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface NotesCardProps{
-    title: String;
-    noOfBookmarked?: String;
-    noOfQuestions?: number;
-    creator?: String;
-    description?: String;
-    tag?: String;
+    quiz: Quiz,
 }
 
-export default function NotesCard({title, noOfBookmarked, noOfQuestions, creator, tag, description} : NotesCardProps){
+export default function NotesCard({quiz} : NotesCardProps){
+
+    const navigate = useNavigate();
+
+    const lastEdited = new Date(quiz.updatedAt);
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric' }
 
     return (
-        <div className="w-full card cursor-pointer">
-            <div className="flex gap-2 justify-between">
-                <h1 className="text-2xl font-bold ">{title}</h1>
-                <div className="flex gap-2 justify-between items-center">
-                    <button id="bookmarkBtn" className="cursor-pointer">
-                        <Bookmark className="h-5"/>
-                    </button>
-                    <h3 className="text-dark-border dark:text-light-border w-5">{noOfBookmarked}</h3>
+        <div className="w-full card hover:bg-light-2 transition cursor-pointer break-words" onClick={() => navigate(`/quiz/${quiz._id}`)}>
+            <div className="flex justify-between">
+                <h1 className="text-lg font-bold ">{quiz.quizTitle}</h1>
+                <h3 className="text-dark-border text-sm dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
+            </div>
+            <div className="flex gap-1">
+                <div className="px-2.5 py-0.5 border border-light-border rounded-full">
+                    wuwa
                 </div>
             </div>
-            <div className="flex gap-2">
-                <h3 className="text-dark-border dark:text-light-border">{noOfQuestions} Questions</h3>
-                <h3 className="text-dark-border dark:text-light-border">{creator}</h3>
-            </div>
-            <div className="flex gap-2">
-                <h3 className="border border-light-border bg-primary-white text-dark-border bg-primary-light px-7 py-0.5  rounded-4xl dark:text-light-border dark:border-light-border dark:bg-primary-dark">{tag}</h3>
-                <h3 className="border border-light-border bg-primary-white text-dark-border bg-primary-light px-7 py-0.5  rounded-4xl dark:text-light-border dark:border-light-border dark:bg-primary-dark">{tag}</h3>
-            </div>
-
-            <h2 className="mt-5 mb-5">
-                {description}
+            <h2 className="text-dark-4 break-words">
+                {quiz.description}
             </h2>
 
         </div>

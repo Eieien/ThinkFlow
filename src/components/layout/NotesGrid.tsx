@@ -11,9 +11,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useDataContext } from "@/hooks/useDataContext";
 
 interface NotesGridProps{
-    type: String;
+    type:  string;
     className?: String;
-    ownedNotes?: boolean;
+    source: string;
 }
 
 interface DataState{
@@ -21,7 +21,8 @@ interface DataState{
     quizzes: Quiz[];
 }
 
-export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ", ownedNotes = false} :  NotesGridProps){
+export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm:mx-2 md:mx-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ", source = "owned" 
+} :  NotesGridProps){
 
     const [data, setData] = useState<DataState>({
         notes: [],
@@ -32,81 +33,66 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
-    const {userNotes,userQuizzes, globalNotes, globalQuizzes} = useDataContext();
+    const {userNotes,userQuizzes, globalNotes, globalQuizzes, bookmarks} = useDataContext();
 
     useEffect(() => {
         console.log(userQuizzes);
     }, [userQuizzes])
-    // useEffect(() => {
-    //     const isLoggedIn = Boolean(auth.user?._id);
-    //     // if(!auth)return;
-    //     const getNotes = async () => {
-    //         try{
-                
-    //             if(isLoggedIn && ownedNotes){
-    //                 setData((prev) => ({...prev, notes: userNotes}));
 
-    //             }else{
-    //                 const getNotes = await axiosPublic.get('/notes/');
-    //                 console.log(getNotes.data);
-    //                 const getQuizzes = await axiosPublic.get('/quizzes/');
-    //                 setData((prev) => ({...prev, notes: getNotes.data, quizzes: getQuizzes.data}));
-    //             }
+    const getNotesData = () => {
+        if (source === "owned") return userNotes;
+        if (source === "bookmarks") return bookmarks;
+        if (source === "global") return globalNotes;
+        return [];
+    };
 
-    //         }catch(err){
-    //             if(err instanceof AxiosError){
-    //                 console.log(err?.response?.data);
-    //             } else {
-    //                 console.log(err);
-    //             }
-    //         }
-    //     }
-    //     getNotes();
-    // }, [auth, userNotes])
+    const getQuizzesData = () => {
+        if (source === "owned") return userQuizzes;
+        if (source === "global") return globalQuizzes;
+        return [];
+    };
+
+    const displayNotes = type === "Notes" ? getNotesData() : [];
+    const displayQuizzes = type === "Quizzes" ? getQuizzesData() : [];
 
     return (
         <>
             {type === "Notes" ? (
                 <section className={String(className)}>
-                    {userNotes.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No notes found</p>
+                    {displayNotes.length === 0 ? (
+                        <p className="text-gray-500 text-sm">
+                            {source === "owned" && "No notes found"}
+                            {source === "bookmarks" && "No bookmarked notes found"}
+                            {source === "global" && "No global notes available"}
+                        </p>
                     ) : (
-                        userNotes.map((note) => (
-                        <NotesCard
-                            key={note._id}
-                            title={note.title}
-                            note={note}
-                            noOfBookmarked="10"
-                            dateCreated={note.creator.createdAt}
-                            creator={note.creator.username}
-                            tag="Prog II"
-                            description={note.description}
-                            navigate ={() => navigate(`/notes/${note._id}`)}
-                        />
-                    ))
+                        displayNotes.map((note) => (
+                            <NotesCard
+                                key={note._id}
+                                note={note}
+                                tag="Prog II"
+                                navigate={() => navigate(`/notes/${note._id}`)}
+                            />
+                        ))
                     )}
                 </section>
-                ) : (
+            ) : (
                 <section className={String(className)}>
-                    {userQuizzes.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No quizzes found</p>
+                    {displayQuizzes.length === 0 ? (
+                        <p className="text-gray-500 text-sm">
+                            {source === "owned" && "No quizzes found"}
+                            {source === "global" && "No global quizzes available"}
+                        </p>
                     ) : (
-                        userQuizzes.map((quiz) => (
-                        <QuizCard
-                        key={quiz._id}
-                        title={quiz.quizTitle}
-                        noOfBookmarked="10"
-                        noOfQuestions={quiz.questions.length}
-                        creator={quiz._id}
-                        tag="Prog II"
-                        description={quiz.description}
-                        />
-                    ))
-                )}
+                        displayQuizzes.map((quiz) => (
+                            <QuizCard
+                                key={quiz._id}
+                                quiz={quiz}
+                            />
+                        ))
+                    )}
                 </section>
             )}
-
-            
         </>
-    )
+    );
 }

@@ -91,7 +91,6 @@ export function AppSidebar() {
             <div className="flex gap-1 items-center py-1">
                 <LogoStyle type="single" styles="w-8"/>
                 <span className={`${state === "collapsed" ? "opacity-0 hidden" : "opacity-100"} transition duration-75`}>Thinkflow</span>
-
             </div>
         </SidebarHeader>
         <SidebarContent>
@@ -155,8 +154,30 @@ export function AppSidebar() {
             <SidebarGroup>
             {/* Sidebar Nptes */}
             <SidebarGroupLabel>Notes</SidebarGroupLabel>
+            <SidebarMenuItem >
+                    <ConditionalWrapper
+                    condition={state === "collapsed"}
+                    wrapper={(children) => (
+                        <Tooltip>
+                            <TooltipTrigger> 
+                                {children}
+                            </TooltipTrigger>
+                            <TooltipContent  side="right">
+                                Add Note
+                            </TooltipContent>
+                        </Tooltip>
+                    )}>
+                    <SidebarMenuButton onClick={onCreateNote}>
+                        <Plus/>
+                        <span>Add Note</span>
+
+                    </SidebarMenuButton>
+                    
+
+                    </ConditionalWrapper>
+                </SidebarMenuItem>
             <SidebarGroupContent>
-                <SidebarMenu className="max-h-50 overflow-scroll">
+                <SidebarMenu className="min-h-40 max-h-40 overflow-scroll">
                 {userNotes.map((item) => (
                     <SidebarMenuItem key={item._id}>
                     
@@ -187,35 +208,14 @@ export function AppSidebar() {
                 ))}
 
 
-                <SidebarMenuItem >
-                    <ConditionalWrapper
-                    condition={state === "collapsed"}
-                    wrapper={(children) => (
-                        <Tooltip>
-                            <TooltipTrigger> 
-                                {children}
-                            </TooltipTrigger>
-                            <TooltipContent  side="right">
-                                Add Note
-                            </TooltipContent>
-                        </Tooltip>
-                    )}>
-                    <SidebarMenuButton onClick={onCreateNote}>
-                        <Plus/>
-                        <span>Add Note</span>
-
-                    </SidebarMenuButton>
-                    
-
-                    </ConditionalWrapper>
-                </SidebarMenuItem>
+                
                 </SidebarMenu>
             </SidebarGroupContent>
             </SidebarGroup>
             <SidebarSeparator className="max-w-[92%]"/>
             <SidebarGroup>
             <SidebarGroupLabel>Bookmarks</SidebarGroupLabel>
-            <SidebarGroupContent className="max-h-50 overflow-scroll">
+            <SidebarGroupContent className="max-h-30 overflow-scroll">
                 <SidebarMenu>
                 {bookmarks.map((item) => (
                     <SidebarMenuItem key={item.title}>

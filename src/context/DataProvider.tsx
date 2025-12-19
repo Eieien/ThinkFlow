@@ -1,3 +1,4 @@
+import axiosPublic from "@/api/axiosInstances";
 import type { Note, Quiz, Users } from "@/configs/DataTypeConfig";
 import { useActions } from "@/hooks/useActions";
 import useAuth from "@/hooks/useAuth";
@@ -13,6 +14,7 @@ export interface Data{
     setUserData: Dispatch<SetStateAction<Users>>,
     globalNotes: Note[],
     globalQuizzes: Quiz[],
+    setGlobalQuizzes: Dispatch<SetStateAction<Quiz[]>>,
     usersList: Users[],
     userNotes: Note[],
     userQuizzes: Quiz[],
@@ -36,6 +38,7 @@ const DataContext = createContext<Data>({
     setUserData: () => {},
     globalNotes: [],
     globalQuizzes: [],
+    setGlobalQuizzes: () => {},
     usersList: [],
     userNotes: [],
     userQuizzes: [],
@@ -73,8 +76,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         try{
             const getData = async() => {
                 const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
-                const globalNotes = await axiosPrivate.get('/notes/');
-                const globalQuizzes = await axiosPrivate.get('/quizzes/');
+                const globalNotes = await axiosPublic.get('/notes/');
+                const globalQuizzes = await axiosPublic.get('/quizzes/');
                 const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
                 const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
                 const getUsersList = await axiosPrivate.get("/users/");
@@ -94,6 +97,11 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
     }, [auth, axiosPrivate])
 
+    useEffect(() => {
+        console.log("GLOBAL NOTES: ");
+        console.log(globalQuizzes);
+    }, [globalQuizzes])
+
 
     return (
         <DataContext.Provider value={
@@ -102,6 +110,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 setUserData,
                 globalNotes,
                 globalQuizzes,
+                setGlobalQuizzes,
                 userNotes, 
                 setUserNotes, 
                 currentNoteId, 

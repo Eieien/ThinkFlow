@@ -105,7 +105,7 @@ export default function UserLayout({title, description, children, notesPage = fa
 
 
     return(
-        <DataProvider>
+        <>
             <title>{title}</title>
             <meta name="description" content={description}/>
 
@@ -164,7 +164,7 @@ export default function UserLayout({title, description, children, notesPage = fa
             <GenerateQuizDialog open={genereateQuiz} onOpenChange={setGenerateQuiz} id={String(id)}/>
             <ImportDialog open={openImport} onOpenChange={setOpenImport} onFileChange={onFileChange} onFileUpload={onFileUpload}/>
 
-        </DataProvider>
+        </>
 
     )
 

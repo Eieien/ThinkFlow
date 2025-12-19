@@ -1,7 +1,8 @@
 import useAuth from "@/hooks/useAuth";
-import React, {ReactNode, useEffect, useState} from "react";
+import React, {type ReactNode, useEffect, useState} from "react";
 import UserLayout from "./User/UserLayout";
 import GuestLayout from "./Guest/GuestLayout";
+import { useDataContext } from "@/hooks/useDataContext";
 
 interface LayoutProps{
     title: string;
@@ -11,14 +12,14 @@ interface LayoutProps{
 
 export default function Layout({title, description, children} : LayoutProps){
 
-    const {setAuth, auth} = useAuth();
+    const {userData} = useDataContext();
     const [loggedIn, isLoggedIn] = useState();
 
-    
+
 
     return(
         <>
-            {Object.keys(auth).length == 0 ? 
+            {(!userData) ? 
                 <GuestLayout title={title} description={description} children={children}/>
                 :
                 <UserLayout title={title} description={description} children={children}/>
