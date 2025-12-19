@@ -2,16 +2,6 @@ import mongoose from "mongoose";
 
 import { excludeV } from "../config/mongoConfig.js";
 
-const accessSchema = new mongoose.Schema(
-    {
-        user: {
-            type: mongoose.SchemaTypes.ObjectId,
-            ref: 'users'
-        }
-    },
-    { timestamps: true }
-)
-
 const notesSchema = new mongoose.Schema(
     {
         creator: {
@@ -45,7 +35,8 @@ const notesSchema = new mongoose.Schema(
             ref: "tags"
         },
         access: {
-            type: [ accessSchema ]
+            type: [ mongoose.SchemaTypes.ObjectId ],
+            ref: 'users'
         }
     },
     { 

@@ -65,7 +65,7 @@ export default class NotesController {
   }
 
   static updateNote = async (req, res) => {
-    const { title, description, options, tags } = req.body;
+    const { title, description, options, tags, access } = req.body;
     const noteId = req.params.id;
     try {
       const foundNote = await Notes.findById(noteId);
@@ -74,6 +74,7 @@ export default class NotesController {
       foundNote.description = description;
       foundNote.options = options;
       foundNote.tags = tags;
+      foundNote.access = access;
       const updatedNote = await foundNote.save();
       return res.status(200).json({
         message: 'Note has been updated!',
