@@ -19,6 +19,8 @@ import { type Note, type Users} from "@/configs/DataTypeConfig";
 import useAuth from "@/hooks/useAuth";
 import Ian from "@/assets/images/Ian.jpg"
 import { axiosPrivate } from "@/api/axiosInstances";
+import { MoreVertical, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ShareDialogProps{
     open: boolean;
@@ -28,19 +30,17 @@ interface ShareDialogProps{
 
 export default function ShareDialog({open, onOpenChange, note} : ShareDialogProps){
     
-    const {usersList} = useDataContext();
+    const {usersList, userData} = useDataContext();
     const {filterPeople} = useActions();
     const [query, setQuery] = useState("");
     const [openSearch, setOpenSearch] = useState(false);
     const {auth} = useAuth();
     const [focused, setFocused] = useState(false);
     const results = filterPeople(usersList, query);
-    
-    const [hasAccess, setHasAccess] = useState<string[]>([]);
+    const [hasAccess, setHasAccess] = useState<Users[]>([]);
 
     const convertIdToUser = async (id: string) => {
         const user = await axiosPrivate.get(`/users/${id}`);
-
         return {
             _id: user.data._id,
             username: user.data.username,
@@ -51,19 +51,29 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
         }
     }    
 
-    
     useEffect(() => {
-        setHasAccess(note.access);
+        const fetchUsers = async () => {
+            if (note.access && note.access.length > 0) {
+                const userPromises = note.access.map(id => convertIdToUser(id));
+                const fetchedUsers = await Promise.all(userPromises);
+                setHasAccess([userData, ...fetchedUsers]);
+            }else{
+                setHasAccess([userData]);
+
+            }
+
+        };
+        fetchUsers();
     }, [note._id])
 
     const handleAccessChange = async (userId: string) => {
         console.log("ADDING");
         try{
-            if(hasAccess.find(user => user === userId)){
+            if(hasAccess.find(user => user._id === userId)){
                 console.log("ALREADY IN ACCESS");
             }else{
-                const nextAccess = [...hasAccess, userId];
-
+                const newUser = await convertIdToUser(userId);
+                const nextAccess = [...hasAccess, newUser];
                 setHasAccess(nextAccess);
                 console.log(nextAccess);
 
@@ -73,7 +83,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
                     description: note.description,
                     options: {
                         isPublic: note.options.isPublic,
-                        bookmarked: note,
+                        bookmarked: note.options.bookmarked,
                     },
                     tags: note.tags,
                     access: nextAccess,
@@ -83,10 +93,35 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
             }
 
         }catch(err){
-            setHasAccess(prev => prev.filter(user => user != userId));
+            setHasAccess(prev => prev.filter(user => user._id !== userId));
+            console.error(err);
 
+        }
+    }
+
+    const removeAccess = async (userId: string) => {
+        try{
+            const nextAccess = hasAccess.filter(user => user._id !== userId);
+            setHasAccess(nextAccess);
+            
+            const res = await axiosPrivate.put(`/notes/${note._id}`, {
+                title: note.title,
+                description: note.description,
+                options: {
+                    isPublic: note.options.isPublic,
+                    bookmarked: note.options.bookmarked,
+                },
+                tags: note.tags,
+                access: nextAccess.map(user => user._id), 
+            });
+            
+            console.log("Access removed successfully");
+        }catch(err){
+            const sameUser = await convertIdToUser(userId);
+            setHasAccess(prev => [...prev, sameUser]);
             console.error(err);
         }
+    
     }
 
     return(
@@ -129,7 +164,34 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
             <DialogTitle>People with Access</DialogTitle>
             <div className="max-h-50 overflow-scroll flex flex-col gap-2">
                 {hasAccess.length !== 0 && hasAccess.map(user => 
-                    <div>{user}</div>)}
+                    <div className="flex px-2 justify-between items-center">
+                        <div className="flex w-full py-2 gap-2 bg-primary-white dark:bg-primary-dark justify-start ">
+                            <img src={Ian} className="w-10 h-10 object-contain rounded-full"/>
+                            <div className="flex flex-col text-start text-primary-dark ">
+                                <h2>
+                                    {user.username}
+                                </h2>
+                                <p className="text-sm">
+                                    {user.email}
+                                </p>
+                            </div>
+
+                        </div>
+                        <Tooltip>
+                            <TooltipTrigger >
+                                <button onClick={() => removeAccess(user._id)} className="p-1  rounded-md hover:bg-light-2 transition">
+                                    <X color="#ED2D4F"/>
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent className="bg-light-error">
+                                <p>Remove User</p>
+                            </TooltipContent>
+
+                        </Tooltip>
+
+                    </div>
+                    
+                    )}
             </div>
 
         

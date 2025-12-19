@@ -37,11 +37,11 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDataContext } from "@/hooks/useDataContext";
 import ShareDialog from "../dialog-boxes/ShareDialog";
 interface SidebarDropdownProps{
-
-    note: Note
+  note: Note,
+  onSidebar?: boolean;
 }
 
-export default function SidebarDropdown({note} : SidebarDropdownProps){
+export default function SidebarDropdown({note, onSidebar = false} : SidebarDropdownProps){
     
     const {handleBookmark, deleteNote} = useActions();
     const [openShare, setOpenShare] = useState(false);
@@ -109,9 +109,13 @@ export default function SidebarDropdown({note} : SidebarDropdownProps){
       <>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
+            {onSidebar ? 
             <SidebarMenuAction>
               <MoreVertical/>
-            </SidebarMenuAction>
+            </SidebarMenuAction> 
+            :
+            <MoreVertical/>}
+            
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="start">
             <DropdownMenuItem onSelect={() => setOpenEdit(true)}>

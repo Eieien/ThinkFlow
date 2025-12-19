@@ -45,7 +45,7 @@ export default function GenerateQuizDialog({open, onOpenChange, id} : GenerateQu
             console.log(res.data);
             onOpenChange(false);
         }catch(err){
-            console.error(err);
+            console.error(err?.response?.data);
         }
     }
 

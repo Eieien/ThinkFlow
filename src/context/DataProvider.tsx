@@ -9,10 +9,13 @@ interface DataProviderProps {
   }
 
 export interface Data{
+    userData: Users,
+    setUserData: Dispatch<SetStateAction<Users>>,
     globalNotes: Note[],
     globalQuizzes: Quiz[],
     usersList: Users[],
     userNotes: Note[],
+    userQuizzes: Quiz[],
     bookmarks: Note[],
     setBookmarks: Dispatch<SetStateAction<Note[]>>,
     setUserNotes: Dispatch<SetStateAction<Note[]>>,
@@ -22,10 +25,20 @@ export interface Data{
 }
 
 const DataContext = createContext<Data>({
+    userData:  {
+        _id: '',
+        username: '',
+        email: '',
+        createdAt: '',
+        updatedAt: '',
+        deactivated: false
+    },
+    setUserData: () => {},
     globalNotes: [],
     globalQuizzes: [],
     usersList: [],
     userNotes: [],
+    userQuizzes: [],
     bookmarks: [],
     setBookmarks: () => {},
     setUserNotes: () => {},
@@ -35,6 +48,14 @@ const DataContext = createContext<Data>({
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     
+    const [userData, setUserData] = useState<Users>({
+        _id: '',
+        username: '',
+        email: '',
+        createdAt: '',
+        updatedAt: '',
+        deactivated: false
+    });
     const [userNotes, setUserNotes] = useState<Note[]>([]);
     const [usersList, setUserList] = useState<Users[]>([]);
     const [globalNotes, setGlobalNotes] = useState<Note[]>([]);
@@ -51,17 +72,16 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         }
         try{
             const getData = async() => {
+                const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
                 const globalNotes = await axiosPrivate.get('/notes/');
                 const globalQuizzes = await axiosPrivate.get('/quizzes/');
-
                 const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
-                const getUserQuizzes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
-
+                const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
                 const getUsersList = await axiosPrivate.get("/users/");
                 
+                setUserData(getUserData.data);
                 setGlobalNotes(globalNotes.data);
                 setGlobalQuizzes(globalQuizzes.data);
-
                 setUserList(getUsersList.data);
                 setUserQuizzes(getUserQuizzes.data);
                 setUserNotes(getUserNotes.data);
@@ -78,6 +98,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     return (
         <DataContext.Provider value={
             { 
+                userData,
+                setUserData,
                 globalNotes,
                 globalQuizzes,
                 userNotes, 
@@ -86,6 +108,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 setCurrentNoteId, 
                 bookmarks, 
                 setBookmarks, 
+                userQuizzes,
                 usersList,
             }
             }>

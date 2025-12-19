@@ -182,7 +182,7 @@ export function AppSidebar() {
                         </SidebarMenuButton>
 
                     </ConditionalWrapper>
-                    <SidebarDropdown note={item}/>
+                    <SidebarDropdown onSidebar={true} note={item}/>
                     </SidebarMenuItem>
                 ))}
 
@@ -241,7 +241,7 @@ export function AppSidebar() {
                         </SidebarMenuButton>
 
                         </ConditionalWrapper>
-                        <SidebarDropdown note={item}/>
+                        <SidebarDropdown onSidebar={true} note={item}/>
 
                     </SidebarMenuItem>
                 ))}

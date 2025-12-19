@@ -33,21 +33,10 @@ interface NotesCardProps{
 
 export default function NotesCard({title, note, noOfBookmarked, dateCreated, creator, tag, description, navigate} : NotesCardProps){
 
-    const {handleBookmark, deleteNote} = useActions();
-    const [openShare, setOpenShare] = useState(false);
-    const [openEdit, setOpenEdit] = useState(false);
-    const createdDate = new Date(note.createdAt);
-    const lastUpdatedDate = new Date(note.updatedAt);
-    const axiosPrivate = useAxiosPrivate();
-    
-    const [newTitle, setNewTitle] = useState(note.title);
-    const [newDescription, setNewDescription] = useState(note.description);
-    
-    const [newOptions, setNewOptions] = useState(note.options);
-    const [newTags, setNewTags] = useState(note.tags);
 
+    
     // const {setUserNotes, setBookmarks} = useDataContext();
-    const lastEdited = new Date(dateCreated);
+    const lastEdited = new Date(note.updatedAt);
     const options = {year: 'numeric', month: 'short', day: 'numeric' }
     return (
         <div className="w-full card cursor-pointer break-words" onClick={navigate}>
@@ -55,25 +44,7 @@ export default function NotesCard({title, note, noOfBookmarked, dateCreated, cre
                 <h1 className="text-lg font-bold ">{title}</h1>
                 <div className="flex gap-2 justify-between items-center">
                     <h3 className="text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <MoreVertical/>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent side="left" align="start">
-                            <DropdownMenuItem onSelect={() => setOpenEdit(true)}>
-                            <span>Options</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => setOpenShare(true)}>
-                            <span>Share</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => {handleBookmark(note._id)}}>
-                            <span>{(note.options.bookmarked) ? "Remove from Bookmark" : "Add to Bookmark"}</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => {deleteNote(note._id);}}>
-                            <span>Delete</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <SidebarDropdown note={note}/>
                 </div>
             </div>
             <div className="flex gap-1">

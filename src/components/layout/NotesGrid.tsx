@@ -32,8 +32,11 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
-    const {userNotes, globalNotes, globalQuizzes} = useDataContext();
+    const {userNotes,userQuizzes, globalNotes, globalQuizzes} = useDataContext();
 
+    useEffect(() => {
+        console.log(userQuizzes);
+    }, [userQuizzes])
     // useEffect(() => {
     //     const isLoggedIn = Boolean(auth.user?._id);
     //     // if(!auth)return;
@@ -85,10 +88,10 @@ export default function NotesGrid( {type, className = "grid grid-cols-1 gap-2 sm
                 </section>
                 ) : (
                 <section className={String(className)}>
-                    {globalQuizzes.length === 0 ? (
+                    {userQuizzes.length === 0 ? (
                     <p className="text-gray-500 text-sm">No quizzes found</p>
                     ) : (
-                    data.quizzes.map((quiz) => (
+                        userQuizzes.map((quiz) => (
                         <QuizCard
                         key={quiz._id}
                         title={quiz.quizTitle}
