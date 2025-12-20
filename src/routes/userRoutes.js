@@ -4,11 +4,11 @@ import { body } from "express-validator";
 import UserController from "../controllers/userController.js";
 import { pfpUploader } from "../config/multerConfig.js";
 import { checkValidationErrors, checkFileUpload } from "../middleware/errorHandlers.js";
-import verifyToken from "../middleware/verifyToken.js";
+import verifyOptionalToken from "../middleware/verifyOptionalToken.js";
 
 const userRouter = Router();
 
-// userRouter.use(verifyToken);
+userRouter.use(verifyOptionalToken);
 userRouter.get('/', UserController.getUsers);
 userRouter.route('/:id')
     .get(UserController.getOneUser)

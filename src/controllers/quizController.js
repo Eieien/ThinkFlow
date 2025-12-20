@@ -103,4 +103,18 @@ export default class QuizController {
       return res.status(400).json(catchError(err));
     }
   }
+  static createQuestion = async (req, res) => {
+    const { quizId, question } = req.body;
+    try {
+      const quizData = await Quiz.findById(quizId);
+      quizData.questions.push(question);
+      await quizData.save();
+      res.status(201).json({
+        message: "Question has been created!",
+        questions: quizData.questions
+      })
+    } catch (err) {
+      return res.status(400).json(catchError(err));
+    }
+  }
 }

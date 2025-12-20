@@ -8,7 +8,7 @@ const resultRouter = Router();
 
 resultRouter.use(verifyOptionalToken);
 resultRouter.get('/:id', ResultController.getResults);
-// resultRouter.use(verifyToken);
+resultRouter.use(verifyToken);
 resultRouter.post('/submit', ResultController.postResult);
 
 export default resultRouter;
