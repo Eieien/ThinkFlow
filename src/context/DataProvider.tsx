@@ -102,11 +102,6 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 setBookmarks(globalNotes.data.filter((note : Note) => note.options.bookmarked == true));
 
                 if(Object.keys(auth).length > 0){
-                    const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
-                        responseType: 'blob'
-                    });
-                    const imageUrl = URL.createObjectURL(res.data);
-                    setUserPfp(imageUrl);
 
                     const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
                     const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
@@ -162,8 +157,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
     useEffect(() => {
         console.log("GLOBAL NOTES: ");
-        console.log(globalQuizzes);
-    }, [globalQuizzes])
+        console.log(userNotes);
+    }, [userNotes])
 
 
     return (
