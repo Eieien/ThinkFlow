@@ -47,7 +47,6 @@ export default function Account() {
   useEffect(() => {
     const getProfilePicture = async () => {
       try{
-        
         const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
           responseType: 'blob'
         });
@@ -103,9 +102,6 @@ export default function Account() {
       console.error('Upload failed:', error);
     }
   };
-
-
-
 
   return (
     <>
