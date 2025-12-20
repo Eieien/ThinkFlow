@@ -87,7 +87,7 @@ export default function NotesEditor({ id, onEditorReady }: NotesEditorProps) {
     ydocRef.current = ydoc;
 
     const provider = new HocuspocusProvider({
-      url: "wss://thinkflow-api.dcism.org/collab",
+      url: "ws://localhost:20155/collab",
       name: newId,
       document: ydoc,
     });
@@ -114,7 +114,7 @@ export default function NotesEditor({ id, onEditorReady }: NotesEditorProps) {
     ydocRef.current = ydoc;
 
     const provider = new HocuspocusProvider({
-      url: "wss://thinkflow-api.dcism.org/collab",
+      url: "ws://localhost:20155/collab",
       name: id,
       document: ydoc,
     });
