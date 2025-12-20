@@ -10,13 +10,14 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axiosPublic from "@/api/axiosInstances";
+import useAuth from "@/hooks/useAuth";
 
 export default function Account() {
-  
+  const { auth, setAuth } = useAuth();
   const {userData} = useDataContext();  
   // USER DATA
-  const [username, setUsername] = useState(userData.username);
-  const [email, setEmail] = useState(userData.email);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(auth?.user?.email);
 
   // EDIT STATES
   const [editUsername, setEditUsername] = useState(false);
@@ -45,10 +46,13 @@ export default function Account() {
   };
 
   useEffect(() => {
+    setUsername(auth?.user?.username);
+    setEmail(auth?.user?.email);
+
     const getProfilePicture = async () => {
       try{
         
-        const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
+        const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
           responseType: 'blob'
         });
 
@@ -63,8 +67,7 @@ export default function Account() {
       }
     }
     getProfilePicture();
-
-  }, [userData._id])
+  }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -82,13 +85,12 @@ export default function Account() {
 
   const handleUpload = async () => {
     if (!selectedImage) return;
-
     try {
       const formData = new FormData();
       formData.append('pfp', selectedImage); 
 
       const response = await axiosPrivate.put(
-        `/users/pfp/${userData._id}`, 
+        `/users/pfp/${auth.user?._id}`,
         formData,
         {
           headers: {
@@ -99,12 +101,31 @@ export default function Account() {
 
       console.log('Profile picture updated:', response.data);
       setEditPfp(false);
+
+        const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
+          responseType: 'blob'
+        });
+
+        // Create object URL from blob
+        const imageUrl = URL.createObjectURL(res.data);
+        setPfp(imageUrl);
     } catch (error) {
       console.error('Upload failed:', error);
     }
   };
 
-
+  const handleUserUpdate = async () => {
+    try {
+      const res = await axiosPrivate.put(`/users/${auth.user?._id}`, {
+        username: username,
+        email: email,
+        deactivated: false
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  } 
 
 
   return (
@@ -135,7 +156,10 @@ export default function Account() {
 
               {!editUsername ? (
                 <button
-                  onClick={() => setEditUsername(true)}
+                  onClick={() => {
+                    setEditUsername(true);
+                    setUsername(auth?.user?.username);
+                  }}
                   className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
                 >
                   Edit
@@ -143,13 +167,26 @@ export default function Account() {
               ) : (
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setEditUsername(false)}
+                    onClick={() => {
+                      setEditUsername(false);
+                    }}
                     className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
-                    onClick={() => setEditUsername(false)}
+                    onClick={() => {
+                      setEditUsername(false);
+                      const user = {
+                        ...auth.user, 
+                        username: username
+                      }
+                      setAuth({
+                        ...auth, 
+                        user: user
+                      });
+                      handleUserUpdate();
+                    }}
                     className="px-4 bg-primary-dark text-white dark:bg-primary-white dark:text-primary-dark rounded-md cursor-pointer"
                   >
                     Apply
@@ -239,7 +276,10 @@ export default function Account() {
 
             {!editEmail ? (
               <button
-                onClick={() => setEditEmail(true)}
+                onClick={() => {
+                  setEditEmail(true);
+                  setEmail(auth?.user?.email);
+                }}
                 className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
               >
                 Change Email
@@ -253,7 +293,18 @@ export default function Account() {
                   Cancel
                 </button>
                 <button
-                  onClick={() => setEditEmail(false)}
+                  onClick={() => {
+                    setEditEmail(false);
+                    const user = {
+                      ...auth.user, 
+                      email: email
+                    }
+                    setAuth({
+                      ...auth, 
+                      user: user
+                    });
+                    handleUserUpdate();
+                  }}
                   className="px-4 bg-primary-dark text-white dark:bg-primary-white dark:text-primary-dark rounded-md cursor-pointer"
                 >
                   Apply
