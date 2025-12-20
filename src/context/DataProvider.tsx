@@ -3,6 +3,7 @@ import type { Note, Quiz, Users } from "@/configs/DataTypeConfig";
 import { useActions } from "@/hooks/useActions";
 import useAuth from "@/hooks/useAuth";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import useRefreshToken from "@/hooks/useRefreshToken";
 import {type ReactNode, createContext, useState, type Dispatch, type SetStateAction, useEffect} from "react";
 
 interface DataProviderProps {
@@ -68,27 +69,33 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     const [currentNoteId, setCurrentNoteId] = useState("");
     const {auth} = useAuth();
     const axiosPrivate = useAxiosPrivate();
+    const refresh = useRefreshToken();
 
     useEffect(() => {
-        if(!auth){
-            return;
+        if(Object.keys(auth).length == 0){
+            refresh();
+            console.log("refreshed");
         }
         try{
             const getData = async() => {
-                const getUserData = await axiosPublic.get(`/users/${auth.user?._id}`);
                 const globalNotes = await axiosPublic.get('/notes/');
                 const globalQuizzes = await axiosPublic.get('/quizzes/');
-                const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
-                const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
                 const getUsersList = await axiosPublic.get("/users/");
-                
-                setUserData(getUserData.data);
+
                 setGlobalNotes(globalNotes.data);
                 setGlobalQuizzes(globalQuizzes.data);
                 setUserList(getUsersList.data);
-                setUserQuizzes(getUserQuizzes.data);
-                setUserNotes(getUserNotes.data);
                 setBookmarks(globalNotes.data.filter((note : Note) => note.options.bookmarked == true));
+
+                if(Object.keys(auth).length > 0){
+                    const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
+                    const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
+                    const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
+
+                    setUserData(getUserData.data);
+                    setUserQuizzes(getUserQuizzes.data);
+                    setUserNotes(getUserNotes.data);
+                }
             }
             getData();
         }catch(err){

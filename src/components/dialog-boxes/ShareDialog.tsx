@@ -42,6 +42,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
     const [visibility, setVisibility] = useState<Boolean>(note.options.isPublic);
 
     const convertIdToUser = async (id: string) => {
+        if(Object.keys(auth).length == 0) return;
         const user = await axiosPrivate.get(`/users/${id}`);
         return {
             _id: user.data._id,
@@ -55,6 +56,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
 
     useEffect(() => {
         const fetchUsers = async () => {
+            if(Object.keys(auth).length == 0) return;
             if (note.access && note.access.length > 0) {
                 const userPromises = note.access.map(id => convertIdToUser(id));
                 const fetchedUsers = await Promise.all(userPromises);

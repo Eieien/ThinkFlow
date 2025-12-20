@@ -10,28 +10,21 @@ import { QuizProvider } from "@/context/QuizProvider";
 import Test from "./quiz-page/Test";
 import Preface from "./quiz-page/Preface";
 import Results from "./quiz-page/Results";
+import { useQuizContext } from "@/hooks/useQuizContext";
+import useAuth from "@/hooks/useAuth";
+import { AxiosError } from "axios";
 
 export default function Quiz(){
     const {id} = useParams();
     const [answering, isAnswering] = useState(false);
     const [finished, isFinished] = useState(false);
-    const [quizData, setQuizData] = useState<Quiz>(
-        {
-            _id: "",
-            note: "",
-            quizTitle: "",
-            description: "",
-            questions: [],
-            createdAt: "",
-            updatedAt: "", 
-        }
-    );
+    const axiosPrivate = useAxiosPrivate();
 
     const startQuiz = () => {
         isAnswering(true);
     }
 
-    const submitQuiz = () => {
+    const submitQuiz = async () => {
         isFinished(true);
         isAnswering(false);
     }

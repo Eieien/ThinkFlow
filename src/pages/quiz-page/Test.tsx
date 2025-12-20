@@ -8,6 +8,7 @@ import type { Quiz } from "@/configs/DataTypeConfig";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { QuizProvider } from "@/context/QuizProvider";
 import { useQuizContext } from "@/hooks/useQuizContext";
+import useAuth from "@/hooks/useAuth";
 
 interface InQuizProps{
     id: string;
@@ -17,6 +18,7 @@ interface InQuizProps{
 export default function InQuiz({id, submitQuiz} : InQuizProps){
     const axiosPrivate = useAxiosPrivate();
     const {quizData, setQuizData} = useQuizContext();
+    const { auth } = useAuth();
     
    
 
@@ -36,11 +38,26 @@ export default function InQuiz({id, submitQuiz} : InQuizProps){
         setScore(correctCount);
     }, [selectedAnswers, quizData.questions]);
 
-    const goToNextQuestion = () => {
+    const goToNextQuestion = async () => {
         if (currentQuestionIndex < quizData.questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         }else{
             submitQuiz();
+            console.log(quizData._id)
+            try {
+                const res = await axiosPrivate.post('/results/submit',
+                    {
+                        userId: auth?.user?._id,
+                        quizId: quizData._id,
+                        score: score,
+                        time: 643 // change dis
+                    }
+                );
+            console.log(res.data);
+            } catch (error) {
+                if(error instanceof AxiosError)
+                    console.log(error?.response?.data);
+            }
         }
     };
 

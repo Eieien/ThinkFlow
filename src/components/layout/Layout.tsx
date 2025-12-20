@@ -11,15 +11,12 @@ interface LayoutProps{
 }
 
 export default function Layout({title, description, children} : LayoutProps){
-
     const {userData} = useDataContext();
-    const [loggedIn, isLoggedIn] = useState();
-
-
+    const { auth } = useAuth();
 
     return(
         <>
-            {(!userData) ? 
+            {(Object.keys(auth).length == 0) ? 
                 <GuestLayout title={title} description={description} children={children}/>
                 :
                 <UserLayout title={title} description={description} children={children}/>

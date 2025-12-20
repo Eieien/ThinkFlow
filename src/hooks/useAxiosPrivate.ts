@@ -10,27 +10,22 @@ const useAxiosPrivate = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('Attaching interceptors...');
         const reqIntercept = axiosPrivate.interceptors.request.use(
             (config) => {
-                console.log('Request Interceptor Hit');
                 if(!config?.headers.Authorization){
                     config.headers.Authorization = `Bearer ${auth?.accessToken}`
                 }
                 return config;
             },
             (error) => {
-                console.log('Request Interceptor Error');
                 return Promise.reject(error);
             }
         );
         const resIntercept = axiosPrivate.interceptors.response.use(
             (res) => {
-                console.log('Response Interceptor Success');
                 return res;
             },
             async (error) => {
-                console.log('Response Interceptor Error');
                 const prevReq = error?.config;
                 if(error?.response?.status === 401 && !prevReq?.sent){
                     try {
