@@ -1,6 +1,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-export const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+export let genAi;
+export function setGenAi(){
+    genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+}
 
 const noteSchema = { type: Type.STRING };
 const notePrompt = 'Create markdown content based on the contents of this file.';

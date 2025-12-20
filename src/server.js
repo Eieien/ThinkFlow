@@ -3,9 +3,11 @@ import expressWs from "express-ws";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
 import cors from "cors";
+import * as dotenv from "dotenv";
 
 import { connectToMongoDB } from "./config/mongoConfig.js";
 import hocuspocus from "./config/hocusConfig.js"
+import { setGenAi } from "./config/genAiConfig.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
@@ -14,7 +16,9 @@ import tagRoutes from "./routes/tagRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import resultRoutes from "./routes/resultRoutes.js";
 
+dotenv.config();
 connectToMongoDB();
+setGenAi();
 
 const { app } = expressWs(express());
 const PORT = process.env.PORT || 3000;
