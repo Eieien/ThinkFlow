@@ -27,6 +27,7 @@ export interface Data{
     userTags: Tag[],
     setUserTags: Dispatch<SetStateAction<Tag[]>>,
     updateNotes: () => Promise<void>,
+    updateQuizzes: () => Promise<void>,
 
 }
 
@@ -54,6 +55,7 @@ const DataContext = createContext<Data>({
     userTags: [],
     setUserTags: () => {},
     updateNotes: async () => {},
+    updateQuizzes: async () => {},
 });
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
@@ -129,6 +131,21 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
             console.error("Error updating notes:", err);
         }
     }, [auth, axiosPrivate]);
+
+    const updateQuizzes = useCallback(async () => {
+        try {
+            const globalQuizzes = await axiosPublic.get('/quizzes/');
+            setGlobalQuizzes(globalQuizzes.data);
+            
+            if(Object.keys(auth).length > 0){
+                const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
+                setUserQuizzes(getUserQuizzes.data);
+            }
+            console.log("Quizzes updated successfully");
+        } catch(err) {
+            console.error("Error updating notes:", err);
+        }
+    }, [auth, axiosPrivate]);
     
     
 
@@ -157,6 +174,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 userTags,
                 setUserTags,
                 updateNotes,
+                updateQuizzes
             }
             }>
         {children}
