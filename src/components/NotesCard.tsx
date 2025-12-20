@@ -37,13 +37,18 @@ export default function NotesCard({note, navigate} : NotesCardProps){
                 <h1 className="text-lg font-bold ">{note.title}</h1>
                 <div className="flex gap-2 justify-between ">
                     <h3 className="text-sm text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
-                    <SidebarDropdown note={note}/>
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <SidebarDropdown note={note}/>
+                    </div>
                 </div>
             </div>
             <div className="flex gap-1">
-                <div className="px-2.5 py-0.5 border border-light-border rounded-full">
-                    wuwa
-                </div>
+                {note.tags.map((tags) => 
+                    <div className="px-2.5 py-0.5 border rounded-full" style={{border: `1px solid ${tags.color}`}}>
+                        {tags.name}
+                    </div>
+
+                )}
             </div>
             <h2 className="text-dark-4 break-words">
                 {note.description}

@@ -133,6 +133,7 @@ export function useActions() {
         
         return [...filteredNotes, ...filteredQuizzes];
       }
+      
     return {
         onCreateNote,
         deleteNote,

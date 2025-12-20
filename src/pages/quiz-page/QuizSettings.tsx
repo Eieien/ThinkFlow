@@ -96,7 +96,17 @@ export default function QuizCreator() {
         }catch(err){
             console.error(err);
         }
-      x
+        // const newQuestion: Questions = {
+        //     _id: quizData.questions[quizData.questions.length - 1]._id + 1, 
+        //     question: "",
+        //     options: { a: "", b: "", c: "", d: "" },
+        //     answer: "a",
+        //     explaination: "",
+        // };
+        // setQuizData(prev => ({
+        //     ...prev,
+        //     questions: [...prev.questions, newQuestion]
+        // }));
     };
 
     const deleteQuestion = (questionId: string) => {
