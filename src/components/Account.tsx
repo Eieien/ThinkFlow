@@ -52,7 +52,7 @@ export default function Account() {
     const getProfilePicture = async () => {
       try{
         
-        const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
+        const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
           responseType: 'blob'
         });
 
@@ -114,18 +114,7 @@ export default function Account() {
     }
   };
 
-  const handleUserUpdate = async () => {
-    try {
-      const res = await axiosPrivate.put(`/users/${auth.user?._id}`, {
-        username: username,
-        email: email,
-        deactivated: false
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.log(error.response);
-    }
-  } 
+
 
 
   return (

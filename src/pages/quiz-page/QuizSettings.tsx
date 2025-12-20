@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { Quiz, Questions } from "@/configs/DataTypeConfig";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDataContext } from "@/hooks/useDataContext";
+import axios from "axios";
 import { Pen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,16 +28,16 @@ export default function QuizCreator() {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
 
+    const fetchQuizData = async () => {
+        try {
+            const fetchedQuiz = await axiosPrivate.get(`/quizzes/${id}`);
+            setQuizData(fetchedQuiz.data);
+            console.log(fetchedQuiz.data);
+        } catch(err) {
+            console.error(err);
+        }
+    } 
     useEffect(() => {
-        const fetchQuizData = async () => {
-            try {
-                const fetchedQuiz = await axiosPrivate.get(`/quizzes/${id}`);
-                setQuizData(fetchedQuiz.data);
-                console.log(fetchedQuiz.data);
-            } catch(err) {
-                console.error(err);
-            }
-        } 
         fetchQuizData();
     }, [id]);
 
@@ -71,42 +72,34 @@ export default function QuizCreator() {
       }
     }
 
-    const addNewQuestion = async() => {
-        try{
-            
-            const res = await axiosPrivate.post(`/quizzes/question`, {
-                quizId: quizData._id,
-                question: {
-                    options: {
-                        a: "a",
-                        b: "b",
-                        c: "c",
-                        d: "d",
-                    },
-                    question: "q",
-                    answer: "a",
-                    explanation: "e"
-                }
-            })
+    const addNewQuestion = async () => {
+        const newQuestion: Questions = {
+            _id: `temp-${Date.now()}`, 
+            question: "a",
+            options: { a: "d", b: "d", c: "d", d: "d" },
+            answer: "a",
+            explaination: "s",
+        };
 
-            setQuizData(prev => ({...prev, questions: [...prev.questions, res.data]}));
+        const res = await axiosPrivate.post(`/quizzes/question`, {
+            quizId: quizData._id,
+            question: {
+                options: newQuestion.options,
+                question: newQuestion.question,
+                answer: newQuestion.answer,
+                explaination: newQuestion.explaination
+            }
+        })
+       
+        console.log(res.data);
+        
+        setQuizData(prev => ({
+            ...prev,
+            questions: [...prev.questions, res.data]
+        }));
 
-            console.log("QUESTION CREATED");
+        fetchQuizData();
 
-        }catch(err){
-            console.error(err);
-        }
-        // const newQuestion: Questions = {
-        //     _id: quizData.questions[quizData.questions.length - 1]._id + 1, 
-        //     question: "",
-        //     options: { a: "", b: "", c: "", d: "" },
-        //     answer: "a",
-        //     explaination: "",
-        // };
-        // setQuizData(prev => ({
-        //     ...prev,
-        //     questions: [...prev.questions, newQuestion]
-        // }));
     };
 
     const deleteQuestion = (questionId: string) => {
@@ -118,6 +111,8 @@ export default function QuizCreator() {
         if (currentQuestion >= updatedQuestions.length) {
             setCurrentQuestion(updatedQuestions.length - 1);
         }
+        handleUpdate();
+
     };
 
     const updateQuestionText = (text: string) => {
