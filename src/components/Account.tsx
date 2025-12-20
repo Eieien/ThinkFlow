@@ -1,10 +1,12 @@
 import { useState } from "react";
 import ian from "@/assets/images/Ian.jpg";
+import { useDataContext } from "@/hooks/useDataContext";
 
 export default function Account() {
+  
+  const {userData} = useDataContext();  
   // USER DATA
   const [username, setUsername] = useState("Ian Florentino");
-  const [nickname, setNickname] = useState("Pedophile");
   const [email, setEmail] = useState("JohnDoe@gmail.com");
 
   // EDIT STATES
@@ -77,48 +79,6 @@ export default function Account() {
             )}
           </div>
 
-          {/* NICKNAME */}
-          <div className="h-23 pt-2">
-            <div className="flex justify-between items-center pb-2">
-              <h3 className="text-primary-dark text-xl font-bold dark:text-primary-white">
-                Nickname
-              </h3>
-
-              {!editNickname ? (
-                <button
-                  onClick={() => setEditNickname(true)}
-                  className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
-                >
-                  Edit
-                </button>
-              ) : (
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setEditNickname(false)}
-                    className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => setEditNickname(false)}
-                    className="px-4 bg-primary-dark text-white dark:bg-primary-white dark:text-primary-dark rounded-md cursor-pointer"
-                  >
-                    Apply
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {!editNickname ? (
-              <p className="h-10 text-dark-3 text-base dark:text-gray-400">{nickname}</p>
-            ) : (
-              <input
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                className="h-10 w-full p-2 border rounded-md"
-              />
-            )}
-          </div>
         </div>
       </div>
 

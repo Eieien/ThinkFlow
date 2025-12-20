@@ -15,8 +15,7 @@ export default function Settings() {
                 <section className="antialiased max-w-screen-xl mx-auto flex flex-row justify-center">
                     <section className="w-full flex flex-col">
                         <Account/>
-                        <Preferences/>
-                        <div className='my-3 pb-10'>
+                        <div className='my-3 pb-10'>    
                             <button className="font-bold text-xl text-primary-dark dark:text-white rounded-md cursor-pointer">
                                 Logout
                             </button>
