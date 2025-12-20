@@ -7,11 +7,15 @@ import LogoStyle from "../components/LogoStyle";
 import axios, { AxiosError, type AxiosResponse } from "axios"
 import axiosPublic from "@/api/axiosInstances";
 import useAuth from "@/hooks/useAuth";
+import { Dialog, DialogHeader ,DialogContent, DialogTitle, DialogFooter, DialogClose, DialogDescription} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState("");
     const { setAuth } = useAuth();
     
     const handleLogin = async (e : MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
@@ -27,17 +31,19 @@ export default function Login(){
             console.log(res.data);
             setAuth(res.data);
             navigate('/home');
+        
         } catch (err) {
+            setOpen(true);
             if(err instanceof AxiosError){
                 console.log(err?.response?.data);
+                setError(err?.response?.data.message);
+        
             } else {
                 console.log(err);
             }
         }
     }
-
     return (
-
         <>
             <section className="relative">
                 <div className="h-20 flex flex-row justify-between items-center">
@@ -48,7 +54,6 @@ export default function Login(){
                                 Thinkflow
                             </h1>
                         </div>
-                    
                     </Link>
                     <ThemeSwitcher/>
                 </div>
@@ -61,7 +66,6 @@ export default function Login(){
                                     <div className="text-center">
                                         <h3 className="text-dark-4 text-xl font-bold dark:text-primary-white">Login to your Account</h3>
                                         <p className="text-dark-3 dark:text-light-border">Login and continue reviewing your notes today</p>
-
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-4">
@@ -107,6 +111,20 @@ export default function Login(){
 
 
             </section>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="flex  flex-col items-center justify-center">
+                    <DialogHeader>
+                        <DialogTitle>Somethign Went Wrong.</DialogTitle>
+                    </DialogHeader>
+                    <span>{error}</span>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button>Close</Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             
         </>

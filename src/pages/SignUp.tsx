@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import LogoStyle from "../components/LogoStyle";
 import axiosPublic from "@/api/axiosInstances";
 import { AxiosError } from "axios";
+import { Dialog, DialogHeader ,DialogContent, DialogTitle, DialogFooter, DialogClose, DialogDescription} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function SignUp(){
     const [username, setUsername] = useState<string>();
@@ -12,7 +14,8 @@ export default function SignUp(){
     const [password, setPassword] = useState<string>();
     const [confPassword, setConfPassword] = useState<string>();
     const navigate = useNavigate();
-
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState("");
     const handleSignup = async () => {
         try {
             const res = await axiosPublic.post(
@@ -28,8 +31,10 @@ export default function SignUp(){
             console.log(res.data);
             navigate('/login');
         } catch (err) {
+            setOpen(true);
             if(err instanceof AxiosError){
                 console.log(err?.response?.data);
+                setError(err?.response?.data.message);
             } else {
                 console.log(err);
             }
@@ -112,6 +117,20 @@ export default function SignUp(){
 
 
             </section>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="flex  flex-col items-center justify-center">
+                    <DialogHeader>
+                        <DialogTitle>Somethign Went Wrong.</DialogTitle>
+                    </DialogHeader>
+                    <span>{error}</span>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button>Close</Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
         </>
 
