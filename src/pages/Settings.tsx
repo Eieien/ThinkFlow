@@ -1,5 +1,4 @@
 import Account from '../components/Account.tsx'
-import Preferences from '../components/Preferences.tsx'
 import Sidebar from '@/components/layout/Sidebar.tsx';
 import UserLayout from '@/components/layout/User/UserLayout.tsx';
 import ThemeSwitcher from "../components/ThemeSwitcher";

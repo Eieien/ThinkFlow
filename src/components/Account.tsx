@@ -1,17 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ian from "@/assets/images/Ian.jpg";
 import { useDataContext } from "@/hooks/useDataContext";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogFooter} from "./ui/dialog";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { Upload } from "lucide-react";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import axiosPublic from "@/api/axiosInstances";
 
 export default function Account() {
   
   const {userData} = useDataContext();  
   // USER DATA
-  const [username, setUsername] = useState("Ian Florentino");
-  const [email, setEmail] = useState("JohnDoe@gmail.com");
+  const [username, setUsername] = useState(userData.username);
+  const [email, setEmail] = useState(userData.email);
 
   // EDIT STATES
   const [editUsername, setEditUsername] = useState(false);
-  const [editNickname, setEditNickname] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
 
@@ -20,22 +28,104 @@ export default function Account() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [editPfp, setEditPfp] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [pfp, setPfp] = useState<string>();
+
+  const axiosPrivate = useAxiosPrivate();
+
+
+  const openEdit = (open: boolean) => {
+    setEditPfp(open);
+    if (!open) {
+      setSelectedImage(null);
+      setPreviewUrl('');
+    }
+  };
+
+  useEffect(() => {
+    const getProfilePicture = async () => {
+      try{
+        
+        const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
+          responseType: 'blob'
+        });
+
+        // Create object URL from blob
+        const imageUrl = URL.createObjectURL(res.data);
+        setPfp(imageUrl);
+
+        console.log(imageUrl);
+
+      }catch(err){
+        console.error(err);
+      }
+    }
+    getProfilePicture();
+
+  }, [userData._id])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedImage) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('pfp', selectedImage); 
+
+      const response = await axiosPrivate.put(
+        `/users/pfp/${userData._id}`, 
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Profile picture updated:', response.data);
+      setEditPfp(false);
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  };
+
+
+
+
   return (
     <>
       <h3 className="text-primary-dark text-xl font-bold dark:text-primary-white mb-6">
         Account
       </h3>
-
       {/* PROFILE SECTION */}
       <div className="flex gap-10 w-2xl">
-        <img
-          className="min-w-35 h-35 object-cover rounded-full"
-          src={ian}
-          alt="Profile"
-        />
-
+          <Tooltip>
+            <TooltipTrigger>
+              <Avatar onClick={() => openEdit(true)} className="hover:opacity-50 cursor-pointer transition h-35 w-35">
+                <AvatarImage src={pfp} alt="User" />
+                <AvatarFallback>IAN</AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>
+              Edit Profile Picture
+            </TooltipContent>
+          </Tooltip>
         <div className="w-full">
-
           {/* USERNAME */}
           <div className="h-18">
             <div className="flex justify-between items-center pb-2">
@@ -81,6 +171,61 @@ export default function Account() {
 
         </div>
       </div>
+
+      <Dialog open={editPfp} onOpenChange={setEditPfp}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Profile Picture</DialogTitle>
+          </DialogHeader>
+
+          <div className="flex flex-col items-center gap-4 py-4">
+            {/* Preview */}
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-40 h-40 rounded-full object-cover border-4 border-gray-200"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center">
+                <Upload className="w-12 h-12 text-gray-400" />
+              </div>
+            )}
+
+            {/* File Input */}
+            <div className="w-full">
+              <Label htmlFor="pfp-input" className="cursor-pointer">
+                <div className="flex items-center justify-center gap-2 px-4 py-2 border border-dashed rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                  <Upload className="w-4 h-4" />
+                  <span>Choose Image</span>
+                </div>
+                <Input
+                  id="pfp-input"
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </Label>
+            </div>
+
+            {selectedImage && (
+              <p className="text-sm text-gray-500">
+                {selectedImage.name} ({(selectedImage.size / 1024).toFixed(2)} KB)
+              </p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditPfp(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpload} disabled={!selectedImage}>
+              Upload
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* EMAIL & PASSWORD */}
       <div className="w-2xl border-b border-primary-dark dark:border-primary-white pb-4">

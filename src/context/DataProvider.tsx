@@ -28,6 +28,8 @@ export interface Data{
     setUserTags: Dispatch<SetStateAction<Tag[]>>,
     updateNotes: () => Promise<void>,
     updateQuizzes: () => Promise<void>,
+    userPfp: string,
+    setUserPfp: Dispatch<SetStateAction<string>>,
 
 }
 
@@ -56,6 +58,8 @@ const DataContext = createContext<Data>({
     setUserTags: () => {},
     updateNotes: async () => {},
     updateQuizzes: async () => {},
+    userPfp: "",
+    setUserPfp: () => {},
 });
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
@@ -79,6 +83,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     const {auth} = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const refresh = useRefreshToken();
+    const [userPfp, setUserPfp] = useState<string>("");
 
     useEffect(() => {
         if(Object.keys(auth).length == 0){
@@ -97,6 +102,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 setBookmarks(globalNotes.data.filter((note : Note) => note.options.bookmarked == true));
 
                 if(Object.keys(auth).length > 0){
+                    const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
+                        responseType: 'blob'
+                    });
+                    const imageUrl = URL.createObjectURL(res.data);
+                    setUserPfp(imageUrl);
+
                     const getUserData = await axiosPrivate.get(`/users/${auth.user?._id}`);
                     const getUserNotes = await axiosPrivate.get(`notes/user/${auth.user?._id}`);
                     const getUserQuizzes = await axiosPrivate.get(`quizzes/user/${auth.user?._id}`);
@@ -174,7 +185,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                 userTags,
                 setUserTags,
                 updateNotes,
-                updateQuizzes
+                updateQuizzes,
+                setUserPfp,
+                userPfp,
             }
             }>
         {children}
