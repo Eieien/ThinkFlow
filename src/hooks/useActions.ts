@@ -10,7 +10,7 @@ export function useActions() {
     const {auth, setAuth} = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
-    const {userNotes, setUserNotes, setBookmarks, bookmarks, usersList} = useDataContext();
+    const {userNotes, setUserNotes, setBookmarks, bookmarks, usersList, currentNoteId} = useDataContext();
 
     const onCreateNote = async () => {
         try {
@@ -39,6 +39,7 @@ export function useActions() {
     const deleteNote = async (noteId: string) => {
         
         try{
+            console.log(currentNoteId);
             setUserNotes(prev =>
                 prev.filter(note => note._id !== noteId)
             );
@@ -46,6 +47,10 @@ export function useActions() {
             
             if(bookmarks.find(note => note._id == noteId)){
                 setBookmarks(prev => prev.filter(note => note._id !== noteId));
+            }
+
+            if(noteId == currentNoteId){
+                navigate('/home');
             }
 
         }catch(err){

@@ -21,6 +21,7 @@ import Ian from "@/assets/images/Ian.jpg"
 import { axiosPrivate } from "@/api/axiosInstances";
 import { MoreVertical, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 interface ShareDialogProps{
     open: boolean;
@@ -38,6 +39,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
     const [focused, setFocused] = useState(false);
     const results = filterPeople(usersList, query);
     const [hasAccess, setHasAccess] = useState<Users[]>([]);
+    const [visibility, setVisibility] = useState<Boolean>(note.options.isPublic);
 
     const convertIdToUser = async (id: string) => {
         const user = await axiosPrivate.get(`/users/${id}`);
@@ -124,6 +126,32 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
     
     }
 
+    const saveVisibility = async (isPublic: boolean) => {
+        try{
+            const file = await axiosPrivate.get(`/notes/${note._id }`);
+            const res = await axiosPrivate.put(`/notes/${note._id }`,{
+                title: file.data.title,
+                description: file.data.description,
+                options: {
+                    isPublic: isPublic,
+                    bookmarked: file.data.options.bookmarked,
+                },
+                tags: file.data.tags,
+                access: file.data.access,
+            })
+            
+
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+
+    const handleVisibility = (isPublic: boolean) => {
+        setVisibility(isPublic);
+        saveVisibility(isPublic);
+    }
+
     return(
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -161,7 +189,26 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
 
             </div>
 
-            <DialogTitle>People with Access</DialogTitle>
+            <DialogTitle className="flex justify-between items-center">
+                People with Access
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant={"outline"} className="ring ring-blue-400 self-start">
+                        {visibility ? "Public" : "Private"}
+
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuCheckboxItem onClick={() => handleVisibility(true)}>
+                            Public
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem onClick={() => handleVisibility(false)}>
+                            Private
+                        </DropdownMenuCheckboxItem>
+                            
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+            </DialogTitle>
             <div className="max-h-50 overflow-scroll flex flex-col gap-2">
                 {hasAccess.length !== 0 && hasAccess.map(user => 
                     <div className="flex px-2 justify-between items-center">
@@ -210,7 +257,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
                 </div>
             </div>
             <DialogFooter className="sm:justify-between">
-                <Button type="button" variant="outline" onClick={() => {navigator.clipboard.writeText(`https://www.Thinkflow.com/notes/${note._id}`)}}
+                <Button type="button" variant="outline" className="ring ring-light-primary-blue" onClick={() => {navigator.clipboard.writeText(`https://www.Thinkflow.com/notes/${note._id}`)}}
 >
                     Copy to Clipboard
                 </Button>

@@ -1,4 +1,4 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     Sidebar,
     SidebarContent,
@@ -16,7 +16,7 @@ import {
     SidebarMenuAction,
   } from "@/components/ui/sidebar"
 import { useActions } from "@/hooks/useActions";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Plus } from "lucide-react";
 import { useActionData } from "react-router-dom";
 import {
     Dialog,
@@ -36,10 +36,13 @@ import type { Note } from "@/configs/DataTypeConfig";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useDataContext } from "@/hooks/useDataContext";
 import ShareDialog from "../dialog-boxes/ShareDialog";
+import { Textarea } from "../ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 interface SidebarDropdownProps{
   note: Note,
   onSidebar?: boolean;
 }
+
 
 export default function SidebarDropdown({note, onSidebar = false} : SidebarDropdownProps){
     
@@ -52,6 +55,7 @@ export default function SidebarDropdown({note, onSidebar = false} : SidebarDropd
     
     const [newTitle, setNewTitle] = useState(note.title);
     const [newDescription, setNewDescription] = useState(note.description);
+    
     
     const [newOptions, setNewOptions] = useState(note.options);
     const [newTags, setNewTags] = useState(note.tags);
@@ -101,9 +105,11 @@ export default function SidebarDropdown({note, onSidebar = false} : SidebarDropd
       setNewTitle(e.target.value);
     }
 
-    const handleDescriptionChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleDescriptionChange = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
       setNewDescription(e.target.value);
     }
+
+    
     
     return (
       <>
@@ -145,14 +151,25 @@ export default function SidebarDropdown({note, onSidebar = false} : SidebarDropd
                 Created by {note.creator.username} on {createdDate.toLocaleString()}
                 <br/>
                 Last updated at {lastUpdatedDate.toLocaleString()}
-                <div>
-                  {note.options.isPublic ? "Public" : "Private"}
-                </div>
-
                 </div>
 
               </DialogDescription>
             </DialogHeader>
+              
+            <div className="flex gap-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="text-sm self-start flex items-center p-0.5 hover:bg-light-2 transition border border-light-border rounded-full">
+                    <Plus className="w-5 h-5"/>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add tag</p>
+                </TooltipContent>
+              </Tooltip>
+
+            </div>
+
             <div className="flex items-center gap-2">
               <div className="grid flex-1 gap-2">
                 <Label htmlFor="fileName" className="sr-only">
@@ -170,7 +187,7 @@ export default function SidebarDropdown({note, onSidebar = false} : SidebarDropd
                 <Label htmlFor="fileDescription" className="sr-only">
                   Description
                 </Label>
-                <Input
+                <Textarea
                   id="fileDescription"
                   defaultValue={`${note.description}`}
                   onChange={handleDescriptionChange}

@@ -71,18 +71,32 @@ export default function QuizCreator() {
       }
     }
 
-    const addNewQuestion = () => {
-        const newQuestion: Questions = {
-            _id: `temp-${Date.now()}`, 
-            question: "",
-            options: { a: "", b: "", c: "", d: "" },
-            answer: "a",
-            explaination: "",
-        };
-        setQuizData(prev => ({
-            ...prev,
-            questions: [...prev.questions, newQuestion]
-        }));
+    const addNewQuestion = async() => {
+        try{
+            
+            const res = await axiosPrivate.post(`/quizzes/question`, {
+                quizId: quizData._id,
+                question: {
+                    options: {
+                        a: "a",
+                        b: "b",
+                        c: "c",
+                        d: "d",
+                    },
+                    question: "q",
+                    answer: "a",
+                    explanation: "e"
+                }
+            })
+
+            setQuizData(prev => ({...prev, questions: [...prev.questions, res.data]}));
+
+            console.log("QUESTION CREATED");
+
+        }catch(err){
+            console.error(err);
+        }
+      x
     };
 
     const deleteQuestion = (questionId: string) => {

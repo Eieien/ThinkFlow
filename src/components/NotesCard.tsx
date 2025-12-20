@@ -35,7 +35,7 @@ export default function NotesCard({note, navigate} : NotesCardProps){
         <div className="w-full card hover:bg-light-2 transition cursor-pointer break-words" onClick={navigate}>
             <div className="flex justify-between">
                 <h1 className="text-lg font-bold ">{note.title}</h1>
-                <div className="flex gap-2 justify-between items-center">
+                <div className="flex gap-2 justify-between ">
                     <h3 className="text-sm text-dark-border dark:text-light-border">{lastEdited.toLocaleDateString('en-US', options)}</h3>
                     <SidebarDropdown note={note}/>
                 </div>
