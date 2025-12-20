@@ -19,7 +19,6 @@ authRouter.post('/login',
     body('email').notEmpty().withMessage('Email not found!')
         .isEmail().withMessage('Invalid email!'),
     body('password').notEmpty().withMessage('Password not found!'),
-    cookie('jwt').isEmpty().withMessage('You are already logged in!'),
     checkValidationErrors,
     AuthController.login);
 authRouter.put('/change-password',
