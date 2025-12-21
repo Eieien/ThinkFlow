@@ -38,6 +38,7 @@ import { useDataContext } from "@/hooks/useDataContext"
 import SidebarDropdown from "./sidebar/SidebarDropdown"
 import SearchDialog from "./dialog-boxes/SearchDialog"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import SidebarSettings from "./sidebar/SidebarSettings"
 
 
 
@@ -57,10 +58,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 
 export function AppSidebar() {
-    const {auth, setAuth } = useAuth();
-    const navigate = useNavigate();
-    const {onCreateNote, deleteNote, handleBookmark} = useActions();
-    const {userNotes, userData, bookmarks} = useDataContext();
+
+    const {onCreateNote} = useActions();
+    const {userNotes, bookmarks} = useDataContext();
     const {state} = useSidebar();
     const isCollapsed = state === "collapsed"
     const [search, openSearch] = useState(false);
@@ -69,19 +69,7 @@ export function AppSidebar() {
         console.log(userNotes);
     })
 
-    async function handleLogout(){
-        try {
-            const res = await axiosPublic.delete(
-                    '/auth/logout',
-                    { withCredentials: true }
-                );
-            console.log(res.status);
-            setAuth({});
-            navigate('/login');
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    
 
   
 
@@ -251,56 +239,10 @@ export function AppSidebar() {
         </SidebarContent>
         <SidebarSeparator className="max-w-[92%]"/>
             <SidebarFooter>
-            <SidebarMenu >
-                <SidebarMenuItem >
-                    <DropdownMenu >
-                        <DropdownMenuTrigger asChild>
-                            <SidebarMenuButton  asChild>
-                                <div className={isCollapsed ? "flex justify-center" : "flex items-center gap-3"}>
-                                    <Avatar className="min-h-8 min-w-8">
-                                        <AvatarImage src={Ian} alt="User" />
-                                        <AvatarFallback>U</AvatarFallback>
-                                    </Avatar>
-                                    {!isCollapsed && (
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">John Doe</span>
-                                        <span className="text-xs text-muted-foreground">john@example.com</span>
-                                    </div>
-                                    )}
-                                </div>
-                            </SidebarMenuButton>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem className="flex gap-1">
-                                <div className={"flex items-center gap-3"}>
-                                    <Avatar className="min-h-12 min-w-12">
-                                        <AvatarImage src={Ian} alt="User" />
-                                        <AvatarFallback>U</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">John Doe</span>
-                                        <span className="text-xs text-muted-foreground">john@example.com</span>
-                                    </div>
-                                </div>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => navigate(`/profile/${userData._id}`)} className="flex gap-2">
-                                <User2/>
-                                <span>Profile</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => navigate('/settings')} className="flex gap-2">
-                                <Settings/>
-                                <span>Settings</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={handleLogout} className="flex gap-2">
-                                <LogOut/>
-                                <span>Sign Out</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                        
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SidebarFooter>
+                <SidebarSettings isCollapsed={isCollapsed}/>
+
+            </SidebarFooter>
+
         </Sidebar>
     )
 }

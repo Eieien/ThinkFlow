@@ -85,6 +85,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     const refresh = useRefreshToken();
     const [userPfp, setUserPfp] = useState<string>("");
 
+
     useEffect(() => {
         if(Object.keys(auth).length == 0){
             refresh();
@@ -114,6 +115,26 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
                     setUserTags(getUserTags.data);
                 }
             }
+            
+            const getProfilePicture = async () => {
+                try{
+                  console.log(auth.user);
+                  const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
+                    responseType: 'blob'
+                  });
+          
+                  // Create object URL from blob
+                  const imageUrl = URL.createObjectURL(res.data);
+                  setUserPfp(imageUrl);
+          
+                  console.log(imageUrl);
+          
+                }catch(err){
+                  console.error(err);
+                }
+              }
+              getProfilePicture();
+
             getData();
         }catch(err){
             console.log(err)

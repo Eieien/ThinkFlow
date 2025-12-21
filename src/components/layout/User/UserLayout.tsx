@@ -33,6 +33,7 @@ import { useDataContext } from "@/hooks/useDataContext";
 import { debounce } from "@tiptap/extension-table-of-contents";
 import ImportDialog from "@/components/dialog-boxes/ImportDialog";
 import GenerateQuizDialog from "@/components/dialog-boxes/GenerateQuizDialog";
+import ShareDialog from "@/components/dialog-boxes/ShareDialog";
   
 
 interface UserLayoutProps{
@@ -50,6 +51,7 @@ export default function UserLayout({title, description, children, notesPage = fa
     const [visibility, setVisibility] = useState<Boolean>(false);
     // const {currentNoteId, setCurrentNoteId} = useDataContext();
     const axiosPrivate = useAxiosPrivate();
+    const [share, setShare] = useState(false);
 
     const [genereateQuiz, setGenerateQuiz] = useState(false);
 
@@ -122,31 +124,9 @@ export default function UserLayout({title, description, children, notesPage = fa
                                 <div className="flex gap-2 items-center">
                                     <Button onClick={handleGenerateOpen}>Generate Quiz</Button>
                                     <Button onClick={handleOpenImport}>Import Note</Button>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button>
-                                                Share
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogTitle>Visibility</DialogTitle>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button>{visibility ? "Public" : "Private"}</Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    <DropdownMenuSeparator/>
-                                                    <DropdownMenuCheckboxItem onClick={() => handleVisibility(true)}>
-                                                        Public
-                                                    </DropdownMenuCheckboxItem>
-                                                    <DropdownMenuCheckboxItem onClick={() => handleVisibility(false)}>
-                                                        Private
-                                                    </DropdownMenuCheckboxItem>
-                                                       
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </DialogContent>                           
-                                    </Dialog>                            
+                                    <Button>
+                                        Share
+                                    </Button>
                                 </div>}
                             <ThemeSwitcher/>
                         </div>

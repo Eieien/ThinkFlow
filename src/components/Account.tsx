@@ -48,7 +48,7 @@ export default function Account() {
   useEffect(() => {
     setUsername(auth?.user?.username);
     setEmail(auth?.user?.email);
-
+    
     const getProfilePicture = async () => {
       try{
         console.log(auth.user);
@@ -67,7 +67,7 @@ export default function Account() {
       }
     }
     getProfilePicture();
-  }, [])
+  }, [auth])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
