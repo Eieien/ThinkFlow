@@ -51,8 +51,8 @@ export default function Account() {
 
     const getProfilePicture = async () => {
       try{
-        
-        const res = await axiosPublic.get(`/users/pfp/${userData._id}`, {
+        console.log(auth.user);
+        const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
           responseType: 'blob'
         });
 
@@ -128,7 +128,7 @@ export default function Account() {
             <TooltipTrigger>
               <Avatar onClick={() => openEdit(true)} className="hover:opacity-50 cursor-pointer transition h-35 w-35">
                 <AvatarImage src={pfp} alt="User" />
-                <AvatarFallback>IAN</AvatarFallback>
+                <AvatarFallback>PFP</AvatarFallback>
               </Avatar>
             </TooltipTrigger>
             <TooltipContent>
