@@ -18,7 +18,7 @@ import { useActions } from "@/hooks/useActions";
 import { type Note, type Users} from "@/configs/DataTypeConfig";
 import useAuth from "@/hooks/useAuth";
 import Ian from "@/assets/images/Ian.jpg"
-import { axiosPrivate } from "@/api/axiosInstances";
+import axiosPublic, { axiosPrivate } from "@/api/axiosInstances";
 import { MoreVertical, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -29,7 +29,7 @@ interface ShareDialogProps{
     note: Note;
     onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
-type UsersWithPfp{
+type UsersWithPfp = {
     user: Users;
     pfp: string;
 }
@@ -44,7 +44,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
     const {auth} = useAuth();
     const [focused, setFocused] = useState(false);
     const results = filterPeople(usersList, query);
-    const [hasAccess, setHasAccess] = useState<UsersWithPfp[]>([]);
+    const [hasAccess, setHasAccess] = useState<Users[]>([]);
     const [visibility, setVisibility] = useState<Boolean>(note.options.isPublic);
 
     const convertIdToUser = async (id: string) => {
