@@ -5,7 +5,7 @@ export default function About(){
 
     return (
         <>
-            <div className="mt-90 w-full min-h-screen">
+            <div className="mt-90 w-full min-h-[80vh]">
                 <div className="text-center flex flex-col justify-center gap-5">
                     <h1 className="text-4xl text-center font-bold">
                         About Thinkflow

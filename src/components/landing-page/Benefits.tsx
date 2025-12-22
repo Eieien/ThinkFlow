@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import react from "react";
+import NotesGrid from "../layout/NotesGrid";
 
 export default function Benefits(){
 
@@ -13,11 +14,7 @@ export default function Benefits(){
                             </h1>
                         </div>
 
-                        {/* Pic of the Art of War example in Figma */}
-                        <div className="px-100 py-60 border border-light-border dark:border-dark-border dark:bg-dark-2 m-5">
-                            <img src="" alt="" />
-                        </div>
-
+                        <NotesGrid type="Notes" source="global"/>
                     </div>
 
                     <div className="mt-70 mb-70 text-center flex flex-col justify-center items-center gap-2">

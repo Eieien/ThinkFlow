@@ -1,6 +1,6 @@
 import react from "react";
 import { Link } from "react-router-dom";
-
+import Thinkflow from "@/assets/images/Thinkflow-sample-image.png"
 export default function Hero(){
 
     return (
@@ -36,9 +36,10 @@ export default function Hero(){
                             </Link>
                         </div>
                         {/* Pic of the Art of War example in Figma */}
-                        <div className="px-100 py-60 border border-light-border dark:border-dark-border dark:bg-dark-2 m-5">
+                        <img src={Thinkflow} alt="thinkflow" className="border-light-border border rounded-md dark:border-dark-border" />
+                        {/* <div className="px-100 py-60 border border-light-border dark:border-dark-border dark:bg-dark-2 m-5">
                             
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
