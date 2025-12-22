@@ -22,12 +22,18 @@ import { axiosPrivate } from "@/api/axiosInstances";
 import { MoreVertical, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface ShareDialogProps{
     open: boolean;
     note: Note;
     onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
+type UsersWithPfp{
+    user: Users;
+    pfp: string;
+}
+
 
 export default function ShareDialog({open, onOpenChange, note} : ShareDialogProps){
     
@@ -38,7 +44,7 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
     const {auth} = useAuth();
     const [focused, setFocused] = useState(false);
     const results = filterPeople(usersList, query);
-    const [hasAccess, setHasAccess] = useState<Users[]>([]);
+    const [hasAccess, setHasAccess] = useState<UsersWithPfp[]>([]);
     const [visibility, setVisibility] = useState<Boolean>(note.options.isPublic);
 
     const convertIdToUser = async (id: string) => {
@@ -53,6 +59,16 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
             deactivated: user.data.deactivated
         }
     }    
+
+    const getUserPfp = async (id: string) => {
+        if(Object.keys(auth).length == 0) return "";
+        const res = await axiosPublic.get(`/users/pfp/${auth.user?._id}`, {
+            responseType: 'blob'
+          });
+  
+        // Create object URL from blob
+        const imageUrl = URL.createObjectURL(res.data);
+    }
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -215,7 +231,12 @@ export default function ShareDialog({open, onOpenChange, note} : ShareDialogProp
                 {hasAccess.length !== 0 && hasAccess.map(user => 
                     <div className="flex px-2 justify-between items-center">
                         <div className="flex w-full py-2 gap-2 bg-primary-white dark:bg-primary-dark justify-start ">
-                            <img src={Ian} className="w-10 h-10 object-contain rounded-full"/>
+                            <Avatar className="object-contain cursor-pointer transition h-10 w-10">
+                                <AvatarImage src={Ian} alt="User" />
+                                <AvatarFallback>PFP</AvatarFallback>
+                            </Avatar>
+                            
+                            {/* <img src={Ian} className="w-10 h-10 object-contain rounded-full"/> */}
                             <div className="flex flex-col text-start text-primary-dark ">
                                 <h2>
                                     {user.username}

@@ -17,6 +17,7 @@ export default function Account() {
   const {userData} = useDataContext();  
   // USER DATA
   const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
   const [email, setEmail] = useState(auth?.user?.email);
 
   // EDIT STATES
@@ -47,6 +48,7 @@ export default function Account() {
 
   useEffect(() => {
     setUsername(auth?.user?.username);
+    setNewUsername(auth?.user?.username);
     setEmail(auth?.user?.email);
     
     const getProfilePicture = async () => {
@@ -115,7 +117,28 @@ export default function Account() {
   };
 
 
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewUsername(e.target.value);  
+  }
 
+  const clearUsernameChange = () => {
+    setNewUsername(auth.user?.username);
+  }
+  
+  const updateUsername = async () => {
+    try{
+      const res = await axiosPrivate.put(`/users/${auth?.user?._id}`, {
+        username: newUsername,
+        email: auth.user?.email,
+        deactivated: false,
+      })
+
+      console.log("USERNAME UPDATED")
+      setUsername(newUsername);
+    }catch(err){
+      console.error(err);
+    }
+  }
 
   return (
     <>
@@ -126,7 +149,7 @@ export default function Account() {
       <div className="flex gap-10 w-2xl">
           <Tooltip>
             <TooltipTrigger>
-              <Avatar onClick={() => openEdit(true)} className="hover:opacity-50 cursor-pointer transition h-35 w-35">
+              <Avatar onClick={() => openEdit(true)} className="hover:opacity-50 object-fit cursor-pointer transition h-35 w-35">
                 <AvatarImage src={pfp} alt="User" />
                 <AvatarFallback>PFP</AvatarFallback>
               </Avatar>
@@ -156,9 +179,7 @@ export default function Account() {
               ) : (
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      setEditUsername(false);
-                    }}
+                    onClick={clearUsernameChange}
                     className="px-4 border border-primary-dark dark:border-primary-white rounded-md cursor-pointer"
                   >
                     Cancel
@@ -174,7 +195,7 @@ export default function Account() {
                         ...auth, 
                         user: user
                       });
-                      handleUserUpdate();
+                      updateUsername();
                     }}
                     className="px-4 bg-primary-dark text-white dark:bg-primary-white dark:text-primary-dark rounded-md cursor-pointer"
                   >
@@ -188,8 +209,8 @@ export default function Account() {
               <p className="h-10 text-dark-3 text-base dark:text-gray-400">{username}</p>
             ) : (
               <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={newUsername}
+                onChange={handleUsernameChange}
                 className="h-10 w-full p-2 border rounded-md"
               />
             )}
