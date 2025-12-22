@@ -57,7 +57,8 @@ export default class PfpController {
         const userId = req.params.id;
         const pfp = req.file.filename;
         try {
-            console.log(pfp);
+            console.log("pfp " + pfp );
+            console.log("hello " + userId);
             const foundUser = await User.findById(userId);
             if(!foundUser) return res.status(404).json({ message: 'User not found!' });
             if(foundUser?.pfp) await unlink(getUploadFilePath('images/pfps', foundUser.pfp));
@@ -68,8 +69,8 @@ export default class PfpController {
                 pfp: pfp
             });
         } catch (err) {
-            const filePath = getUploadFilePath('pfps', foundUser.pfp);
-            if(existsSync(filePath)) await unlink(getUploadFilePath('images/pfps', pfp));
+            const filePath = getUploadFilePath('images/pfps', pfp);
+            if(existsSync(filePath)) await unlink(filePath);
             return res.status(400).json(err);
         }
     }
